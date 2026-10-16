@@ -1,4 +1,4 @@
-# ADR 0002: shadcn/ui Component Library Setup with Pointer Cursor
+# ADR 0002: shadcn/ui Setup, Components, and Typeset
 
 - **Status**: Accepted
 - **Date**: 2026-10-16
@@ -24,6 +24,19 @@ Key architectural choices:
 7. **Base UI Non-Button Element Composition (`nativeButton={false}`)**: When composing `<Button>` with non-button elements such as `<Link>` via the `render` prop (`render={<Link ... />}`), `nativeButton={false}` must be explicitly provided to comply with Base UI accessibility contracts and prevent runtime console warnings.
 8. **Proportional Component Sizing**: Interactive CTA buttons in the starter view are configured to `h-11 sm:h-12 w-full sm:w-[160px] rounded-lg` to match the visual scale of the hero typography and adhere to the `--radius` design token, avoiding under-sized default button variants in wide layouts.
 
+9. **Pre-installation of UI Components**: We install all available components from the shadcn/ui registry with:
+   ```bash
+   pnpm dlx shadcn@latest add --all -y
+   ```
+   This keeps the template batteries-included: dialogs, cards, forms, menus, tables, tooltips, popovers, tabs, and other building blocks are immediately available in `src/components/ui/`. Unused components do not add code to a route's production bundle because Next.js and Turbopack bundle statically per route.
+
+10. **Scoped Markdown Typography**: We adopt `shadcn/typeset` for rich content and Markdown rendering:
+    - Store the upstream stylesheet at `src/app/typeset.css`.
+    - Import it from `src/app/globals.css` after the Tailwind imports.
+    - Expose the Geist variables `--font-geist` and `--font-geist-mono` from `src/app/layout.tsx`.
+    - Define the `.typeset-docs` preset in `src/app/globals.css` with the project font, size, leading, and flow tokens.
+    - Apply `.typeset` only to dedicated content containers, with `.not-typeset` and `data-not-typeset` escape hatches for embedded interactive components.
+
 ## Consequences
 - **Positive**:
   - Full control over component code, styling, and accessibility attributes.
@@ -31,5 +44,8 @@ Key architectural choices:
   - Zero heavy third-party UI runtime overhead.
   - Zero runtime warnings from Base UI button semantics when rendering links.
   - True visual adherence to shadcn design tokens and radius variables across the starter view.
+  - UI primitives and Markdown typography are available without repeating setup steps or adding per-element utility classes.
 - **Negative / Trade-offs**:
   - Component updates from upstream shadcn need to be pulled or maintained manually in the repository.
+  - Pre-installed components increase repository file count and require maintenance when upstream APIs change.
+  - The vendored `typeset.css` must be refreshed manually when upstream typography styles change.
