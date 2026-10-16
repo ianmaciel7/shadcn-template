@@ -1,12 +1,13 @@
 import { execFileSync } from "node:child_process";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { afterAll, describe, expect, it } from "vitest";
 
 const root = resolve(__dirname, "../../..");
 const biome = join(root, "node_modules/@biomejs/biome/bin/biome");
-const dir = mkdtempSync(join(tmpdir(), "grit-rules-"));
+// Biome 2.5 expects explicitly checked files to be under the workspace root.
+// Keep fixtures inside the repository and remove them after the test suite.
+const dir = mkdtempSync(join(root, ".biome", "grit-rules-"));
 
 afterAll(() => rmSync(dir, { recursive: true, force: true }));
 
