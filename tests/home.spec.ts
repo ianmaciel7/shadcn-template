@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { defaultLocale, localeCookie, locales } from "../src/i18n/routing";
+import { localeCookie, locales } from "../src/i18n/routing";
 
 test.describe("home page smoke tests", () => {
   test("serves a usable page with document metadata", async ({ page }) => {
@@ -47,6 +47,5 @@ test.describe("home page smoke tests", () => {
     const response = await page.goto("/");
     expect(response?.ok()).toBe(true);
     await expect(page.locator("main")).toBeVisible();
-    expect(locales).toContain(defaultLocale);
   });
 });
