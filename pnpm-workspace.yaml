@@ -15,6 +15,8 @@ overrides:
 auditConfig:
   ignoreGhsas:
     # braces <=3.0.3 (stack exhaustion DoS on deeply nested patterns) has no
-    # patched release. It is reached only through the shadcn CLI's fast-glob.
+    # patched release. It is reached only through developer tools (shadcn CLI,
+    # Ladle, markdownlint) that expand fixed, trusted glob patterns.
+    # Upstream tracking: https://github.com/micromatch/braces/issues/84
     # Reassess when a fixed braces version exists.
     - GHSA-vfj7-8cjw-p6xm

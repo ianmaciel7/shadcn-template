@@ -177,7 +177,9 @@ configuration in `.ladle/` is versioned; only its build output is ignored.
   release (the advisory lists none) and is ignored in `auditConfig`. It is
   reached only through developer tools (shadcn CLI, Ladle) that expand fixed,
   trusted glob patterns, so an attacker cannot supply the nested pattern it
-  needs. Reassess when a fixed release exists.
+  needs. Upstream tracking is in [micromatch/braces#84](https://github.com/micromatch/braces/issues/84); the
+  only mitigation besides this exception is a local `pnpm patch`, which is not
+  worth maintaining for this exposure. Reassess when a fixed release exists.
 - **Visual baselines are per platform.** Screenshots are committed for Windows
   (`*-chromium-win32.png`) and Linux (`*-chromium-linux.png`, used by CI). A
   third platform needs its own baselines. Regenerate the Linux ones with
