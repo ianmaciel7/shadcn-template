@@ -28,7 +28,6 @@ Key architectural choices:
 1. **Dedicated Client Seam**: Encapsulates client-side theme context inside a reusable boundary (`src/components/ui/extensions/theme-provider.tsx`), allowing root `layout.tsx` to remain a Server Component.
 2. **Tailwind Class Synchronization**: Configured with `attribute="class"`, `defaultTheme="system"`, and `enableSystem` to toggle the `.dark` class on the `<html>` root, matching Tailwind CSS custom variant `@custom-variant dark (&:is(.dark *));`.
 3. **Hydration Warning Suppression**: Root `<html>` element will include `suppressHydrationWarning` to eliminate attribute mismatch warnings from client theme injection.
-4. **Interactive Theme Toggle (`src/components/ui/extensions/mode-toggle.tsx`)**: Provide a ready-to-use toggle button/dropdown with `useTheme()` from `next-themes` and Lucide icons (`SunIcon`, `MoonIcon`) using shadcn `Button` and `DropdownMenu`.
 
 ## Consequences
 - **Positive**:

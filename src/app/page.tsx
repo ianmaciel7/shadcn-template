@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { ModeToggle } from "@/components/ui/extensions/mode-toggle";
 
 export default function Home() {
   const t = useTranslations("App");
@@ -16,9 +15,6 @@ export default function Home() {
           height={20}
           priority
         />
-        <div className="flex items-center gap-2">
-          <ModeToggle />
-        </div>
       </header>
 
       <main className="flex flex-1 flex-col items-center justify-center gap-6 text-center max-w-2xl py-16">
