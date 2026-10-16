@@ -24,11 +24,13 @@ test.describe("home page smoke tests", () => {
       context,
       page,
     }) => {
-      await context.addCookies([{
+      await context.addCookies([
+      {
         name: localeCookie,
         value: locale,
         url: "http://127.0.0.1:3000",
-      }]);
+      },
+    ]);
       const response = await page.goto("/");
       expect(response?.ok()).toBe(true);
       await expect(page.locator("main")).toBeVisible();
@@ -39,11 +41,13 @@ test.describe("home page smoke tests", () => {
     context,
     page,
   }) => {
-    await context.addCookies([{
-      name: localeCookie,
-      value: "unsupported-locale",
-      url: "http://127.0.0.1:3000",
-    }]);
+    await context.addCookies([
+      {
+        name: localeCookie,
+        value: "unsupported-locale",
+        url: "http://127.0.0.1:3000",
+      },
+    ]);
     const response = await page.goto("/");
     expect(response?.ok()).toBe(true);
     await expect(page.locator("main")).toBeVisible();
