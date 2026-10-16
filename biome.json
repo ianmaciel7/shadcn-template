@@ -63,6 +63,7 @@
       "includes": [
         "src/components/ai-elements/**",
         "src/components/ui/**",
+        "!src/components/ui/extensions/**",
         "src/lib/highlighter.tsx"
       ],
       "linter": {

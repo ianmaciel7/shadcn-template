@@ -103,7 +103,8 @@ Cover the variants and states a reviewer needs to see, not every prop.
 ## Coverage, complexity, and size
 
 - `pnpm test:coverage` writes `coverage/`. It measures application code and
-  leaves out the vendored `src/components/ui` and `src/components/ai-elements`.
+  leaves out the vendored `src/components/ui/*.tsx` and
+  `src/components/ai-elements`; `src/components/ui/extensions` is measured.
 - `pnpm analyze:health` feeds that coverage to Fallow so CRAP scores reflect real
   tests. Add a test before accepting a complex, untested function.
 - `pnpm analyze:size` builds the app and fails when generated client JavaScript or
@@ -112,8 +113,9 @@ Cover the variants and states a reviewer needs to see, not every prop.
 
 ## Continuous integration
 
-`.github/workflows/ci.yml` runs `pnpm verify:full`, `pnpm verify:e2e`, and
-`pnpm audit` on pushes to `main` and on pull requests. Run `pnpm check:workflows`
+`.github/workflows/ci.yml` runs `pnpm verify:full`, `pnpm verify:e2e`, and a
+separate `security` job (Semgrep, Gitleaks, actionlint, zizmor, `pnpm audit`, and
+`pre-commit run --all-files`) on pushes to `main` and on pull requests. Run `pnpm check:workflows`
 after editing a workflow, and keep actions and the Playwright container pinned
 by commit SHA or digest.
 

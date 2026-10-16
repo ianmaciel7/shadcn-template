@@ -29,16 +29,16 @@ repository. It is not a catalog of every runtime library; `package.json` and
 | Architecture boundaries | dependency-cruiser | 18.6.0 | Enforces layering rules and forbids dependency cycles. | `.dependency-cruiser.cjs` |
 | Structural rules | ast-grep | 0.51.0 | Enforces project conventions that need syntax awareness (currently no manual memoization, per `CODING_STANDARDS.md`). Rules have snapshot tests. | `sgconfig.yml`, `.ast-grep/` |
 | Duplication | jscpd | 5.4.1 | Reports meaningful duplicated code. | `.jscpd.json` |
-| Complexity and health | Fallow | 3.33.1 | Reports complexity, CRAP score (from real coverage), and hotspots. Dead-code, duplication, and architecture analysis stay with Knip, jscpd, and dependency-cruiser. | `.fallowrc.json` |
+| Complexity and health | Fallow | 3.33.1 | Reports complexity, CRAP score (from real coverage), and hotspots. `.ladle/` is excluded on purpose: it is tooling glue that Ladle loads by convention. Vendored `src/components/ui/*.tsx` and `ai-elements` are excluded; custom code under `ui/extensions/` is analyzed. Dead-code, duplication, and architecture analysis stay with Knip, jscpd, and dependency-cruiser. | `.fallowrc.json` |
 | React diagnostics | React Doctor | 0.9.18 | Scans application React code for correctness, performance, and security issues. | `doctor.config.json` |
 | Bundle budgets | Size Limit + `@size-limit/file` | 14.2.0 | Fails when generated client JavaScript or CSS exceeds its gzip budget. | `.size-limit.json` |
 | Performance audit | Lighthouse | 13.5.0 | On-demand performance and accessibility report. | `package.json` |
 | Spelling | CSpell | 10.4.0 | Checks spelling in code, JSON, and Markdown. | `cspell.json` |
 | Markdown | markdownlint-cli2 | 0.23.3 | Lints repository Markdown. | `.markdownlint-cli2.jsonc` |
-| Static security | Semgrep | Host tool | Runs project security rules. | `.semgrep.yml` |
-| Secret scanning | Gitleaks | Host tool | Scans history and working tree for secrets. | `package.json` (`check:secrets`) |
+| Static security | Semgrep Community Edition | Host tool (CI pins 1.178.0) | Runs the project's local security rules with metrics and version checks off. | `.semgrep.yml`, `package.json` (`check:security`) |
+| Secret scanning | Gitleaks | Host tool (CI pins 8.30.1) | Scans the Git history for secrets with `gitleaks git --redact`. `detect` is deprecated upstream. | `package.json` (`check:secrets`) |
 | Dependency audit | `pnpm audit` | Included with pnpm | Reports known vulnerable dependencies. | `pnpm-workspace.yaml` (`auditConfig`) |
-| Continuous integration | GitHub Actions | Pinned by commit SHA | Runs `verify:full`, `verify:e2e`, and the dependency audit on push and pull requests. | `.github/workflows/ci.yml` |
+| Continuous integration | GitHub Actions | Pinned by commit SHA | Runs `verify:full`, `verify:e2e`, and a `security` job (Semgrep, Gitleaks, actionlint, zizmor, dependency audit, pre-commit) on push and pull requests. | `.github/workflows/ci.yml` |
 | Workflow linting | actionlint, zizmor | Host tools | Lint and audit the GitHub Actions workflows. | `package.json` (`check:workflows`) |
 | Codebase graph | Graphify | Host tool | Builds an on-demand knowledge graph; output goes to the ignored `graphify-out/`. | None |
 | Git hooks | Husky + lint-staged + Commitlint | 9.1.7 / 16.4.0 / 21.2.3 | Check staged files with Biome and validate commit messages. | `.husky/`, `package.json`, `commitlint.config.mjs` |
@@ -58,7 +58,7 @@ outside pnpm and are only needed for the commands noted next to them:
 | pre-commit | Repository-integrity checks in the Git hook | `pre-commit --version` |
 | Semgrep | `check:security` | `semgrep --version` |
 | Gitleaks | `check:secrets` | `gitleaks version` |
-| actionlint, zizmor | Linting workflows, once they exist | `actionlint -version`, `zizmor --version` |
+| actionlint, zizmor | `check:workflows` | `actionlint -version`, `zizmor --version` |
 | Graphify | On-demand codebase graph | `graphify --version` |
 
 Missing `pre-commit` does not block a commit; the hook prints a warning and skips
@@ -116,7 +116,7 @@ leave them unapproved.
 | `pnpm verify:fast` | Biome CI, typecheck, and the unit tests only. Meant to run constantly. | seconds |
 | `pnpm verify:full` | `verify:fast`, plus architecture, unused code, duplication, structural rules, spelling, Markdown, Fallow health, React Doctor, browser tests, and a production build with size budgets. | minutes |
 | `pnpm verify:e2e` | The whole Playwright suite: functional, accessibility, and visual. | minutes |
-| `pnpm verify:security` | Semgrep, Gitleaks, workflow linting, and the dependency audit. Needs the host tools. | seconds |
+| `pnpm verify:security` | Semgrep, Gitleaks, workflow linting, and the dependency audit. Needs the host tools; the same checks run in the CI `security` job. | seconds |
 
 `verify:full` intentionally excludes Playwright, security scanners, mutation
 testing, and Lighthouse because they are slow or need host tools. Run
@@ -164,6 +164,16 @@ Generated output (`reports/`, `coverage/`, `.next/`, `test-results/`,
 configuration in `.ladle/` is versioned; only its build output is ignored.
 
 ## Known limitations
+
+- **Vendored components are excluded from coverage, Fallow health, React Doctor,
+  and relaxed in Biome.** The exclusions cover the preinstalled shadcn/ui files
+  (`src/components/ui/*.tsx`) and `src/components/ai-elements/`. Project code
+  that lives beside them, such as `src/components/ui/extensions/`, is fully
+  checked. Fallow reports `38/1304 functions matched` for coverage because the
+  denominator includes those vendored functions; every covered file is matched.
+- **CI hotspot analysis needs history.** The `verify` job checks out with
+  `fetch-depth: 0` so Fallow can compute hotspots; other jobs use shallow clones
+  except `security`, which Gitleaks needs in full.
 
 - **Stryker uses the `command` runner.** The native `@stryker-mutator/vitest-runner`
   10.0.0 does not work with Vitest 5.0.5: mutants inside functions are never

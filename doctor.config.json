@@ -3,7 +3,7 @@
   "ignore": {
     "files": [
       "src/components/ai-elements/**",
-      "src/components/ui/**",
+      "src/components/ui/*.tsx",
       "reports/**",
       ".next/**",
       "coverage/**"

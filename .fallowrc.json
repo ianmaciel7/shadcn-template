@@ -6,10 +6,11 @@
     "src/lib/**/*.{ts,tsx}",
     "src/i18n/**/*.ts"
   ],
+  "ignorePatterns": [".ladle/**"],
   "health": {
     "ignore": [
       "src/components/ai-elements/**",
-      "src/components/ui/**",
+      "src/components/ui/*.tsx",
       "**/*.stories.tsx"
     ]
   }

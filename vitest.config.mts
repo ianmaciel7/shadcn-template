@@ -15,7 +15,7 @@ export default defineConfig({
       exclude: [
         "src/**/*.{test,browser.test,stories}.{ts,tsx}",
         "src/components/ai-elements/**",
-        "src/components/ui/**",
+        "src/components/ui/*.tsx",
         "src/types/**",
       ],
     },
