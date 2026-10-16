@@ -34,6 +34,7 @@ Run the following before opening a pull request:
 
 ```bash
 pnpm lint
+pnpm test
 pnpm build
 ```
 

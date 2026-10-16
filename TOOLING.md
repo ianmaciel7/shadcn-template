@@ -17,6 +17,8 @@ repository. It is not a catalog of every runtime library; `package.json` and
 | Code quality | Biome | 2.4.2 | Formats code, runs lint checks, and organizes imports. | `package.json`, `biome.json` |
 | Custom code quality rules | GritQL | Executed by Biome; no standalone CLI | Supplies the three project-specific Next.js rules for layout props, page props, and route context. | `.biome/rules/nextjs/*.grit`, `biome.json` |
 | UI scaffolding | shadcn/ui CLI | 4.21.5 | Adds and maintains locally owned UI components using the configured aliases and style. | `package.json`, `components.json` |
+| Unit and component testing | Vitest + React Testing Library | Configured | Runs colocated synchronous unit, component, and integration tests in `jsdom`. | `vitest.config.mts`, `package.json` |
+| End-to-end testing | Playwright | Configured | Runs browser user-journey specifications against a production Next.js server. | `playwright.config.ts`, `package.json` |
 | Agent configuration | Agents CLI | Repository configuration; CLI is externally provided | Synchronizes reusable agent skills and MCP settings. | `.agents/agents.json`, `.agents/skills/` |
 
 ## Host prerequisites
@@ -39,6 +41,9 @@ field in `package.json`. The `pnpm-lock.yaml` file is the lockfile of record.
 | `pnpm start` | Serve a completed production build. |
 | `pnpm lint` | Run Biome checks. |
 | `pnpm format` | Apply Biome formatting changes. |
+| `pnpm test` | Run the colocated Vitest suite once. |
+| `pnpm test:watch` | Run Vitest in watch mode. |
+| `pnpm test:e2e` | Run Playwright E2E specifications. |
 
 See [TESTING.md](TESTING.md) for the required validation and manual smoke-test
 workflow.

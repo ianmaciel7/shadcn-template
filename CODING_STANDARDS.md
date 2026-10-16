@@ -57,3 +57,19 @@ When standards conflict, apply them in this order:
   without recording the rationale in an ADR when the decision is durable.
 - Keep changes focused and add or update tests when automated test tooling is
   introduced.
+
+## Tests
+
+- Colocate `*.test.ts` and `*.test.tsx` files with the production module under
+  `src/`; do not create per-component `__tests__/` folders or global
+  `unit/`, `components/`, or `integration/` hierarchies.
+- Put only Playwright user-journey specifications in root `tests/`, using
+  `*.spec.ts`.
+- Test observable behavior with clear arrange-act-assert structure. Prefer
+  accessible, semantic React Testing Library queries such as `getByRole`.
+- Keep feature-specific mocks, fixtures, and helpers next to their consuming
+  test. Promote them to shared infrastructure only after genuine reuse.
+- Avoid broad implementation mocks and large snapshots. Do not test an
+  external library's internals.
+- Cover asynchronous Server Components with Playwright E2E tests rather than
+  forcing them through Vitest.
