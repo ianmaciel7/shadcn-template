@@ -37,6 +37,12 @@ Key architectural choices:
     - Define the `.typeset-docs` preset in `src/app/globals.css` with the project font, size, leading, and flow tokens.
     - Apply `.typeset` only to dedicated content containers, with `.not-typeset` and `data-not-typeset` escape hatches for embedded interactive components.
 
+11. **AI SDK Elements Registry**: We install AI SDK Elements through the shadcn CLI registry:
+    ```bash
+    pnpm dlx shadcn@latest add https://elements.ai-sdk.dev/api/registry/all.json
+    ```
+    This vendors the selected AI chat and generative-interface primitives into the template, preserving the same source ownership and customization model as the core shadcn/ui components.
+
 ## Consequences
 - **Positive**:
   - Full control over component code, styling, and accessibility attributes.
@@ -45,7 +51,9 @@ Key architectural choices:
   - Zero runtime warnings from Base UI button semantics when rendering links.
   - True visual adherence to shadcn design tokens and radius variables across the starter view.
   - UI primitives and Markdown typography are available without repeating setup steps or adding per-element utility classes.
+  - AI SDK Elements can be added as locally owned source components through the configured shadcn workflow.
 - **Negative / Trade-offs**:
   - Component updates from upstream shadcn need to be pulled or maintained manually in the repository.
   - Pre-installed components increase repository file count and require maintenance when upstream APIs change.
   - The vendored `typeset.css` must be refreshed manually when upstream typography styles change.
+  - AI SDK Elements require manually pulling and reviewing upstream updates when their APIs or generated source change.

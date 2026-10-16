@@ -51,13 +51,18 @@
   },
   "overrides": [
     {
-      "includes": ["src/components/ui/**", "src/lib/highlighter.tsx"],
+      "includes": [
+        "src/components/ai-elements/**",
+        "src/components/ui/**",
+        "src/lib/highlighter.tsx"
+      ],
       "linter": {
         "rules": {
           "a11y": {
             "useSemanticElements": "off",
             "useFocusableInteractive": "off",
             "useAriaPropsForRole": "off",
+            "useAnchorContent": "off",
             "noLabelWithoutControl": "off",
             "noNoninteractiveTabindex": "off",
             "useKeyWithClickEvents": "off",
@@ -74,6 +79,9 @@
           "correctness": {
             "useExhaustiveDependencies": "off",
             "noUnusedImports": "off"
+          },
+          "performance": {
+            "noImgElement": "off"
           },
           "style": {
             "noJsxLiterals": "off"
