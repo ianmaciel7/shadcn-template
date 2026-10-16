@@ -209,10 +209,12 @@ Base radius `--radius: 0.625rem` (10px). Derived tokens:
 ## Do's and Don'ts
 
 ### Do
+
 - Use semantic tokens (`bg-background`, `text-muted-foreground`, `border-border`) instead of raw colors, so dark mode works automatically.
 - Change the theme in `src/app/globals.css` and then update this document.
 - Use `rounded-*` utilities so components follow `--radius`.
 
 ### Don't
+
 - Don't hardcode hex or `oklch()` values in components.
 - Don't add a brand accent without adding the matching token pair (light and dark) in `globals.css`.

@@ -2,53 +2,54 @@
 
 ## Validation commands
 
-This template provides static analysis through Biome, colocated unit and
-component testing through Vitest, Playwright E2E testing, and production
-validation through Next.js. Run the checks relevant to a change before opening
-a pull request:
+Run the checks relevant to a change before opening a pull request. See
+[TOOLING.md](TOOLING.md) for every command and the tools behind them.
 
-```bash
-pnpm lint
-pnpm test
-pnpm build
-```
+| Command | Use it for |
+| --- | --- |
+| `pnpm verify:fast` | Every change: Biome CI, typecheck, and unit tests. Runs in seconds. |
+| `pnpm verify:full` | Before a pull request: adds architecture, unused code, duplication, spelling, Markdown, complexity, React diagnostics, browser tests, and a production build with size budgets. |
+| `pnpm verify:e2e` | Changes that affect pages or visual output: functional, accessibility, and visual Playwright specs. |
+| `pnpm verify:security` | Dependency or configuration changes: Semgrep, Gitleaks, and `pnpm audit`. Needs the host tools in [TOOLING.md](TOOLING.md#host-prerequisites). |
 
-`pnpm lint` runs `biome check`. `pnpm test` runs Vitest once. `pnpm build`
-performs a production Next.js build and catches TypeScript and framework
-integration errors. Use `pnpm test:watch` while writing a colocated Vitest
-test. Run `pnpm test:e2e` when an E2E specification is affected or added; it
-builds and starts the production application through Playwright.
+`pnpm verify:fast` must stay fast. It runs only the `unit` Vitest project; browser,
+end-to-end, visual, and mutation tests are deliberately outside it.
 
-## Current lint baseline
+For a manual smoke test, run `pnpm dev` and verify the affected route in a
+browser, including its loading, error, and localized states where applicable.
 
-`pnpm lint` currently reports existing repository-wide formatting diagnostics.
-Run it for every change, report the result, and do not represent it as passing
-until the baseline is repaired. When a change introduces a new diagnostic, fix
-that diagnostic in the same change; do not reformat unrelated files solely to
-make the command pass.
+## Test layers
 
-For a manual smoke test, run:
+| Layer | Location and name | Runner | Command | Use for |
+| --- | --- | --- | --- | --- |
+| Unit and hook | `src/**/*.test.ts(x)` next to the source | Vitest `unit` project, `jsdom` | `pnpm test` | Functions, utilities, hooks, and business logic. |
+| Property-based | Inside unit tests, with `fast-check` | Vitest `unit` | `pnpm test` | Pure logic with a large input space, such as `isLocale`. |
+| Browser component | `src/**/*.browser.test.tsx` | Vitest `browser` project, Chromium | `pnpm test:browser` | Behavior that needs a real browser: viewport and media queries, focus, real events. |
+| End-to-end | `tests/*.spec.ts` | Playwright | `pnpm test:e2e` | User journeys against a production build. |
+| Accessibility | `tests/a11y.spec.ts`, titled `@a11y` | Playwright and axe-core | `pnpm test:a11y` | Automated WCAG 2.x A/AA scans in light and dark mode. |
+| Visual regression | `tests/visual.spec.ts`, titled `@visual` | Playwright screenshots | `pnpm test:visual` | Layout and theme changes in rendered pages. |
+| Mutation | `stryker.config.json` | Stryker | `pnpm test:mutation` | On-demand check of test strength. Currently unreliable; see [TOOLING.md](TOOLING.md#known-limitations). |
 
-```bash
-pnpm dev
-```
-
-Then verify the affected route in a browser, including its loading, error, and
-localized states where applicable.
+Choose the lightest layer that can fail for the right reason. Keep a behavior
+in `jsdom` when a stub is enough, and move it to Browser Mode only when the real
+browser matters (for example, `use-mobile.browser.test.tsx` uses a real viewport
+instead of a stubbed `matchMedia`).
 
 ## Test placement and scope
 
 - Place Vitest unit tests for functions, utilities, hooks, and business logic
   next to their source module with `*.test.ts`.
 - Place React component and JSX integration tests next to their source module
-  with `*.test.tsx`.
-- Place Playwright E2E user journeys in root `tests/` with `*.spec.ts`. Keep
-  E2E fixtures and helpers there only when they are E2E-specific and shared.
+  with `*.test.tsx`. Use `*.browser.test.tsx` for Browser Mode tests.
+- Place Playwright specifications in root `tests/` with `*.spec.ts`. Keep E2E
+  fixtures and helpers there only when they are E2E-specific and shared.
 - Do not create empty test directories or placeholder tests. Do not create a
   global `unit/`, `components/`, or `integration/` directory, nor a
   `__tests__/` folder for every component.
 - Preserve App Router organization: colocating a test does not make a route
   public, and `_components` and `_lib` remain suitable private locations.
+- Do not write a test only to make a tool report success. When a tool has no
+  suitable subject yet, leave it unused and say so.
 
 Use Vitest with React Testing Library for synchronous units, components, and
 integrations. Favor `getByRole` and other accessible queries. Test observable
@@ -59,17 +60,64 @@ output is the contract.
 Use Playwright for browser journeys and asynchronous Server Components. Vitest
 does not currently support async Server Components completely, so do not build
 testing workarounds for them. Add MSW only when a shared network-mocking need
-exists.
+exists (ADR 0006).
 
 At minimum, new tests should be deterministic, independent of external
 services, and safe to run in CI. Mock network and clock dependencies where
 needed. Do not store production credentials or personal data in test fixtures.
 
-Before the first E2E run in a new environment, install browser binaries with:
+## Visual regression workflow
+
+Verification and baseline updates are separate commands:
 
 ```bash
-pnpm exec playwright install
+pnpm test:visual          # compare; fails on a difference, never rewrites
+pnpm test:visual:update   # rewrite baselines after reviewing the change
 ```
+
+1. Run `pnpm test:visual`. On failure, open the diff in `playwright-report/`.
+2. If the change is intentional, run `pnpm test:visual:update`, review the new
+   PNGs in `tests/visual.spec.ts-snapshots/`, and commit them with the change.
+3. If it is not intentional, fix the code instead.
+
+Baselines are committed so every contributor compares against the same image.
+They are named per platform (`-chromium-win32.png`); another operating system
+needs its own baselines. Differences up to 1% of pixels are tolerated
+(`maxDiffPixelRatio` in `playwright.config.ts`).
+
+## Component workbench
+
+Write a colocated `*.stories.tsx` next to a component to review it in isolation:
+
+```bash
+pnpm ladle         # serve the workbench
+pnpm ladle:build   # production build in reports/ladle
+```
+
+`.ladle/components.tsx` wraps every story in the same providers as
+`src/app/layout.tsx` (theme, intl, tooltip) and loads `src/app/globals.css`.
+Cover the variants and states a reviewer needs to see, not every prop.
+
+## Coverage, complexity, and size
+
+- `pnpm test:coverage` writes `coverage/`. It measures application code and
+  leaves out the vendored `src/components/ui` and `src/components/ai-elements`.
+- `pnpm analyze:health` feeds that coverage to Fallow so CRAP scores reflect real
+  tests. Add a test before accepting a complex, untested function.
+- `pnpm analyze:size` builds the app and fails when generated client JavaScript or
+  CSS exceeds the gzip budgets in `.size-limit.json`. Raise a budget only with a
+  reason in the pull request.
+
+## First-time setup
+
+Install the browser binaries once per environment:
+
+```bash
+pnpm exec playwright install chromium
+```
+
+Playwright starts the application itself (`pnpm build && pnpm start`), reusing a
+server on port 3000 when one is already running outside CI.
 
 ## Pull request evidence
 

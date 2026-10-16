@@ -35,10 +35,14 @@ auto-updates as you edit the file.
 Run the following before opening a pull request:
 
 ```bash
-pnpm lint
-pnpm test
-pnpm build
+pnpm verify:fast   # lint, typecheck, unit tests (seconds)
+pnpm verify:full   # adds analysis, browser tests, build, and size budgets
+pnpm verify:e2e    # Playwright: functional, accessibility, visual
 ```
+
+Develop components in isolation with `pnpm ladle`. See [TESTING.md](TESTING.md)
+for the test strategy and [TOOLING.md](TOOLING.md) for every command and host
+prerequisite.
 
 ## Learn More
 
