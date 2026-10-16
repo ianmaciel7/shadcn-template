@@ -80,9 +80,8 @@ export default function Home() {
                 href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
                 target="_blank"
                 rel="noopener noreferrer"
-              >
-                {t("deployNow")}
-              </Link>
+                aria-label={t("deployNow")}
+              />
             }
             className="h-11 sm:h-12 w-full sm:w-[160px] gap-2 rounded-lg px-5 text-sm sm:text-base font-medium shadow-xs"
           >
@@ -103,9 +102,8 @@ export default function Home() {
                 href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
                 target="_blank"
                 rel="noopener noreferrer"
-              >
-                {t("documentation")}
-              </Link>
+                aria-label={t("documentation")}
+              />
             }
             className="h-11 sm:h-12 w-full sm:w-[160px] rounded-lg px-5 text-sm sm:text-base font-medium shadow-xs"
           >
