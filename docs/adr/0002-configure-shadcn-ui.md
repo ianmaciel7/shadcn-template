@@ -1,4 +1,4 @@
-# ADR 0002: shadcn/ui Setup, Components, and Typeset
+# ADR 0002: Configure shadcn/ui
 
 - **Status**: Accepted
 - **Date**: 2026-10-16

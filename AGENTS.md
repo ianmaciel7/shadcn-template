@@ -48,6 +48,8 @@ Deliver correct, maintainable changes with minimal risk.
 - `CONTRIBUTING.md`: branch, commit, release, and pull-request conventions.
 - `GLOSSARY.md`: agreed domain terminology; preserve its pending status until
   product-specific terms are resolved.
+- `.agents/rules/adr-naming.md`: naming and immutability policy for future
+  architecture decision records.
 
 Read the documentation relevant to the change before editing it. Keep these
 documents and the relevant ADR current when a durable project practice changes.

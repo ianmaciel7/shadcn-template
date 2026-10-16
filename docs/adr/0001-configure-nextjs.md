@@ -1,4 +1,4 @@
-# ADR 0001: Next.js Base Stack with Biome, React Compiler and Tailwind
+# ADR 0001: Configure Next.js
 
 - **Status**: Accepted
 - **Date**: 2026-10-16

@@ -1,4 +1,4 @@
-# ADR 0004: Internationalization (i18n) Architecture with next-intl
+# ADR 0004: Configure Internationalization
 
 - **Status**: Accepted
 - **Date**: 2026-10-16

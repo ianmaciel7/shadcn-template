@@ -16,6 +16,7 @@ Project-local standard for AGENTS.md + MCP + SKILLS.
 ## Source files (commit these)
 - `agents.json`: selected integrations + MCP servers + workspace behavior
 - `skills/*/SKILL.md`: project skills
+- `rules/*.md`: persistent project guidance for coding agents
 
 ## Root instruction file
 - `../AGENTS.md`: canonical instruction document

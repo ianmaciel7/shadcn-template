@@ -1,4 +1,4 @@
-# ADR 0003: Theme Provider Setup with next-themes
+# ADR 0003: Configure Theming
 
 - **Status**: Accepted
 - **Date**: 2026-10-16

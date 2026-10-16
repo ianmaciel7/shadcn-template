@@ -1,4 +1,4 @@
-# ADR 0005: Establish Project Documentation Standards
+# ADR 0005: Document Project Standards
 
 - **Status**: Accepted
 - **Date**: 2026-10-16
@@ -46,7 +46,10 @@ documentation entrypoints, except for the domain records described below:
    executable form is split across tool configuration and accepted ADRs.
 
 Lasting architectural choices continue to be recorded as sequential ADRs in
-`docs/adr/`.
+`docs/adr/`. Future ADRs follow the filename and title convention in
+`.agents/rules/adr-naming.md`. Accepted ADRs remain immutable: a changed
+decision is captured in a new record that supersedes the earlier one, rather
+than by renaming, renumbering, or rewriting it.
 
 ## Missing-document policy
 

@@ -17,7 +17,7 @@ Single-context repo:
 /
 ├── GLOSSARY.md
 ├── docs/adr/
-│   └── 0001-setup-base-stack.md
+│   └── 0001-configure-nextjs.md
 └── src/
 ```
 
