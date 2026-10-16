@@ -15,7 +15,7 @@ repository. It is not a catalog of every runtime library; `package.json` and
 | Compiler | React Compiler | 1.0.0 | Optimizes React components through Next.js configuration. | `package.json`, `next.config.ts` |
 | Styling | Tailwind CSS | `^4` | Generates utility CSS and is loaded by Turbopack (and by Vite for Ladle). | `package.json`, `next.config.ts`, `.ladle/vite.config.mjs`, `src/app/globals.css` |
 | Code quality | Biome | 2.4.2 | Formats code, runs lint checks, and organizes imports. | `package.json`, `biome.json` |
-| Custom code quality rules | GritQL | Executed by Biome; no standalone CLI | Supplies the three project-specific Next.js rules for layout props, page props, and route context. | `.biome/rules/nextjs/*.grit`, `biome.json` |
+| Custom code quality rules | GritQL | Executed by Biome; no standalone CLI | Supplies the three project-specific Next.js rules for layout props, page props, and route context. Regression-tested in `.biome/rules/nextjs/rules.test.ts`. | `.biome/rules/nextjs/*.grit`, `biome.json` |
 | UI scaffolding | shadcn/ui CLI | 4.21.5 | Adds and maintains locally owned UI components using the configured aliases and style. | `package.json`, `components.json` |
 | Component workbench | Ladle | 5.1.1 | Develops and reviews components in isolation through colocated `*.stories.tsx` files. | `.ladle/`, `package.json` |
 | Unit and component testing | Vitest + React Testing Library | Vitest 5.0.5 | Runs colocated unit, hook, and component tests in `jsdom` (`unit` project). | `vitest.config.mts`, `package.json` |
@@ -27,7 +27,7 @@ repository. It is not a catalog of every runtime library; `package.json` and
 | Mutation testing | Stryker with the `command` runner | 10.0.0 (see [Known limitations](#known-limitations)) | On-demand mutation analysis of selected logic; runs the unit tests once per mutant. | `stryker.config.json`, `vitest.mutation.config.mts` |
 | Unused code | Knip | 6.41.0 | Finds unused files, exports, and dependencies. | `knip.jsonc` |
 | Architecture boundaries | dependency-cruiser | 18.6.0 | Enforces layering rules and forbids dependency cycles. | `.dependency-cruiser.cjs` |
-| Structural rules | ast-grep | 0.51.0 | Enforces project conventions that need syntax awareness (currently no manual memoization, per `CODING_STANDARDS.md`). Rules have snapshot tests. | `sgconfig.yml`, `.ast-grep/` |
+| Structural rules | ast-grep | 0.51.0 | Enforces project conventions that need syntax awareness (currently a warning-level hint about manual memoization, per `CODING_STANDARDS.md`). Rules have snapshot tests. | `sgconfig.yml`, `.ast-grep/` |
 | Duplication | jscpd | 5.4.1 | Reports meaningful duplicated code. | `.jscpd.json` |
 | Complexity and health | Fallow | 3.33.1 | Reports complexity, CRAP score (from real coverage), and hotspots. `.ladle/` is excluded on purpose: it is tooling glue that Ladle loads by convention. Vendored `src/components/ui/*.tsx` and `ai-elements` are excluded; custom code under `ui/extensions/` is analyzed. Dead-code, duplication, and architecture analysis stay with Knip, jscpd, and dependency-cruiser. | `.fallowrc.json` |
 | React diagnostics | React Doctor | 0.9.18 | Scans application React code for correctness, performance, and security issues. | `doctor.config.json` |
@@ -35,10 +35,10 @@ repository. It is not a catalog of every runtime library; `package.json` and
 | Performance audit | Lighthouse | 13.5.0 | On-demand performance and accessibility report. | `package.json` |
 | Spelling | CSpell | 10.4.0 | Checks spelling in code, JSON, and Markdown. | `cspell.json` |
 | Markdown | markdownlint-cli2 | 0.23.3 | Lints repository Markdown. | `.markdownlint-cli2.jsonc` |
-| Static security | Semgrep Community Edition | Host tool (CI pins 1.178.0) | Runs the project's local security rules with metrics and version checks off. | `.semgrep.yml`, `package.json` (`check:security`) |
+| Static security | Semgrep Community Edition | Host tool (CI pins 1.178.0) | Runs the project's security rules on `src` with `--error` so findings fail the run; `check:security:rules` tests them against an annotated fixture. | `tests/semgrep/rules.yml`, `tests/semgrep/rules.tsx`, `package.json` |
 | Secret scanning | Gitleaks | Host tool (CI pins 8.30.1) | Scans the Git history for secrets with `gitleaks git --redact`. `detect` is deprecated upstream. | `package.json` (`check:secrets`) |
 | Dependency audit | `pnpm audit` | Included with pnpm | Reports known vulnerable dependencies. | `pnpm-workspace.yaml` (`auditConfig`) |
-| Continuous integration | GitHub Actions | Pinned by commit SHA | Runs `verify:full`, `verify:e2e`, and a `security` job (Semgrep, Gitleaks, actionlint, zizmor, dependency audit, pre-commit) on push and pull requests. | `.github/workflows/ci.yml` |
+| Continuous integration | GitHub Actions | Pinned by commit SHA | Runs `static`, `build`, `e2e`, `security`, and `pr-title` jobs in parallel on pull requests, pushes to `main`, and manual dispatch, plus a `ci-result` aggregate (see TESTING.md). | `.github/workflows/ci.yml` |
 | Workflow linting | actionlint, zizmor | Host tools | Lint and audit the GitHub Actions workflows. | `package.json` (`check:workflows`) |
 | Codebase graph | Graphify | Host tool | Builds an on-demand knowledge graph; output goes to the ignored `graphify-out/`. | None |
 | Git hooks | Husky + lint-staged + Commitlint | 9.1.7 / 16.4.0 / 21.2.3 | Check staged files with Biome and validate commit messages. | `.husky/`, `package.json`, `commitlint.config.mjs` |
@@ -101,22 +101,26 @@ leave them unapproved.
 | `pnpm check:duplicates` | jscpd. |
 | `pnpm check:structure` | ast-grep rule tests, then a scan of application code. |
 | `pnpm check:spelling` / `pnpm check:markdown` | CSpell / markdownlint. |
-| `pnpm check:security` / `pnpm check:secrets` / `pnpm audit` | Semgrep / Gitleaks / dependency audit. |
+| `pnpm check:security` / `pnpm check:security:rules` | Semgrep scan of `src` (fails on findings) / tests of the Semgrep rules. Run inside a Git work tree. |
+| `pnpm check:secrets` / `pnpm audit` | Gitleaks / dependency audit. |
 | `pnpm check:workflows` | actionlint and zizmor on `.github/workflows`. |
 | `pnpm analyze:health` | Unit tests with coverage, then Fallow complexity and CRAP. |
 | `pnpm analyze:react` | React Doctor. |
 | `pnpm analyze:size` | Production build, then Size Limit budgets. |
 | `pnpm analyze:bundle` | Next.js bundle analyzer. |
 | `pnpm analyze:lighthouse` | Lighthouse report against a running server. |
+| `pnpm analyze:lighthouse:ci` | Same, headless with `--no-sandbox` and an `.html` report path; used by the scheduled workflow. |
 
 ### Verification entry points
 
 | Command | Responsibility | Time |
 | --- | --- | --- |
 | `pnpm verify:fast` | Biome CI, typecheck, and the unit tests only. Meant to run constantly. | seconds |
-| `pnpm verify:full` | `verify:fast`, plus architecture, unused code, duplication, structural rules, spelling, Markdown, Fallow health, React Doctor, browser tests, and a production build with size budgets. | minutes |
+| `pnpm verify:static` | Biome CI, typecheck, unit tests with coverage thresholds, architecture, unused code, duplication, structural rules, spelling, Markdown, Fallow health, and React Doctor. The CI `static` job. | minutes |
+| `pnpm verify:build` | Browser tests, production build with size budgets, and the Ladle build. The CI `build` job. | minutes |
+| `pnpm verify:full` | `verify:static` then `verify:build`. | minutes |
 | `pnpm verify:e2e` | The whole Playwright suite: functional, accessibility, and visual. | minutes |
-| `pnpm verify:security` | Semgrep, Gitleaks, workflow linting, and the dependency audit. Needs the host tools; the same checks run in the CI `security` job. | seconds |
+| `pnpm verify:security` | Semgrep rule tests and scan, Gitleaks, workflow linting, and the dependency audit. Needs the host tools; the same checks run in the CI `security` job. | seconds |
 
 `verify:full` intentionally excludes Playwright, security scanners, mutation
 testing, and Lighthouse because they are slow or need host tools. Run
@@ -152,7 +156,10 @@ theming decision is recorded in ADR 0003.
 | `sgconfig.yml`, `.ast-grep/` | ast-grep rules and their snapshot tests. |
 | `knip.jsonc`, `.dependency-cruiser.cjs`, `.jscpd.json`, `.fallowrc.json`, `doctor.config.json` | Analysis tool configuration. |
 | `cspell.json`, `.markdownlint-cli2.jsonc` | Documentation quality. |
-| `.semgrep.yml` | Static security rules. |
+| `tests/semgrep/` | Semgrep rules and their annotated test fixture. |
+| `.github/dependabot.yml` | Weekly grouped npm, GitHub Actions, and mirror-file updates. |
+| `.github/dependabot-mirror/` | Dockerfile and `requirements.txt` that let Dependabot bump the Playwright image and the pip-installed CI tools. |
+| `.github/workflows/scheduled-quality.yml` | Weekly Stryker and Lighthouse runs, also manual. |
 | `.husky/`, `commitlint.config.mjs`, `.pre-commit-config.yaml` | Git hooks and commit validation. |
 | `.github/workflows/ci.yml` | Continuous integration. |
 | `.github/workflows/visual-baselines.yml` | Manual workflow that regenerates the visual baselines in CI. |
@@ -162,6 +169,79 @@ theming decision is recorded in ADR 0003.
 Generated output (`reports/`, `coverage/`, `.next/`, `test-results/`,
 `playwright-report/`, `.stryker-tmp/`, `graphify-out/`) is ignored. Ladle
 configuration in `.ladle/` is versioned; only its build output is ignored.
+
+## Custom rule registry
+
+Native rules are preferred; every custom rule below exists because no native
+rule, type constraint, or specialized tool covers it. Add a row here, with
+valid and invalid tests, before registering a new custom rule.
+
+| Rule | Owner | Severity | Scope | Why it is not native |
+| --- | --- | --- | --- | --- |
+| `prefer-page-props` | Grit (Biome plugin) | error | `export default async function Page({ params }: {...})` | Next.js accepts compatible hand-written types, so TypeScript will not reject them. This enforces the generated `PageProps<"/route">` helper ([Next.js docs](https://nextjs.org/docs/app/api-reference/file-conventions/page)). Convention, not a framework requirement. |
+| `prefer-layout-props` | Grit (Biome plugin) | error | `export default function Layout({ children }: { children: ReactNode })` | Same reasoning for `LayoutProps<"/route">`. `Readonly<{ children: ReactNode }>` is not matched. |
+| `prefer-route-context` | Grit (Biome plugin) | error | Route Handlers `GET`/`POST`/`PUT`/`PATCH`/`DELETE` with a hand-written `{ params }` | Same reasoning for `RouteContext<"/route">`. |
+| `no-manual-memoization-ts` / `-tsx` | ast-grep | warning | `useMemo`, `useCallback`, `memo` in `src/app`, `src/hooks`, `src/i18n`, `src/lib` | No native Biome rule. React Compiler makes most of these redundant but [React still documents them as escape hatches](https://react.dev/learn/react-compiler/introduction), so this is a hint, not an error. Keep the call and comment the reason when it is intentional. |
+| `no-dynamic-tailwind-class` | ast-grep | error | `className` values and `cn`/`clsx`/`cva` calls in app code (vendored files excluded) | Template literals such as `bg-${color}-500` are never generated because [Tailwind scans for complete class names](https://tailwindcss.com/docs/detecting-classes-in-source-files). Functional, not stylistic; no native Biome rule. |
+| `no-hardcoded-ui-attribute` | ast-grep | warning | `aria-label`, `aria-description`, `title`, `placeholder`, `alt` with a literal containing letters | `noJsxLiterals` runs with `ignoreProps`, so attributes are unchecked. A warning because brand names and similar values need judgment; `alt=""` is allowed. |
+| `no-server-api-in-client-components` | Semgrep | error | `"use client"` files importing `next/headers` | Complements `no-server-only-in-client-components`; fails with a clear message before the framework build error. |
+| `session-cookie-must-be-http-only` | Semgrep | error | a `.set()` call whose cookie name contains session, token, auth or sid, without `httpOnly: true` and `secure: true` | [Next.js authentication guide](https://nextjs.org/docs/app/guides/authentication). Matches by cookie name only, so unrelated cookies (theme, locale) are never flagged. |
+| `no-ignored-build-errors` | Semgrep | error | `ignoreBuildErrors: true` in `src` and `next.config.ts` | Dangerous build configuration; no native rule. |
+| Other Semgrep rules in `tests/semgrep/rules.yml` | Semgrep | error | `src` | Env access in client components, `eval`, HTML sinks, `dangerouslySetInnerHTML`, and secrets in `NEXT_PUBLIC_` names. `API_KEY` is deliberately not treated as a secret (public Firebase web keys). Each rule has valid and invalid cases in `tests/semgrep/rules.tsx`. |
+
+### Reference repositories surveyed
+
+The 156 distinct rule and config files across `notes-app` (`dev`,
+`firebase/file`, `old-11`) and `exams-app` (`main`,
+`chore/development-quality-tooling`) were reviewed by name and grouped. Only
+the rules above were adopted. The rest fall into these groups, none of which
+is reintroduced:
+
+- **Next.js 16 removed or deprecated APIs** (`next16-*`, `app-router-legacy-*`,
+  `async-*-access`): `next build` and generated types already reject them.
+- **Props, variants, Base UI and Accordion/ToggleGroup APIs** (`base-ui-*`,
+  `shadcn-*-props`, `component-props-type`): TypeScript.
+- **shadcn composition and anatomy** (`shadcn-*`, `*-composition`,
+  `*-title`): optional recommendations that a same-file pattern cannot judge
+  (extracted composition is valid). They stay in the shadcn skill; behavior is
+  covered by axe and Playwright.
+- **Hooks placement and inline components** (`exported-hook-location`,
+  `extract-stateful-hooks`, `no-inline-hook-definition`): Biome
+  `noNestedComponentDefinitions` and `useHookAtTopLevel`; hooks may be colocated.
+- **Effects and state** (`react-effect-set-state`, controlled/uncontrolled
+  rules): React Doctor and TypeScript.
+- **Tailwind style preferences** (`logical-properties`, `no-inline-styles`,
+  semantic-color and spacing rules): optional preferences; Biome gets native
+  rules when upgraded.
+- **i18n** (`next-intl-*`): JSX text is covered by `noJsxLiterals`, keys by
+  typed next-intl, catalogs by `messages.test.ts`. Dynamic keys and toast
+  literals are deferred until the template has toasts.
+- **Security** (`next-*` server rules): see "Security checks not adopted".
+
+### Native Biome rules evaluated for this version (2.4.2)
+
+- **Enabled:** `noJsxLiterals` (`ignoreProps`), `noReactForwardRef` (React 19
+  passes `ref` as a prop; relaxed for vendored components), and the `next` and
+  `react` domains, which include `noNestedComponentDefinitions`,
+  `useHookAtTopLevel`, and `useExhaustiveDependencies`.
+- **Not available in 2.4.2:** `noInlineStyles`, `noTailwindRawColors`,
+  `noTailwindArbitraryValue`, `useTailwindShorthandClasses`. Revisit after a
+  Biome upgrade; do not reintroduce them as Grit rules.
+- **Not adopted:** `noNamespaceImport` (only flags `import * as React`, which the
+  shadcn convention uses, and vendored Radix/Base UI wrappers);
+  `noDeprecatedImports` (needs the project scanner, about 5x slower on every
+  lint-staged run, and only flagged vendored files); `noFloatingPromises` (still
+  in `nursery`); `noRestrictedImports` for `next/link` (ADR 0004 prefers the
+  localized `@/i18n/navigation` helpers, but `src/app/page.tsx` uses external
+  links; adopt it once locale-prefixed internal links exist).
+- **Security checks not adopted:** unsafe Server Action input handling, missing
+  authorization near sensitive operations, and private data in shared caches.
+  The template has no auth, database, or Server Actions to validate rules
+  against, `.parse()` or `throw` does not prove safety, and Next.js already
+  rejects `cookies()` or `headers()` inside `"use cache"`. Gitleaks owns
+  real secrets. Add taint-mode rules once a data access layer exists.
+- **Left to TypeScript:** component props, variants, Base UI and Accordion /
+  ToggleGroup APIs, and async `params`. No Grit rule duplicates them.
 
 ## Known limitations
 

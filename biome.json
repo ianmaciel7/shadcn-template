@@ -20,7 +20,8 @@
       "!build",
       "!.agents",
       "!.claude",
-      "!.serena"
+      "!.serena",
+      "!tests/semgrep"
     ]
   },
   "formatter": {
@@ -37,6 +38,9 @@
     "enabled": true,
     "rules": {
       "recommended": true,
+      "suspicious": {
+        "noReactForwardRef": "error"
+      },
       "style": {
         "noJsxLiterals": {
           "level": "error",
@@ -79,6 +83,7 @@
             "noRedundantRoles": "off"
           },
           "suspicious": {
+            "noReactForwardRef": "off",
             "noArrayIndexKey": "off",
             "noDoubleEquals": "off",
             "noDocumentCookie": "off"

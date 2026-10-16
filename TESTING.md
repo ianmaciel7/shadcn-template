@@ -8,9 +8,9 @@ Run the checks relevant to a change before opening a pull request. See
 | Command | Use it for |
 | --- | --- |
 | `pnpm verify:fast` | Every change: Biome CI, typecheck, and unit tests. Runs in seconds. |
-| `pnpm verify:full` | Before a pull request: adds architecture, unused code, duplication, spelling, Markdown, complexity, React diagnostics, browser tests, and a production build with size budgets. |
+| `pnpm verify:full` | Before a pull request: `verify:static` (adds coverage thresholds, architecture, unused code, duplication, spelling, Markdown, complexity, React diagnostics) plus `verify:build` (browser tests, production build with size budgets, Ladle build). |
 | `pnpm verify:e2e` | Changes that affect pages or visual output: functional, accessibility, and visual Playwright specs. |
-| `pnpm verify:security` | Dependency or configuration changes: Semgrep, Gitleaks, and `pnpm audit`. Needs the host tools in [TOOLING.md](TOOLING.md#host-prerequisites). |
+| `pnpm verify:security` | Dependency or configuration changes: Semgrep rule tests and scan, Gitleaks, workflow lint, and `pnpm audit`. Needs the host tools in [TOOLING.md](TOOLING.md#host-prerequisites). |
 
 `pnpm verify:fast` must stay fast. It runs only the `unit` Vitest project; browser,
 end-to-end, visual, and mutation tests are deliberately outside it.
@@ -26,7 +26,7 @@ browser, including its loading, error, and localized states where applicable.
 | Property-based | Inside unit tests, with `fast-check` | Vitest `unit` | `pnpm test` | Pure logic with a large input space, such as `isLocale`. |
 | Browser component | `src/**/*.browser.test.tsx` | Vitest `browser` project, Chromium | `pnpm test:browser` | Behavior that needs a real browser: viewport and media queries, focus, real events. |
 | End-to-end | `tests/*.spec.ts` | Playwright | `pnpm test:e2e` | User journeys against a production build. |
-| Accessibility | `tests/a11y.spec.ts`, titled `@a11y` | Playwright and axe-core | `pnpm test:a11y` | Automated WCAG 2.x A/AA scans in light and dark mode. |
+| Accessibility | `tests/a11y.spec.ts`, titled `@a11y` | Playwright and axe-core | `pnpm test:a11y` | Automated WCAG 2.0, 2.1, and 2.2 A/AA scans (`wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `wcag22aa`) in light and dark mode. |
 | Visual regression | `tests/visual.spec.ts`, titled `@visual` | Playwright screenshots (CI only) | `pnpm test:visual` | Layout and theme changes in rendered pages. |
 | Mutation | `stryker.config.json` | Stryker | `pnpm test:mutation` | On-demand check of test strength. Currently unreliable; see [TOOLING.md](TOOLING.md#known-limitations). |
 
@@ -50,6 +50,14 @@ instead of a stubbed `matchMedia`).
   public, and `_components` and `_lib` remain suitable private locations.
 - Do not write a test only to make a tool report success. When a tool has no
   suitable subject yet, leave it unused and say so.
+
+Two Vitest suites verify configuration rather than application behavior:
+`src/messages/messages.test.ts` checks that every locale catalog has the same
+keys and ICU arguments as the default locale and no empty messages, and
+`.biome/rules/nextjs/rules.test.ts` lints fixtures to prove each Grit rule
+reports invalid code and accepts valid code. Semgrep rules are tested with
+`semgrep --test` (`pnpm check:security:rules`) and ast-grep rules with
+`ast-grep test`.
 
 Use Vitest with React Testing Library for synchronous units, components, and
 integrations. Favor `getByRole` and other accessible queries. Test observable
@@ -105,19 +113,88 @@ Cover the variants and states a reviewer needs to see, not every prop.
 - `pnpm test:coverage` writes `coverage/`. It measures application code and
   leaves out the vendored `src/components/ui/*.tsx` and
   `src/components/ai-elements`; `src/components/ui/extensions` is measured.
-- `pnpm analyze:health` feeds that coverage to Fallow so CRAP scores reflect real
-  tests. Add a test before accepting a complex, untested function.
+- `vitest.config.mts` sets a coverage floor of 70% (statements, branches,
+  functions, lines), just below the template's current 74%. Raise it as
+  application code grows; never lower it to pass a run. `json-summary` feeds
+  the CI step summary.
+- `pnpm analyze:health` runs coverage and feeds it to Fallow so CRAP scores
+  reflect real tests; `pnpm analyze:fallow` reuses an existing `coverage/`. Add a test before accepting a complex, untested function.
 - `pnpm analyze:size` builds the app and fails when generated client JavaScript or
   CSS exceeds the gzip budgets in `.size-limit.json`. Raise a budget only with a
   reason in the pull request.
 
 ## Continuous integration
 
-`.github/workflows/ci.yml` runs `pnpm verify:full`, `pnpm verify:e2e`, and a
-separate `security` job (Semgrep, Gitleaks, actionlint, zizmor, `pnpm audit`, and
-`pre-commit run --all-files`) on pushes to `main` and on pull requests. Run `pnpm check:workflows`
-after editing a workflow, and keep actions and the Playwright container pinned
-by commit SHA or digest.
+`.github/workflows/ci.yml` runs on pull requests, pushes to `main`, and manual
+`workflow_dispatch`. Jobs run in parallel:
+
+| Job | Runs | Local equivalent |
+| --- | --- | --- |
+| `static` | Biome, typecheck, unit tests with coverage thresholds, architecture, Knip, jscpd, ast-grep, CSpell, markdownlint, Fallow, React Doctor | `pnpm verify:static` |
+| `build` | Vitest Browser Mode, production build with size budgets, Ladle production build | `pnpm verify:build` |
+| `e2e` | Playwright functional, accessibility, and visual specs in the pinned Playwright container | `pnpm verify:e2e` |
+| `security` | Semgrep rule tests and scan (`--error`), Gitleaks, actionlint, zizmor, `pnpm audit`, pre-commit | `pnpm verify:security` |
+| `pr-title` | Conventional Commit PR title (pull requests only) | `echo "feat: title" \| pnpm exec commitlint` |
+| `ci-result` | Aggregates the jobs above; use it as the single required status check | n/a |
+
+Pull-request runs cancel superseded runs (including when the title is edited,
+which re-runs the title check); pushes to `main` each get their own
+concurrency group and are never cancelled. The
+coverage report and the Playwright report and `test-results` are uploaded as
+artifacts for seven days, and coverage plus the job results are summarized on
+the run page. Run `pnpm check:workflows` after editing a workflow, and keep
+actions and the Playwright container pinned by commit SHA or digest.
+
+Dependabot opens weekly grouped updates for npm and GitHub Actions
+(`.github/dependabot.yml`); review each one, there is no auto-merge. It does not
+cover the Playwright container tag and digest in the workflows, so bump them
+together with `@playwright/test` and regenerate baselines with the
+`Update visual baselines` workflow.
+
+### Adapting the tests in a generated project
+
+Reusable infrastructure: the Vitest and Playwright configs, the axe scan, the
+locale-cookie and external-link behaviors, and the visual-baseline workflow.
+Tied to the starter UI: `tests/home.spec.ts` (title, "To get started, edit"
+headings, "Deploy Now" and "Documentation" links) and the `home-*` visual
+baselines. Replace these with your own pages, then regenerate baselines with the
+`Update visual baselines` workflow.
+
+### Automated accessibility limits
+
+axe-core detects only a subset of WCAG failures. It does not verify keyboard
+operation, focus order, screen-reader output, or content quality, so passing
+scans do not mean WCAG compliance. Test those manually.
+
+### Scheduled and manual checks
+
+`.github/workflows/scheduled-quality.yml` runs weekly (Mondays 06:00 UTC) and on
+manual dispatch, outside the pull-request path:
+
+- `mutation`: Stryker (`pnpm test:mutation`); fails below the `break` score in
+  `stryker.config.json` and uploads the HTML report.
+- `lighthouse`: builds and serves the app, then runs
+  `pnpm analyze:lighthouse:ci` and uploads the report. It is report-only: it
+  fails only when the audit cannot run, because no score threshold is set.
+
+Fallow and React Doctor already run in the `static` job. The Lighthouse job's
+runner setup (Playwright Chromium with `--no-sandbox`) was verified locally but
+not yet on a hosted runner; check the first scheduled run.
+
+### Known limitations
+
+- The `braces` advisory exception in `pnpm-workspace.yaml` is documented there;
+  revisit it when the advisory is withdrawn or the dependency chain drops it.
+- `pnpm check:security` must run inside a Git work tree; Semgrep stalls on
+  Windows when the directory is not a repository.
+- Dependabot cannot read workflow `container:` images or tool pins, so
+  `.github/dependabot-mirror/` holds a Dockerfile and a `requirements.txt` that
+  receive those bumps. Copy a Playwright image bump into `ci.yml` and
+  `visual-baselines.yml` by hand. Gitleaks and actionlint versions stay manual.
+- Deployment is intentionally absent; add provider-specific CD in the derived
+  project.
+- On Windows, set `PYTHONUTF8=1` when running Semgrep locally, or it can exit
+  with code 2 on an output encoding error.
 
 ## First-time setup
 

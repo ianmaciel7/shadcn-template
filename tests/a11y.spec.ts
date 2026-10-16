@@ -1,7 +1,10 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-const standards = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"];
+// axe-core tags: WCAG 2.0, 2.1 and 2.2 Level A/AA. WCAG 2.2 adds no new
+// Level A tag of its own, only "wcag22aa". Automated scans find only a subset
+// of issues; keyboard and screen-reader behavior still need manual review.
+const standards = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 
 for (const colorScheme of ["light", "dark"] as const) {
   test.describe(`@a11y home page in ${colorScheme} mode`, () => {

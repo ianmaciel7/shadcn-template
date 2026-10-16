@@ -13,8 +13,10 @@ When standards conflict, apply them in this order:
 ## TypeScript and React
 
 - Write TypeScript that passes the repository's strict compiler configuration.
-- Follow the Rules of React. React Compiler is enabled; do not add manual
-  memoization without a measured reason.
+- Follow the Rules of React. React Compiler is enabled, so manual
+  memoization (`useMemo`, `useCallback`, `memo`) is usually redundant. Keep it
+  only for a stated reason, such as a stable Effect dependency. ast-grep reports
+  it as a warning, not an error.
 - Prefer Server Components. Add `"use client"` only at the smallest boundary
   that needs browser APIs, state, effects, or event handlers.
 - Keep client-only providers in dedicated component seams so route layouts can

@@ -1,6 +1,6 @@
 # ADR 0007: Configure quality tooling
 
-- **Status**: Accepted
+- **Status**: Superseded in part by [ADR 0008](0008-configure-continuous-integration.md)
 - **Date**: 2026-10-16
 - **Deciders**: ianmaciel7
 

@@ -52,5 +52,7 @@ Releases and git tags follow [Semantic Versioning (SemVer)](https://semver.org/)
 
 ## Before opening a pull request
 
-Run the checks in [TESTING.md](TESTING.md), keep changes focused, and update
+Run the checks in [TESTING.md](TESTING.md), keep changes focused, title the
+pull request as a Conventional Commit (CI validates it and squash merges use
+it as the commit message), and update
 architecture or security documentation when the change affects those concerns.

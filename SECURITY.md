@@ -30,6 +30,11 @@ coordinate disclosure and remediation with the reporter.
 - Prefer server-side handling for sensitive operations and minimize data sent
   to Client Components.
 - Keep dependencies current and review security advisories before upgrades.
+  Dependabot proposes weekly updates; CI runs Semgrep, Gitleaks, `pnpm audit`,
+  actionlint, and zizmor. Document any audit exception with its justification,
+  scope, and review condition rather than inheriting one you cannot justify.
+- Workflows use least-privilege permissions, full-SHA-pinned actions, and no
+  deployment credentials. Keep it that way.
 - Treat generated and third-party code as untrusted until reviewed.
 
 This template does not prescribe an authentication provider or data store.

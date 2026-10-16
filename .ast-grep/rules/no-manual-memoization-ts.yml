@@ -8,12 +8,14 @@ files:
 ignores:
   - "**/*.test.ts"
   - "**/*.stories.ts"
-severity: error
-message: React Compiler is enabled; do not add manual memoization without a measured reason.
+severity: warning
+message: React Compiler is enabled; manual memoization is usually redundant. Keep it only when it is intentional.
 note: |
-  CODING_STANDARDS.md asks for no manual memoization without a measured reason.
-  If a measurement justifies it, suppress this rule on that line with
-  `// ast-grep-ignore: <rule-id>` and state the reason in a comment.
+  React Compiler memoizes automatically, but React still documents useMemo,
+  useCallback and memo as escape hatches (for example to keep an Effect
+  dependency stable). This is guidance, not a correctness rule: keep the call
+  when it has a reason and state that reason in a comment.
+  See CODING_STANDARDS.md.
 rule:
   any:
     - pattern: useMemo($$$)
