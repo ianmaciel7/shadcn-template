@@ -1,0 +1,12 @@
+{
+  "App": {
+    "title": "shadcn-template",
+    "description": "Template Next.js + shadcn/ui com Biome, React Compiler e i18n"
+  },
+  "Theme": {
+    "toggle": "Alternar tema",
+    "light": "Claro",
+    "dark": "Escuro",
+    "system": "Sistema"
+  }
+}
