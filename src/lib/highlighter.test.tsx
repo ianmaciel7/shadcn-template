@@ -65,21 +65,14 @@ describe("highlightCode", () => {
     expect(lines?.map(textOf)).toEqual(["x"]);
   });
 
-  it.each([
-    "js",
-    "md",
-    "py",
-    "sh",
-    "shell",
-    "shellscript",
-    "ts",
-    "yml",
-    "zsh",
-  ])("resolves the %s alias to a listed language", async (alias) => {
-    const lines = await highlightCode("x", alias);
+  it.each(["js", "md", "py", "sh", "shell", "shellscript", "ts", "yml", "zsh"])(
+    "resolves the %s alias to a listed language",
+    async (alias) => {
+      const lines = await highlightCode("x", alias);
 
-    expect(lines?.map(textOf)).toEqual(["x"]);
-  });
+      expect(lines?.map(textOf)).toEqual(["x"]);
+    },
+  );
 
   it("uses a different color for light and dark mode", async () => {
     const lines = await highlightCode("const a = 1;", "ts");
