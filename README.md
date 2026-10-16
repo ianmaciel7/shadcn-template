@@ -1,3 +1,5 @@
+# shadcn template
+
 This is a [Next.js](https://nextjs.org) template using the App Router,
 TypeScript, Tailwind CSS, shadcn/ui, Biome, and `next-intl`.
 

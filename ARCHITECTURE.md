@@ -61,6 +61,7 @@ files, and `public/` remain at the repository root, as required by the Next.js
 
 See ADR 0006 for the adopted architecture and [TESTING.md](TESTING.md) for
 commands and implementation conventions.
+
 - Internationalization is implemented through `src/i18n` and
   `src/messages`; see ADR 0004 for the adopted `next-intl` design.
 

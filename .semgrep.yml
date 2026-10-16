@@ -1,0 +1,13 @@
+rules:
+  - id: no-process-env-in-client-components
+    message: Do not expose process.env values from a Client Component.
+    languages: [typescript]
+    severity: ERROR
+    paths:
+      include: ["src/**/*.tsx"]
+    patterns:
+      - pattern: process.env.$NAME
+      - pattern-not: process.env.NODE_ENV
+      - pattern-inside: |
+          "use client";
+          ...

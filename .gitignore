@@ -14,6 +14,9 @@
 /coverage
 /playwright-report/
 /test-results/
+/reports/
+/graphify-out/
+/.ladle/
 
 # next.js
 /.next/
@@ -65,3 +68,6 @@ opencode.json
 .claude/skills
 .junie/skills
 .kilo/skills
+
+# serena local state
+.serena/

@@ -1,0 +1,8 @@
+{
+  "$schema": "https://unpkg.com/@stryker-mutator/core@10.0.0/schema/stryker-schema.json",
+  "testRunner": "vitest",
+  "mutate": ["src/lib/utils.ts"],
+  "coverageAnalysis": "perTest",
+  "concurrency": 2,
+  "reporters": ["clear-text", "progress"]
+}

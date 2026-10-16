@@ -21,7 +21,29 @@
   },
   "syncMode": "source-only",
   "mcp": {
-    "servers": {}
+    "servers": {
+      "serena": {
+        "transport": "stdio",
+        "enabled": true,
+        "description": "Project-local semantic symbol analysis",
+        "command": "serena",
+        "args": [
+          "start-mcp-server",
+          "--project-from-cwd",
+          "--context=codex"
+        ]
+      },
+      "next-devtools": {
+        "transport": "stdio",
+        "enabled": true,
+        "description": "Next.js runtime diagnostics and route inspection",
+        "command": "pnpm",
+        "args": [
+          "exec",
+          "next-devtools-mcp"
+        ]
+      }
+    }
   },
   "workspace": {
     "vscode": {

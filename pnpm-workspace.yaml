@@ -1,5 +1,14 @@
 allowBuilds:
+  "@ast-grep/cli": true
   sharp: false
   unrs-resolver: false
   "@parcel/watcher": false
   "@swc/core": false
+  esbuild: true
+  msw: false
+overrides:
+  "@modelcontextprotocol/sdk": ">=1.31.0"
+  linkify-it: ">=5.0.2"
+  qs: ">=6.16.0"
+  smol-toml: ">=1.9.0"
+  katex: ">=0.18.2"
