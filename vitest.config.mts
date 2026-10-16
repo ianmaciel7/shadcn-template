@@ -8,6 +8,17 @@ export default defineConfig({
     tsconfigPaths: true,
   },
   test: {
+    coverage: {
+      provider: "v8",
+      reporter: ["text-summary", "json"],
+      include: ["src/**/*.{ts,tsx}"],
+      exclude: [
+        "src/**/*.{test,browser.test,stories}.{ts,tsx}",
+        "src/components/ai-elements/**",
+        "src/components/ui/**",
+        "src/types/**",
+      ],
+    },
     projects: [
       {
         test: {
