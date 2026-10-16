@@ -1,6 +1,5 @@
 import { execFileSync } from "node:child_process";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
-
 import { join, resolve } from "node:path";
 import { afterAll, describe, expect, it } from "vitest";
 
