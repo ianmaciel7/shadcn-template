@@ -32,13 +32,13 @@ const useChainOfThought = () => {
   return context;
 };
 
-export type ChainOfThoughtProps = ComponentProps<"div"> & {
+type ChainOfThoughtProps = ComponentProps<"div"> & {
   open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
 };
 
-export const ChainOfThought = memo(
+const ChainOfThought = memo(
   ({
     className,
     open,
@@ -68,11 +68,9 @@ export const ChainOfThought = memo(
   },
 );
 
-export type ChainOfThoughtHeaderProps = ComponentProps<
-  typeof CollapsibleTrigger
->;
+type ChainOfThoughtHeaderProps = ComponentProps<typeof CollapsibleTrigger>;
 
-export const ChainOfThoughtHeader = memo(
+const ChainOfThoughtHeader = memo(
   ({ className, children, ...props }: ChainOfThoughtHeaderProps) => {
     const { isOpen, setIsOpen } = useChainOfThought();
 
@@ -101,7 +99,7 @@ export const ChainOfThoughtHeader = memo(
   },
 );
 
-export type ChainOfThoughtStepProps = ComponentProps<"div"> & {
+type ChainOfThoughtStepProps = ComponentProps<"div"> & {
   icon?: LucideIcon;
   label: ReactNode;
   description?: ReactNode;
@@ -114,7 +112,7 @@ const stepStatusStyles = {
   pending: "text-muted-foreground/50",
 };
 
-export const ChainOfThoughtStep = memo(
+const ChainOfThoughtStep = memo(
   ({
     className,
     icon: Icon = DotIcon,
@@ -148,9 +146,9 @@ export const ChainOfThoughtStep = memo(
   ),
 );
 
-export type ChainOfThoughtSearchResultsProps = ComponentProps<"div">;
+type ChainOfThoughtSearchResultsProps = ComponentProps<"div">;
 
-export const ChainOfThoughtSearchResults = memo(
+const ChainOfThoughtSearchResults = memo(
   ({ className, ...props }: ChainOfThoughtSearchResultsProps) => (
     <div
       className={cn("flex flex-wrap items-center gap-2", className)}
@@ -159,9 +157,9 @@ export const ChainOfThoughtSearchResults = memo(
   ),
 );
 
-export type ChainOfThoughtSearchResultProps = ComponentProps<typeof Badge>;
+type ChainOfThoughtSearchResultProps = ComponentProps<typeof Badge>;
 
-export const ChainOfThoughtSearchResult = memo(
+const ChainOfThoughtSearchResult = memo(
   ({ className, children, ...props }: ChainOfThoughtSearchResultProps) => (
     <Badge
       className={cn("gap-1 px-2 py-0.5 font-normal text-xs", className)}
@@ -173,11 +171,9 @@ export const ChainOfThoughtSearchResult = memo(
   ),
 );
 
-export type ChainOfThoughtContentProps = ComponentProps<
-  typeof CollapsibleContent
->;
+type ChainOfThoughtContentProps = ComponentProps<typeof CollapsibleContent>;
 
-export const ChainOfThoughtContent = memo(
+const ChainOfThoughtContent = memo(
   ({ className, children, ...props }: ChainOfThoughtContentProps) => {
     const { isOpen } = useChainOfThought();
 
@@ -198,11 +194,11 @@ export const ChainOfThoughtContent = memo(
   },
 );
 
-export type ChainOfThoughtImageProps = ComponentProps<"div"> & {
+type ChainOfThoughtImageProps = ComponentProps<"div"> & {
   caption?: string;
 };
 
-export const ChainOfThoughtImage = memo(
+const ChainOfThoughtImage = memo(
   ({ className, children, caption, ...props }: ChainOfThoughtImageProps) => (
     <div className={cn("mt-2 space-y-2", className)} {...props}>
       <div className="relative flex max-h-[22rem] items-center justify-center overflow-hidden rounded-lg bg-muted p-3">
@@ -220,3 +216,20 @@ ChainOfThoughtSearchResults.displayName = "ChainOfThoughtSearchResults";
 ChainOfThoughtSearchResult.displayName = "ChainOfThoughtSearchResult";
 ChainOfThoughtContent.displayName = "ChainOfThoughtContent";
 ChainOfThoughtImage.displayName = "ChainOfThoughtImage";
+
+export {
+  ChainOfThought,
+  ChainOfThoughtHeader,
+  ChainOfThoughtStep,
+  ChainOfThoughtSearchResults,
+  ChainOfThoughtSearchResult,
+  ChainOfThoughtContent,
+  ChainOfThoughtImage,
+  type ChainOfThoughtProps,
+  type ChainOfThoughtHeaderProps,
+  type ChainOfThoughtStepProps,
+  type ChainOfThoughtSearchResultsProps,
+  type ChainOfThoughtSearchResultProps,
+  type ChainOfThoughtContentProps,
+  type ChainOfThoughtImageProps,
+};

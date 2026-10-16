@@ -27,11 +27,11 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
-export type MessageProps = HTMLAttributes<HTMLDivElement> & {
+type MessageProps = HTMLAttributes<HTMLDivElement> & {
   from: UIMessage["role"];
 };
 
-export const Message = ({ className, from, ...props }: MessageProps) => (
+const Message = ({ className, from, ...props }: MessageProps) => (
   <div
     className={cn(
       "group flex w-full max-w-[95%] flex-col gap-2",
@@ -42,9 +42,9 @@ export const Message = ({ className, from, ...props }: MessageProps) => (
   />
 );
 
-export type MessageContentProps = HTMLAttributes<HTMLDivElement>;
+type MessageContentProps = HTMLAttributes<HTMLDivElement>;
 
-export const MessageContent = ({
+const MessageContent = ({
   children,
   className,
   ...props
@@ -62,9 +62,9 @@ export const MessageContent = ({
   </div>
 );
 
-export type MessageActionsProps = ComponentProps<"div">;
+type MessageActionsProps = ComponentProps<"div">;
 
-export const MessageActions = ({
+const MessageActions = ({
   className,
   children,
   ...props
@@ -74,12 +74,12 @@ export const MessageActions = ({
   </div>
 );
 
-export type MessageActionProps = ComponentProps<typeof Button> & {
+type MessageActionProps = ComponentProps<typeof Button> & {
   tooltip?: string;
   label?: string;
 };
 
-export const MessageAction = ({
+const MessageAction = ({
   tooltip,
   children,
   label,
@@ -135,12 +135,12 @@ const useMessageBranch = () => {
   return context;
 };
 
-export type MessageBranchProps = HTMLAttributes<HTMLDivElement> & {
+type MessageBranchProps = HTMLAttributes<HTMLDivElement> & {
   defaultBranch?: number;
   onBranchChange?: (branchIndex: number) => void;
 };
 
-export const MessageBranch = ({
+const MessageBranch = ({
   defaultBranch = 0,
   onBranchChange,
   className,
@@ -191,9 +191,9 @@ export const MessageBranch = ({
   );
 };
 
-export type MessageBranchContentProps = HTMLAttributes<HTMLDivElement>;
+type MessageBranchContentProps = HTMLAttributes<HTMLDivElement>;
 
-export const MessageBranchContent = ({
+const MessageBranchContent = ({
   children,
   ...props
 }: MessageBranchContentProps) => {
@@ -224,9 +224,9 @@ export const MessageBranchContent = ({
   ));
 };
 
-export type MessageBranchSelectorProps = ComponentProps<typeof ButtonGroup>;
+type MessageBranchSelectorProps = ComponentProps<typeof ButtonGroup>;
 
-export const MessageBranchSelector = ({
+const MessageBranchSelector = ({
   className,
   ...props
 }: MessageBranchSelectorProps) => {
@@ -249,9 +249,9 @@ export const MessageBranchSelector = ({
   );
 };
 
-export type MessageBranchPreviousProps = ComponentProps<typeof Button>;
+type MessageBranchPreviousProps = ComponentProps<typeof Button>;
 
-export const MessageBranchPrevious = ({
+const MessageBranchPrevious = ({
   children,
   ...props
 }: MessageBranchPreviousProps) => {
@@ -272,12 +272,9 @@ export const MessageBranchPrevious = ({
   );
 };
 
-export type MessageBranchNextProps = ComponentProps<typeof Button>;
+type MessageBranchNextProps = ComponentProps<typeof Button>;
 
-export const MessageBranchNext = ({
-  children,
-  ...props
-}: MessageBranchNextProps) => {
+const MessageBranchNext = ({ children, ...props }: MessageBranchNextProps) => {
   const { goToNext, totalBranches } = useMessageBranch();
 
   return (
@@ -295,12 +292,9 @@ export const MessageBranchNext = ({
   );
 };
 
-export type MessageBranchPageProps = HTMLAttributes<HTMLSpanElement>;
+type MessageBranchPageProps = HTMLAttributes<HTMLSpanElement>;
 
-export const MessageBranchPage = ({
-  className,
-  ...props
-}: MessageBranchPageProps) => {
+const MessageBranchPage = ({ className, ...props }: MessageBranchPageProps) => {
   const { currentBranch, totalBranches } = useMessageBranch();
 
   return (
@@ -316,11 +310,11 @@ export const MessageBranchPage = ({
   );
 };
 
-export type MessageResponseProps = ComponentProps<typeof Streamdown>;
+type MessageResponseProps = ComponentProps<typeof Streamdown>;
 
 const streamdownPlugins = { cjk, code, math, mermaid };
 
-export const MessageResponse = memo(
+const MessageResponse = memo(
   ({ className, ...props }: MessageResponseProps) => (
     <Streamdown
       className={cn(
@@ -338,9 +332,9 @@ export const MessageResponse = memo(
 
 MessageResponse.displayName = "MessageResponse";
 
-export type MessageToolbarProps = ComponentProps<"div">;
+type MessageToolbarProps = ComponentProps<"div">;
 
-export const MessageToolbar = ({
+const MessageToolbar = ({
   className,
   children,
   ...props
@@ -355,3 +349,30 @@ export const MessageToolbar = ({
     {children}
   </div>
 );
+
+export {
+  Message,
+  MessageContent,
+  MessageActions,
+  MessageAction,
+  MessageBranch,
+  MessageBranchContent,
+  MessageBranchSelector,
+  MessageBranchPrevious,
+  MessageBranchNext,
+  MessageBranchPage,
+  MessageResponse,
+  MessageToolbar,
+  type MessageProps,
+  type MessageContentProps,
+  type MessageActionsProps,
+  type MessageActionProps,
+  type MessageBranchProps,
+  type MessageBranchContentProps,
+  type MessageBranchSelectorProps,
+  type MessageBranchPreviousProps,
+  type MessageBranchNextProps,
+  type MessageBranchPageProps,
+  type MessageResponseProps,
+  type MessageToolbarProps,
+};

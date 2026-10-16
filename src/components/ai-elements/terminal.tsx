@@ -28,9 +28,9 @@ const TerminalContext = createContext<TerminalContextType>({
   output: "",
 });
 
-export type TerminalHeaderProps = HTMLAttributes<HTMLDivElement>;
+type TerminalHeaderProps = HTMLAttributes<HTMLDivElement>;
 
-export const TerminalHeader = ({
+const TerminalHeader = ({
   className,
   children,
   ...props
@@ -46,9 +46,9 @@ export const TerminalHeader = ({
   </div>
 );
 
-export type TerminalTitleProps = HTMLAttributes<HTMLDivElement>;
+type TerminalTitleProps = HTMLAttributes<HTMLDivElement>;
 
-export const TerminalTitle = ({
+const TerminalTitle = ({
   className,
   children,
   ...props
@@ -62,9 +62,9 @@ export const TerminalTitle = ({
   </div>
 );
 
-export type TerminalStatusProps = HTMLAttributes<HTMLDivElement>;
+type TerminalStatusProps = HTMLAttributes<HTMLDivElement>;
 
-export const TerminalStatus = ({
+const TerminalStatus = ({
   className,
   children,
   ...props
@@ -85,9 +85,9 @@ export const TerminalStatus = ({
   );
 };
 
-export type TerminalActionsProps = HTMLAttributes<HTMLDivElement>;
+type TerminalActionsProps = HTMLAttributes<HTMLDivElement>;
 
-export const TerminalActions = ({
+const TerminalActions = ({
   className,
   children,
   ...props
@@ -97,13 +97,13 @@ export const TerminalActions = ({
   </div>
 );
 
-export type TerminalCopyButtonProps = ComponentProps<typeof Button> & {
+type TerminalCopyButtonProps = ComponentProps<typeof Button> & {
   onCopy?: () => void;
   onError?: (error: Error) => void;
   timeout?: number;
 };
 
-export const TerminalCopyButton = ({
+const TerminalCopyButton = ({
   onCopy,
   onError,
   timeout = 2000,
@@ -156,9 +156,9 @@ export const TerminalCopyButton = ({
   );
 };
 
-export type TerminalClearButtonProps = ComponentProps<typeof Button>;
+type TerminalClearButtonProps = ComponentProps<typeof Button>;
 
-export const TerminalClearButton = ({
+const TerminalClearButton = ({
   children,
   className,
   ...props
@@ -185,9 +185,9 @@ export const TerminalClearButton = ({
   );
 };
 
-export type TerminalContentProps = HTMLAttributes<HTMLDivElement>;
+type TerminalContentProps = HTMLAttributes<HTMLDivElement>;
 
-export const TerminalContent = ({
+const TerminalContent = ({
   className,
   children,
   ...props
@@ -222,14 +222,14 @@ export const TerminalContent = ({
   );
 };
 
-export type TerminalProps = HTMLAttributes<HTMLDivElement> & {
+type TerminalProps = HTMLAttributes<HTMLDivElement> & {
   output: string;
   isStreaming?: boolean;
   autoScroll?: boolean;
   onClear?: () => void;
 };
 
-export const Terminal = ({
+const Terminal = ({
   output,
   isStreaming = false,
   autoScroll = true,
@@ -270,4 +270,23 @@ export const Terminal = ({
       </div>
     </TerminalContext.Provider>
   );
+};
+
+export {
+  TerminalHeader,
+  TerminalTitle,
+  TerminalStatus,
+  TerminalActions,
+  TerminalCopyButton,
+  TerminalClearButton,
+  TerminalContent,
+  Terminal,
+  type TerminalHeaderProps,
+  type TerminalTitleProps,
+  type TerminalStatusProps,
+  type TerminalActionsProps,
+  type TerminalCopyButtonProps,
+  type TerminalClearButtonProps,
+  type TerminalContentProps,
+  type TerminalProps,
 };

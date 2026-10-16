@@ -23,7 +23,7 @@ const getMotionComponent = (element: keyof JSX.IntrinsicElements) => {
   return component;
 };
 
-export interface TextShimmerProps {
+interface TextShimmerProps {
   children: string;
   as?: ElementType;
   className?: string;
@@ -74,4 +74,6 @@ const ShimmerComponent = ({
   );
 };
 
-export const Shimmer = memo(ShimmerComponent);
+const Shimmer = memo(ShimmerComponent);
+
+export { Shimmer, type TextShimmerProps };

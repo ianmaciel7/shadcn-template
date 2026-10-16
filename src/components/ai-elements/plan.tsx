@@ -36,11 +36,11 @@ const usePlan = () => {
   return context;
 };
 
-export type PlanProps = ComponentProps<typeof Collapsible> & {
+type PlanProps = ComponentProps<typeof Collapsible> & {
   isStreaming?: boolean;
 };
 
-export const Plan = ({
+const Plan = ({
   className,
   isStreaming = false,
   children,
@@ -61,9 +61,9 @@ export const Plan = ({
   );
 };
 
-export type PlanHeaderProps = ComponentProps<typeof CardHeader>;
+type PlanHeaderProps = ComponentProps<typeof CardHeader>;
 
-export const PlanHeader = ({ className, ...props }: PlanHeaderProps) => (
+const PlanHeader = ({ className, ...props }: PlanHeaderProps) => (
   <CardHeader
     className={cn("flex items-start justify-between", className)}
     data-slot="plan-header"
@@ -71,14 +71,11 @@ export const PlanHeader = ({ className, ...props }: PlanHeaderProps) => (
   />
 );
 
-export type PlanTitleProps = Omit<
-  ComponentProps<typeof CardTitle>,
-  "children"
-> & {
+type PlanTitleProps = Omit<ComponentProps<typeof CardTitle>, "children"> & {
   children: string;
 };
 
-export const PlanTitle = ({ children, ...props }: PlanTitleProps) => {
+const PlanTitle = ({ children, ...props }: PlanTitleProps) => {
   const { isStreaming } = usePlan();
 
   return (
@@ -88,14 +85,14 @@ export const PlanTitle = ({ children, ...props }: PlanTitleProps) => {
   );
 };
 
-export type PlanDescriptionProps = Omit<
+type PlanDescriptionProps = Omit<
   ComponentProps<typeof CardDescription>,
   "children"
 > & {
   children: string;
 };
 
-export const PlanDescription = ({
+const PlanDescription = ({
   className,
   children,
   ...props
@@ -113,32 +110,32 @@ export const PlanDescription = ({
   );
 };
 
-export type PlanActionProps = ComponentProps<typeof CardAction>;
+type PlanActionProps = ComponentProps<typeof CardAction>;
 
-export const PlanAction = (props: PlanActionProps) => (
+const PlanAction = (props: PlanActionProps) => (
   <CardAction data-slot="plan-action" {...props} />
 );
 
-export type PlanContentProps = ComponentProps<typeof CardContent>;
+type PlanContentProps = ComponentProps<typeof CardContent>;
 
-export const PlanContent = (props: PlanContentProps) => (
+const PlanContent = (props: PlanContentProps) => (
   <CollapsibleContent
     render={<CardContent data-slot="plan-content" {...props} />}
   ></CollapsibleContent>
 );
 
-export type PlanFooterProps = ComponentProps<"div">;
+type PlanFooterProps = ComponentProps<"div">;
 
-export const PlanFooter = (props: PlanFooterProps) => (
+const PlanFooter = (props: PlanFooterProps) => (
   <CardFooter data-slot="plan-footer" {...props} />
 );
 
-export type PlanTriggerProps = Omit<
+type PlanTriggerProps = Omit<
   ComponentProps<typeof CollapsibleTrigger>,
   "render"
 >;
 
-export const PlanTrigger = ({ className, ...props }: PlanTriggerProps) => (
+const PlanTrigger = ({ className, ...props }: PlanTriggerProps) => (
   <CollapsibleTrigger
     {...props}
     render={
@@ -154,3 +151,22 @@ export const PlanTrigger = ({ className, ...props }: PlanTriggerProps) => (
     <span className="sr-only">Toggle plan</span>
   </CollapsibleTrigger>
 );
+
+export {
+  Plan,
+  PlanHeader,
+  PlanTitle,
+  PlanDescription,
+  PlanAction,
+  PlanContent,
+  PlanFooter,
+  PlanTrigger,
+  type PlanProps,
+  type PlanHeaderProps,
+  type PlanTitleProps,
+  type PlanDescriptionProps,
+  type PlanActionProps,
+  type PlanContentProps,
+  type PlanFooterProps,
+  type PlanTriggerProps,
+};

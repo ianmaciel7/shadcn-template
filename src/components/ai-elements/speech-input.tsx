@@ -59,7 +59,7 @@ declare global {
 
 type SpeechInputMode = "speech-recognition" | "media-recorder" | "none";
 
-export type SpeechInputProps = ComponentProps<typeof Button> & {
+type SpeechInputProps = ComponentProps<typeof Button> & {
   onTranscriptionChange?: (text: string) => void;
   /**
    * Callback for when audio is recorded using MediaRecorder fallback.
@@ -87,7 +87,7 @@ const detectSpeechInputMode = (): SpeechInputMode => {
   return "none";
 };
 
-export const SpeechInput = ({
+const SpeechInput = ({
   className,
   onTranscriptionChange,
   onAudioRecorded,
@@ -321,3 +321,5 @@ export const SpeechInput = ({
     </div>
   );
 };
+
+export { SpeechInput, type SpeechInputProps };

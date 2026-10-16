@@ -19,9 +19,9 @@ const PackageInfoContext = createContext<PackageInfoContextType>({
   name: "",
 });
 
-export type PackageInfoHeaderProps = HTMLAttributes<HTMLDivElement>;
+type PackageInfoHeaderProps = HTMLAttributes<HTMLDivElement>;
 
-export const PackageInfoHeader = ({
+const PackageInfoHeader = ({
   className,
   children,
   ...props
@@ -34,9 +34,9 @@ export const PackageInfoHeader = ({
   </div>
 );
 
-export type PackageInfoNameProps = HTMLAttributes<HTMLDivElement>;
+type PackageInfoNameProps = HTMLAttributes<HTMLDivElement>;
 
-export const PackageInfoName = ({
+const PackageInfoName = ({
   className,
   children,
   ...props
@@ -68,9 +68,9 @@ const changeTypeIcons: Record<ChangeType, React.ReactNode> = {
   removed: <MinusIcon className="size-3" />,
 };
 
-export type PackageInfoChangeTypeProps = HTMLAttributes<HTMLDivElement>;
+type PackageInfoChangeTypeProps = HTMLAttributes<HTMLDivElement>;
 
-export const PackageInfoChangeType = ({
+const PackageInfoChangeType = ({
   className,
   children,
   ...props
@@ -97,9 +97,9 @@ export const PackageInfoChangeType = ({
   );
 };
 
-export type PackageInfoVersionProps = HTMLAttributes<HTMLDivElement>;
+type PackageInfoVersionProps = HTMLAttributes<HTMLDivElement>;
 
-export const PackageInfoVersion = ({
+const PackageInfoVersion = ({
   className,
   children,
   ...props
@@ -133,14 +133,14 @@ export const PackageInfoVersion = ({
   );
 };
 
-export type PackageInfoProps = HTMLAttributes<HTMLDivElement> & {
+type PackageInfoProps = HTMLAttributes<HTMLDivElement> & {
   name: string;
   currentVersion?: string;
   newVersion?: string;
   changeType?: ChangeType;
 };
 
-export const PackageInfo = ({
+const PackageInfo = ({
   name,
   currentVersion,
   newVersion,
@@ -174,9 +174,9 @@ export const PackageInfo = ({
   );
 };
 
-export type PackageInfoDescriptionProps = HTMLAttributes<HTMLParagraphElement>;
+type PackageInfoDescriptionProps = HTMLAttributes<HTMLParagraphElement>;
 
-export const PackageInfoDescription = ({
+const PackageInfoDescription = ({
   className,
   children,
   ...props
@@ -186,9 +186,9 @@ export const PackageInfoDescription = ({
   </p>
 );
 
-export type PackageInfoContentProps = HTMLAttributes<HTMLDivElement>;
+type PackageInfoContentProps = HTMLAttributes<HTMLDivElement>;
 
-export const PackageInfoContent = ({
+const PackageInfoContent = ({
   className,
   children,
   ...props
@@ -198,9 +198,9 @@ export const PackageInfoContent = ({
   </div>
 );
 
-export type PackageInfoDependenciesProps = HTMLAttributes<HTMLDivElement>;
+type PackageInfoDependenciesProps = HTMLAttributes<HTMLDivElement>;
 
-export const PackageInfoDependencies = ({
+const PackageInfoDependencies = ({
   className,
   children,
   ...props
@@ -213,12 +213,12 @@ export const PackageInfoDependencies = ({
   </div>
 );
 
-export type PackageInfoDependencyProps = HTMLAttributes<HTMLDivElement> & {
+type PackageInfoDependencyProps = HTMLAttributes<HTMLDivElement> & {
   name: string;
   version?: string;
 };
 
-export const PackageInfoDependency = ({
+const PackageInfoDependency = ({
   name,
   version,
   className,
@@ -237,3 +237,24 @@ export const PackageInfoDependency = ({
     )}
   </div>
 );
+
+export {
+  PackageInfoHeader,
+  PackageInfoName,
+  PackageInfoChangeType,
+  PackageInfoVersion,
+  PackageInfo,
+  PackageInfoDescription,
+  PackageInfoContent,
+  PackageInfoDependencies,
+  PackageInfoDependency,
+  type PackageInfoHeaderProps,
+  type PackageInfoNameProps,
+  type PackageInfoChangeTypeProps,
+  type PackageInfoVersionProps,
+  type PackageInfoProps,
+  type PackageInfoDescriptionProps,
+  type PackageInfoContentProps,
+  type PackageInfoDependenciesProps,
+  type PackageInfoDependencyProps,
+};

@@ -23,21 +23,18 @@ import {
 } from "@/components/ui/hover-card";
 import { cn } from "@/lib/utils";
 
-export type InlineCitationProps = ComponentProps<"span">;
+type InlineCitationProps = ComponentProps<"span">;
 
-export const InlineCitation = ({
-  className,
-  ...props
-}: InlineCitationProps) => (
+const InlineCitation = ({ className, ...props }: InlineCitationProps) => (
   <span
     className={cn("group inline items-center gap-1", className)}
     {...props}
   />
 );
 
-export type InlineCitationTextProps = ComponentProps<"span">;
+type InlineCitationTextProps = ComponentProps<"span">;
 
-export const InlineCitationText = ({
+const InlineCitationText = ({
   className,
   ...props
 }: InlineCitationTextProps) => (
@@ -47,22 +44,22 @@ export const InlineCitationText = ({
   />
 );
 
-export type InlineCitationCardProps = ComponentProps<typeof HoverCard> & {
+type InlineCitationCardProps = ComponentProps<typeof HoverCard> & {
   openDelay?: number;
   closeDelay?: number;
 };
 
-export const InlineCitationCard = ({
+const InlineCitationCard = ({
   openDelay: _openDelay,
   closeDelay: _closeDelay,
   ...props
 }: InlineCitationCardProps) => <HoverCard {...props} />;
 
-export type InlineCitationCardTriggerProps = ComponentProps<typeof Badge> & {
+type InlineCitationCardTriggerProps = ComponentProps<typeof Badge> & {
   sources: string[];
 };
 
-export const InlineCitationCardTrigger = ({
+const InlineCitationCardTrigger = ({
   sources,
   className,
   ...props
@@ -87,9 +84,9 @@ export const InlineCitationCardTrigger = ({
   </HoverCardTrigger>
 );
 
-export type InlineCitationCardBodyProps = ComponentProps<"div">;
+type InlineCitationCardBodyProps = ComponentProps<"div">;
 
-export const InlineCitationCardBody = ({
+const InlineCitationCardBody = ({
   className,
   ...props
 }: InlineCitationCardBodyProps) => (
@@ -103,9 +100,9 @@ const useCarouselApi = () => {
   return context;
 };
 
-export type InlineCitationCarouselProps = ComponentProps<typeof Carousel>;
+type InlineCitationCarouselProps = ComponentProps<typeof Carousel>;
 
-export const InlineCitationCarousel = ({
+const InlineCitationCarousel = ({
   className,
   children,
   ...props
@@ -121,15 +118,15 @@ export const InlineCitationCarousel = ({
   );
 };
 
-export type InlineCitationCarouselContentProps = ComponentProps<"div">;
+type InlineCitationCarouselContentProps = ComponentProps<"div">;
 
-export const InlineCitationCarouselContent = (
+const InlineCitationCarouselContent = (
   props: InlineCitationCarouselContentProps,
 ) => <CarouselContent {...props} />;
 
-export type InlineCitationCarouselItemProps = ComponentProps<"div">;
+type InlineCitationCarouselItemProps = ComponentProps<"div">;
 
-export const InlineCitationCarouselItem = ({
+const InlineCitationCarouselItem = ({
   className,
   ...props
 }: InlineCitationCarouselItemProps) => (
@@ -139,9 +136,9 @@ export const InlineCitationCarouselItem = ({
   />
 );
 
-export type InlineCitationCarouselHeaderProps = ComponentProps<"div">;
+type InlineCitationCarouselHeaderProps = ComponentProps<"div">;
 
-export const InlineCitationCarouselHeader = ({
+const InlineCitationCarouselHeader = ({
   className,
   ...props
 }: InlineCitationCarouselHeaderProps) => (
@@ -154,9 +151,9 @@ export const InlineCitationCarouselHeader = ({
   />
 );
 
-export type InlineCitationCarouselIndexProps = ComponentProps<"div">;
+type InlineCitationCarouselIndexProps = ComponentProps<"div">;
 
-export const InlineCitationCarouselIndex = ({
+const InlineCitationCarouselIndex = ({
   children,
   className,
   ...props
@@ -200,9 +197,9 @@ export const InlineCitationCarouselIndex = ({
   );
 };
 
-export type InlineCitationCarouselPrevProps = ComponentProps<"button">;
+type InlineCitationCarouselPrevProps = ComponentProps<"button">;
 
-export const InlineCitationCarouselPrev = ({
+const InlineCitationCarouselPrev = ({
   className,
   ...props
 }: InlineCitationCarouselPrevProps) => {
@@ -227,9 +224,9 @@ export const InlineCitationCarouselPrev = ({
   );
 };
 
-export type InlineCitationCarouselNextProps = ComponentProps<"button">;
+type InlineCitationCarouselNextProps = ComponentProps<"button">;
 
-export const InlineCitationCarouselNext = ({
+const InlineCitationCarouselNext = ({
   className,
   ...props
 }: InlineCitationCarouselNextProps) => {
@@ -254,13 +251,13 @@ export const InlineCitationCarouselNext = ({
   );
 };
 
-export type InlineCitationSourceProps = ComponentProps<"div"> & {
+type InlineCitationSourceProps = ComponentProps<"div"> & {
   title?: string;
   url?: string;
   description?: string;
 };
 
-export const InlineCitationSource = ({
+const InlineCitationSource = ({
   title,
   url,
   description,
@@ -284,9 +281,9 @@ export const InlineCitationSource = ({
   </div>
 );
 
-export type InlineCitationQuoteProps = ComponentProps<"blockquote">;
+type InlineCitationQuoteProps = ComponentProps<"blockquote">;
 
-export const InlineCitationQuote = ({
+const InlineCitationQuote = ({
   children,
   className,
   ...props
@@ -301,3 +298,34 @@ export const InlineCitationQuote = ({
     {children}
   </blockquote>
 );
+
+export {
+  InlineCitation,
+  InlineCitationText,
+  InlineCitationCard,
+  InlineCitationCardTrigger,
+  InlineCitationCardBody,
+  InlineCitationCarousel,
+  InlineCitationCarouselContent,
+  InlineCitationCarouselItem,
+  InlineCitationCarouselHeader,
+  InlineCitationCarouselIndex,
+  InlineCitationCarouselPrev,
+  InlineCitationCarouselNext,
+  InlineCitationSource,
+  InlineCitationQuote,
+  type InlineCitationProps,
+  type InlineCitationTextProps,
+  type InlineCitationCardProps,
+  type InlineCitationCardTriggerProps,
+  type InlineCitationCardBodyProps,
+  type InlineCitationCarouselProps,
+  type InlineCitationCarouselContentProps,
+  type InlineCitationCarouselItemProps,
+  type InlineCitationCarouselHeaderProps,
+  type InlineCitationCarouselIndexProps,
+  type InlineCitationCarouselPrevProps,
+  type InlineCitationCarouselNextProps,
+  type InlineCitationSourceProps,
+  type InlineCitationQuoteProps,
+};

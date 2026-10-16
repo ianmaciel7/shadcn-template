@@ -32,7 +32,7 @@ const JSXPreviewContext = createContext<JSXPreviewContextValue | null>(null);
 
 const TAG_REGEX = /<\/?([a-zA-Z][a-zA-Z0-9]*)\s*([^>]*?)(\/)?>/;
 
-export const useJSXPreview = () => {
+const useJSXPreview = () => {
   const context = useContext(JSXPreviewContext);
   if (!context) {
     throw new Error("JSXPreview components must be used within JSXPreview");
@@ -123,7 +123,7 @@ const completeJsxTag = (code: string) => {
   );
 };
 
-export type JSXPreviewProps = ComponentProps<"div"> & {
+type JSXPreviewProps = ComponentProps<"div"> & {
   jsx: string;
   isStreaming?: boolean;
   components?: JsxParserProps["components"];
@@ -131,7 +131,7 @@ export type JSXPreviewProps = ComponentProps<"div"> & {
   onError?: (error: Error) => void;
 };
 
-export const JSXPreview = memo(
+const JSXPreview = memo(
   ({
     jsx,
     isStreaming = false,
@@ -193,9 +193,9 @@ export const JSXPreview = memo(
 
 JSXPreview.displayName = "JSXPreview";
 
-export type JSXPreviewContentProps = Omit<ComponentProps<"div">, "children">;
+type JSXPreviewContentProps = Omit<ComponentProps<"div">, "children">;
 
-export const JSXPreviewContent = memo(
+const JSXPreviewContent = memo(
   ({ className, ...props }: JSXPreviewContentProps) => {
     const {
       processedJsx,
@@ -264,7 +264,7 @@ export const JSXPreviewContent = memo(
 
 JSXPreviewContent.displayName = "JSXPreviewContent";
 
-export type JSXPreviewErrorProps = ComponentProps<"div"> & {
+type JSXPreviewErrorProps = ComponentProps<"div"> & {
   children?: ReactNode | ((error: Error) => ReactNode);
 };
 
@@ -278,7 +278,7 @@ const renderChildren = (
   return children;
 };
 
-export const JSXPreviewError = memo(
+const JSXPreviewError = memo(
   ({ className, children, ...props }: JSXPreviewErrorProps) => {
     const { error } = useJSXPreview();
 
@@ -308,3 +308,13 @@ export const JSXPreviewError = memo(
 );
 
 JSXPreviewError.displayName = "JSXPreviewError";
+
+export {
+  useJSXPreview,
+  JSXPreview,
+  JSXPreviewContent,
+  JSXPreviewError,
+  type JSXPreviewProps,
+  type JSXPreviewContentProps,
+  type JSXPreviewErrorProps,
+};

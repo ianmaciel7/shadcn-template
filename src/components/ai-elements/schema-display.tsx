@@ -53,9 +53,9 @@ const methodStyles: Record<HttpMethod, string> = {
   PUT: "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400",
 };
 
-export type SchemaDisplayHeaderProps = HTMLAttributes<HTMLDivElement>;
+type SchemaDisplayHeaderProps = HTMLAttributes<HTMLDivElement>;
 
-export const SchemaDisplayHeader = ({
+const SchemaDisplayHeader = ({
   className,
   children,
   ...props
@@ -68,9 +68,9 @@ export const SchemaDisplayHeader = ({
   </div>
 );
 
-export type SchemaDisplayMethodProps = ComponentProps<typeof Badge>;
+type SchemaDisplayMethodProps = ComponentProps<typeof Badge>;
 
-export const SchemaDisplayMethod = ({
+const SchemaDisplayMethod = ({
   className,
   children,
   ...props
@@ -88,9 +88,9 @@ export const SchemaDisplayMethod = ({
   );
 };
 
-export type SchemaDisplayPathProps = HTMLAttributes<HTMLSpanElement>;
+type SchemaDisplayPathProps = HTMLAttributes<HTMLSpanElement>;
 
-export const SchemaDisplayPath = ({
+const SchemaDisplayPath = ({
   className,
   children,
   ...props
@@ -113,10 +113,9 @@ export const SchemaDisplayPath = ({
   );
 };
 
-export type SchemaDisplayDescriptionProps =
-  HTMLAttributes<HTMLParagraphElement>;
+type SchemaDisplayDescriptionProps = HTMLAttributes<HTMLParagraphElement>;
 
-export const SchemaDisplayDescription = ({
+const SchemaDisplayDescription = ({
   className,
   children,
   ...props
@@ -136,9 +135,9 @@ export const SchemaDisplayDescription = ({
   );
 };
 
-export type SchemaDisplayContentProps = HTMLAttributes<HTMLDivElement>;
+type SchemaDisplayContentProps = HTMLAttributes<HTMLDivElement>;
 
-export const SchemaDisplayContent = ({
+const SchemaDisplayContent = ({
   className,
   children,
   ...props
@@ -148,10 +147,10 @@ export const SchemaDisplayContent = ({
   </div>
 );
 
-export type SchemaDisplayParameterProps = HTMLAttributes<HTMLDivElement> &
+type SchemaDisplayParameterProps = HTMLAttributes<HTMLDivElement> &
   SchemaParameter;
 
-export const SchemaDisplayParameter = ({
+const SchemaDisplayParameter = ({
   name,
   type,
   required,
@@ -186,9 +185,9 @@ export const SchemaDisplayParameter = ({
   </div>
 );
 
-export type SchemaDisplayParametersProps = ComponentProps<typeof Collapsible>;
+type SchemaDisplayParametersProps = ComponentProps<typeof Collapsible>;
 
-export const SchemaDisplayParameters = ({
+const SchemaDisplayParameters = ({
   className,
   children,
   ...props
@@ -216,12 +215,12 @@ export const SchemaDisplayParameters = ({
   );
 };
 
-export type SchemaDisplayPropertyProps = HTMLAttributes<HTMLDivElement> &
+type SchemaDisplayPropertyProps = HTMLAttributes<HTMLDivElement> &
   SchemaProperty & {
     depth?: number;
   };
 
-export const SchemaDisplayProperty = ({
+const SchemaDisplayProperty = ({
   name,
   type,
   required,
@@ -318,9 +317,9 @@ export const SchemaDisplayProperty = ({
   );
 };
 
-export type SchemaDisplayRequestProps = ComponentProps<typeof Collapsible>;
+type SchemaDisplayRequestProps = ComponentProps<typeof Collapsible>;
 
-export const SchemaDisplayRequest = ({
+const SchemaDisplayRequest = ({
   className,
   children,
   ...props
@@ -345,9 +344,9 @@ export const SchemaDisplayRequest = ({
   );
 };
 
-export type SchemaDisplayResponseProps = ComponentProps<typeof Collapsible>;
+type SchemaDisplayResponseProps = ComponentProps<typeof Collapsible>;
 
-export const SchemaDisplayResponse = ({
+const SchemaDisplayResponse = ({
   className,
   children,
   ...props
@@ -372,7 +371,7 @@ export const SchemaDisplayResponse = ({
   );
 };
 
-export type SchemaDisplayProps = HTMLAttributes<HTMLDivElement> & {
+type SchemaDisplayProps = HTMLAttributes<HTMLDivElement> & {
   method: HttpMethod;
   path: string;
   description?: string;
@@ -381,7 +380,7 @@ export type SchemaDisplayProps = HTMLAttributes<HTMLDivElement> & {
   responseBody?: SchemaProperty[];
 };
 
-export const SchemaDisplay = ({
+const SchemaDisplay = ({
   method,
   path,
   description,
@@ -440,9 +439,9 @@ export const SchemaDisplay = ({
   );
 };
 
-export type SchemaDisplayBodyProps = HTMLAttributes<HTMLDivElement>;
+type SchemaDisplayBodyProps = HTMLAttributes<HTMLDivElement>;
 
-export const SchemaDisplayBody = ({
+const SchemaDisplayBody = ({
   className,
   children,
   ...props
@@ -452,9 +451,9 @@ export const SchemaDisplayBody = ({
   </div>
 );
 
-export type SchemaDisplayExampleProps = HTMLAttributes<HTMLPreElement>;
+type SchemaDisplayExampleProps = HTMLAttributes<HTMLPreElement>;
 
-export const SchemaDisplayExample = ({
+const SchemaDisplayExample = ({
   className,
   children,
   ...props
@@ -469,3 +468,32 @@ export const SchemaDisplayExample = ({
     {children}
   </pre>
 );
+
+export {
+  SchemaDisplayHeader,
+  SchemaDisplayMethod,
+  SchemaDisplayPath,
+  SchemaDisplayDescription,
+  SchemaDisplayContent,
+  SchemaDisplayParameter,
+  SchemaDisplayParameters,
+  SchemaDisplayProperty,
+  SchemaDisplayRequest,
+  SchemaDisplayResponse,
+  SchemaDisplay,
+  SchemaDisplayBody,
+  SchemaDisplayExample,
+  type SchemaDisplayHeaderProps,
+  type SchemaDisplayMethodProps,
+  type SchemaDisplayPathProps,
+  type SchemaDisplayDescriptionProps,
+  type SchemaDisplayContentProps,
+  type SchemaDisplayParameterProps,
+  type SchemaDisplayParametersProps,
+  type SchemaDisplayPropertyProps,
+  type SchemaDisplayRequestProps,
+  type SchemaDisplayResponseProps,
+  type SchemaDisplayProps,
+  type SchemaDisplayBodyProps,
+  type SchemaDisplayExampleProps,
+};

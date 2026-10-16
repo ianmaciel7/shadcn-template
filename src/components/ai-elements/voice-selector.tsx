@@ -46,7 +46,7 @@ const VoiceSelectorContext = createContext<VoiceSelectorContextValue | null>(
   null,
 );
 
-export const useVoiceSelector = () => {
+const useVoiceSelector = () => {
   const context = useContext(VoiceSelectorContext);
   if (!context) {
     throw new Error(
@@ -56,13 +56,13 @@ export const useVoiceSelector = () => {
   return context;
 };
 
-export type VoiceSelectorProps = ComponentProps<typeof Dialog> & {
+type VoiceSelectorProps = ComponentProps<typeof Dialog> & {
   value?: string;
   defaultValue?: string;
   onValueChange?: (value: string | undefined) => void;
 };
 
-export const VoiceSelector = ({
+const VoiceSelector = ({
   value: valueProp,
   defaultValue,
   onValueChange,
@@ -104,17 +104,17 @@ export const VoiceSelector = ({
   );
 };
 
-export type VoiceSelectorTriggerProps = ComponentProps<typeof DialogTrigger>;
+type VoiceSelectorTriggerProps = ComponentProps<typeof DialogTrigger>;
 
-export const VoiceSelectorTrigger = (props: VoiceSelectorTriggerProps) => (
+const VoiceSelectorTrigger = (props: VoiceSelectorTriggerProps) => (
   <DialogTrigger {...props} />
 );
 
-export type VoiceSelectorContentProps = ComponentProps<typeof DialogContent> & {
+type VoiceSelectorContentProps = ComponentProps<typeof DialogContent> & {
   title?: ReactNode;
 };
 
-export const VoiceSelectorContent = ({
+const VoiceSelectorContent = ({
   className,
   children,
   title = "Voice Selector",
@@ -132,63 +132,58 @@ export const VoiceSelectorContent = ({
   </DialogContent>
 );
 
-export type VoiceSelectorDialogProps = ComponentProps<typeof CommandDialog>;
+type VoiceSelectorDialogProps = ComponentProps<typeof CommandDialog>;
 
-export const VoiceSelectorDialog = (props: VoiceSelectorDialogProps) => (
+const VoiceSelectorDialog = (props: VoiceSelectorDialogProps) => (
   <CommandDialog {...props} />
 );
 
-export type VoiceSelectorInputProps = ComponentProps<typeof CommandInput>;
+type VoiceSelectorInputProps = ComponentProps<typeof CommandInput>;
 
-export const VoiceSelectorInput = ({
+const VoiceSelectorInput = ({
   className,
   ...props
 }: VoiceSelectorInputProps) => (
   <CommandInput className={cn("h-auto py-3.5", className)} {...props} />
 );
 
-export type VoiceSelectorListProps = ComponentProps<typeof CommandList>;
+type VoiceSelectorListProps = ComponentProps<typeof CommandList>;
 
-export const VoiceSelectorList = (props: VoiceSelectorListProps) => (
+const VoiceSelectorList = (props: VoiceSelectorListProps) => (
   <CommandList {...props} />
 );
 
-export type VoiceSelectorEmptyProps = ComponentProps<typeof CommandEmpty>;
+type VoiceSelectorEmptyProps = ComponentProps<typeof CommandEmpty>;
 
-export const VoiceSelectorEmpty = (props: VoiceSelectorEmptyProps) => (
+const VoiceSelectorEmpty = (props: VoiceSelectorEmptyProps) => (
   <CommandEmpty {...props} />
 );
 
-export type VoiceSelectorGroupProps = ComponentProps<typeof CommandGroup>;
+type VoiceSelectorGroupProps = ComponentProps<typeof CommandGroup>;
 
-export const VoiceSelectorGroup = (props: VoiceSelectorGroupProps) => (
+const VoiceSelectorGroup = (props: VoiceSelectorGroupProps) => (
   <CommandGroup {...props} />
 );
 
-export type VoiceSelectorItemProps = ComponentProps<typeof CommandItem>;
+type VoiceSelectorItemProps = ComponentProps<typeof CommandItem>;
 
-export const VoiceSelectorItem = ({
-  className,
-  ...props
-}: VoiceSelectorItemProps) => (
+const VoiceSelectorItem = ({ className, ...props }: VoiceSelectorItemProps) => (
   <CommandItem className={cn("px-4 py-2", className)} {...props} />
 );
 
-export type VoiceSelectorShortcutProps = ComponentProps<typeof CommandShortcut>;
+type VoiceSelectorShortcutProps = ComponentProps<typeof CommandShortcut>;
 
-export const VoiceSelectorShortcut = (props: VoiceSelectorShortcutProps) => (
+const VoiceSelectorShortcut = (props: VoiceSelectorShortcutProps) => (
   <CommandShortcut {...props} />
 );
 
-export type VoiceSelectorSeparatorProps = ComponentProps<
-  typeof CommandSeparator
->;
+type VoiceSelectorSeparatorProps = ComponentProps<typeof CommandSeparator>;
 
-export const VoiceSelectorSeparator = (props: VoiceSelectorSeparatorProps) => (
+const VoiceSelectorSeparator = (props: VoiceSelectorSeparatorProps) => (
   <CommandSeparator {...props} />
 );
 
-export type VoiceSelectorGenderProps = ComponentProps<"span"> & {
+type VoiceSelectorGenderProps = ComponentProps<"span"> & {
   value?:
     | "male"
     | "female"
@@ -198,7 +193,7 @@ export type VoiceSelectorGenderProps = ComponentProps<"span"> & {
     | "intersex";
 };
 
-export const VoiceSelectorGender = ({
+const VoiceSelectorGender = ({
   className,
   value,
   children,
@@ -243,7 +238,7 @@ export const VoiceSelectorGender = ({
   );
 };
 
-export type VoiceSelectorAccentProps = ComponentProps<"span"> & {
+type VoiceSelectorAccentProps = ComponentProps<"span"> & {
   value?:
     | "american"
     | "british"
@@ -278,7 +273,7 @@ export type VoiceSelectorAccentProps = ComponentProps<"span"> & {
     | string;
 };
 
-export const VoiceSelectorAccent = ({
+const VoiceSelectorAccent = ({
   className,
   value,
   children,
@@ -419,42 +414,36 @@ export const VoiceSelectorAccent = ({
   );
 };
 
-export type VoiceSelectorAgeProps = ComponentProps<"span">;
+type VoiceSelectorAgeProps = ComponentProps<"span">;
 
-export const VoiceSelectorAge = ({
-  className,
-  ...props
-}: VoiceSelectorAgeProps) => (
+const VoiceSelectorAge = ({ className, ...props }: VoiceSelectorAgeProps) => (
   <span
     className={cn("text-muted-foreground text-xs tabular-nums", className)}
     {...props}
   />
 );
 
-export type VoiceSelectorNameProps = ComponentProps<"span">;
+type VoiceSelectorNameProps = ComponentProps<"span">;
 
-export const VoiceSelectorName = ({
-  className,
-  ...props
-}: VoiceSelectorNameProps) => (
+const VoiceSelectorName = ({ className, ...props }: VoiceSelectorNameProps) => (
   <span
     className={cn("flex-1 truncate text-left font-medium", className)}
     {...props}
   />
 );
 
-export type VoiceSelectorDescriptionProps = ComponentProps<"span">;
+type VoiceSelectorDescriptionProps = ComponentProps<"span">;
 
-export const VoiceSelectorDescription = ({
+const VoiceSelectorDescription = ({
   className,
   ...props
 }: VoiceSelectorDescriptionProps) => (
   <span className={cn("text-muted-foreground text-xs", className)} {...props} />
 );
 
-export type VoiceSelectorAttributesProps = ComponentProps<"div">;
+type VoiceSelectorAttributesProps = ComponentProps<"div">;
 
-export const VoiceSelectorAttributes = ({
+const VoiceSelectorAttributes = ({
   className,
   children,
   ...props
@@ -464,9 +453,9 @@ export const VoiceSelectorAttributes = ({
   </div>
 );
 
-export type VoiceSelectorBulletProps = ComponentProps<"span">;
+type VoiceSelectorBulletProps = ComponentProps<"span">;
 
-export const VoiceSelectorBullet = ({
+const VoiceSelectorBullet = ({
   className,
   ...props
 }: VoiceSelectorBulletProps) => (
@@ -479,16 +468,13 @@ export const VoiceSelectorBullet = ({
   </span>
 );
 
-export type VoiceSelectorPreviewProps = Omit<
-  ComponentProps<"button">,
-  "children"
-> & {
+type VoiceSelectorPreviewProps = Omit<ComponentProps<"button">, "children"> & {
   playing?: boolean;
   loading?: boolean;
   onPlay?: () => void;
 };
 
-export const VoiceSelectorPreview = ({
+const VoiceSelectorPreview = ({
   className,
   playing,
   loading,
@@ -527,4 +513,46 @@ export const VoiceSelectorPreview = ({
       {icon}
     </Button>
   );
+};
+
+export {
+  useVoiceSelector,
+  VoiceSelector,
+  VoiceSelectorTrigger,
+  VoiceSelectorContent,
+  VoiceSelectorDialog,
+  VoiceSelectorInput,
+  VoiceSelectorList,
+  VoiceSelectorEmpty,
+  VoiceSelectorGroup,
+  VoiceSelectorItem,
+  VoiceSelectorShortcut,
+  VoiceSelectorSeparator,
+  VoiceSelectorGender,
+  VoiceSelectorAccent,
+  VoiceSelectorAge,
+  VoiceSelectorName,
+  VoiceSelectorDescription,
+  VoiceSelectorAttributes,
+  VoiceSelectorBullet,
+  VoiceSelectorPreview,
+  type VoiceSelectorProps,
+  type VoiceSelectorTriggerProps,
+  type VoiceSelectorContentProps,
+  type VoiceSelectorDialogProps,
+  type VoiceSelectorInputProps,
+  type VoiceSelectorListProps,
+  type VoiceSelectorEmptyProps,
+  type VoiceSelectorGroupProps,
+  type VoiceSelectorItemProps,
+  type VoiceSelectorShortcutProps,
+  type VoiceSelectorSeparatorProps,
+  type VoiceSelectorGenderProps,
+  type VoiceSelectorAccentProps,
+  type VoiceSelectorAgeProps,
+  type VoiceSelectorNameProps,
+  type VoiceSelectorDescriptionProps,
+  type VoiceSelectorAttributesProps,
+  type VoiceSelectorBulletProps,
+  type VoiceSelectorPreviewProps,
 };

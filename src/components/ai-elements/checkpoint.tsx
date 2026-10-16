@@ -12,13 +12,9 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
-export type CheckpointProps = HTMLAttributes<HTMLDivElement>;
+type CheckpointProps = HTMLAttributes<HTMLDivElement>;
 
-export const Checkpoint = ({
-  className,
-  children,
-  ...props
-}: CheckpointProps) => (
+const Checkpoint = ({ className, children, ...props }: CheckpointProps) => (
   <div
     className={cn(
       "flex items-center gap-0.5 overflow-hidden text-muted-foreground",
@@ -31,9 +27,9 @@ export const Checkpoint = ({
   </div>
 );
 
-export type CheckpointIconProps = LucideProps;
+type CheckpointIconProps = LucideProps;
 
-export const CheckpointIcon = ({
+const CheckpointIcon = ({
   className,
   children,
   ...props
@@ -42,11 +38,11 @@ export const CheckpointIcon = ({
     <BookmarkIcon className={cn("size-4 shrink-0", className)} {...props} />
   );
 
-export type CheckpointTriggerProps = ComponentProps<typeof Button> & {
+type CheckpointTriggerProps = ComponentProps<typeof Button> & {
   tooltip?: string;
 };
 
-export const CheckpointTrigger = ({
+const CheckpointTrigger = ({
   children,
   variant = "ghost",
   size = "sm",
@@ -71,3 +67,12 @@ export const CheckpointTrigger = ({
       {children}
     </Button>
   );
+
+export {
+  Checkpoint,
+  CheckpointIcon,
+  CheckpointTrigger,
+  type CheckpointProps,
+  type CheckpointIconProps,
+  type CheckpointTriggerProps,
+};

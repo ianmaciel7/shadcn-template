@@ -154,7 +154,7 @@ const parseStackTrace = (trace: string): ParsedStackTrace => {
   };
 };
 
-export type StackTraceProps = ComponentProps<"div"> & {
+type StackTraceProps = ComponentProps<"div"> & {
   trace: string;
   open?: boolean;
   defaultOpen?: boolean;
@@ -162,7 +162,7 @@ export type StackTraceProps = ComponentProps<"div"> & {
   onFilePathClick?: (filePath: string, line?: number, column?: number) => void;
 };
 
-export const StackTrace = memo(
+const StackTrace = memo(
   ({
     trace,
     className,
@@ -208,9 +208,9 @@ export const StackTrace = memo(
   },
 );
 
-export type StackTraceHeaderProps = ComponentProps<typeof CollapsibleTrigger>;
+type StackTraceHeaderProps = ComponentProps<typeof CollapsibleTrigger>;
 
-export const StackTraceHeader = memo(
+const StackTraceHeader = memo(
   ({ className, children, ...props }: StackTraceHeaderProps) => {
     const { isOpen, setIsOpen } = useStackTrace();
 
@@ -234,9 +234,9 @@ export const StackTraceHeader = memo(
   },
 );
 
-export type StackTraceErrorProps = ComponentProps<"div">;
+type StackTraceErrorProps = ComponentProps<"div">;
 
-export const StackTraceError = memo(
+const StackTraceError = memo(
   ({ className, children, ...props }: StackTraceErrorProps) => (
     <div
       className={cn(
@@ -251,9 +251,9 @@ export const StackTraceError = memo(
   ),
 );
 
-export type StackTraceErrorTypeProps = ComponentProps<"span">;
+type StackTraceErrorTypeProps = ComponentProps<"span">;
 
-export const StackTraceErrorType = memo(
+const StackTraceErrorType = memo(
   ({ className, children, ...props }: StackTraceErrorTypeProps) => {
     const { trace } = useStackTrace();
 
@@ -268,9 +268,9 @@ export const StackTraceErrorType = memo(
   },
 );
 
-export type StackTraceErrorMessageProps = ComponentProps<"span">;
+type StackTraceErrorMessageProps = ComponentProps<"span">;
 
-export const StackTraceErrorMessage = memo(
+const StackTraceErrorMessage = memo(
   ({ className, children, ...props }: StackTraceErrorMessageProps) => {
     const { trace } = useStackTrace();
 
@@ -282,7 +282,7 @@ export const StackTraceErrorMessage = memo(
   },
 );
 
-export type StackTraceActionsProps = ComponentProps<"div">;
+type StackTraceActionsProps = ComponentProps<"div">;
 
 const handleActionsClick = (e: React.MouseEvent) => e.stopPropagation();
 const handleActionsKeyDown = (e: React.KeyboardEvent) => {
@@ -291,7 +291,7 @@ const handleActionsKeyDown = (e: React.KeyboardEvent) => {
   }
 };
 
-export const StackTraceActions = memo(
+const StackTraceActions = memo(
   ({ className, children, ...props }: StackTraceActionsProps) => (
     <div
       className={cn("flex shrink-0 items-center gap-1", className)}
@@ -305,13 +305,13 @@ export const StackTraceActions = memo(
   ),
 );
 
-export type StackTraceCopyButtonProps = ComponentProps<typeof Button> & {
+type StackTraceCopyButtonProps = ComponentProps<typeof Button> & {
   onCopy?: () => void;
   onError?: (error: Error) => void;
   timeout?: number;
 };
 
-export const StackTraceCopyButton = memo(
+const StackTraceCopyButton = memo(
   ({
     onCopy,
     onError,
@@ -366,9 +366,9 @@ export const StackTraceCopyButton = memo(
   },
 );
 
-export type StackTraceExpandButtonProps = ComponentProps<"div">;
+type StackTraceExpandButtonProps = ComponentProps<"div">;
 
-export const StackTraceExpandButton = memo(
+const StackTraceExpandButton = memo(
   ({ className, ...props }: StackTraceExpandButtonProps) => {
     const { isOpen } = useStackTrace();
 
@@ -388,13 +388,11 @@ export const StackTraceExpandButton = memo(
   },
 );
 
-export type StackTraceContentProps = ComponentProps<
-  typeof CollapsibleContent
-> & {
+type StackTraceContentProps = ComponentProps<typeof CollapsibleContent> & {
   maxHeight?: number;
 };
 
-export const StackTraceContent = memo(
+const StackTraceContent = memo(
   ({
     className,
     maxHeight = 400,
@@ -421,7 +419,7 @@ export const StackTraceContent = memo(
   },
 );
 
-export type StackTraceFramesProps = ComponentProps<"div"> & {
+type StackTraceFramesProps = ComponentProps<"div"> & {
   showInternalFrames?: boolean;
 };
 
@@ -466,7 +464,7 @@ const FilePathButton = memo(
 
 FilePathButton.displayName = "FilePathButton";
 
-export const StackTraceFrames = memo(
+const StackTraceFrames = memo(
   ({
     className,
     showInternalFrames = true,
@@ -529,3 +527,26 @@ StackTraceCopyButton.displayName = "StackTraceCopyButton";
 StackTraceExpandButton.displayName = "StackTraceExpandButton";
 StackTraceContent.displayName = "StackTraceContent";
 StackTraceFrames.displayName = "StackTraceFrames";
+
+export {
+  StackTrace,
+  StackTraceHeader,
+  StackTraceError,
+  StackTraceErrorType,
+  StackTraceErrorMessage,
+  StackTraceActions,
+  StackTraceCopyButton,
+  StackTraceExpandButton,
+  StackTraceContent,
+  StackTraceFrames,
+  type StackTraceProps,
+  type StackTraceHeaderProps,
+  type StackTraceErrorProps,
+  type StackTraceErrorTypeProps,
+  type StackTraceErrorMessageProps,
+  type StackTraceActionsProps,
+  type StackTraceCopyButtonProps,
+  type StackTraceExpandButtonProps,
+  type StackTraceContentProps,
+  type StackTraceFramesProps,
+};

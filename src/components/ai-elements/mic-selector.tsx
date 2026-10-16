@@ -49,7 +49,7 @@ const MicSelectorContext = createContext<MicSelectorContextType>({
   width: 200,
 });
 
-export const useAudioDevices = () => {
+const useAudioDevices = () => {
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -148,7 +148,7 @@ export const useAudioDevices = () => {
   };
 };
 
-export type MicSelectorProps = ComponentProps<typeof Popover> & {
+type MicSelectorProps = ComponentProps<typeof Popover> & {
   defaultValue?: string;
   value?: string | undefined;
   onValueChange?: (value: string | undefined) => void;
@@ -156,7 +156,7 @@ export type MicSelectorProps = ComponentProps<typeof Popover> & {
   onOpenChange?: (open: boolean) => void;
 };
 
-export const MicSelector = ({
+const MicSelector = ({
   defaultValue,
   value: controlledValue,
   onValueChange: controlledOnValueChange,
@@ -204,9 +204,9 @@ export const MicSelector = ({
   );
 };
 
-export type MicSelectorTriggerProps = ComponentProps<typeof Button>;
+type MicSelectorTriggerProps = ComponentProps<typeof Button>;
 
-export const MicSelectorTrigger = ({
+const MicSelectorTrigger = ({
   children,
   ...props
 }: MicSelectorTriggerProps) => {
@@ -245,11 +245,11 @@ export const MicSelectorTrigger = ({
   );
 };
 
-export type MicSelectorContentProps = ComponentProps<typeof Command> & {
+type MicSelectorContentProps = ComponentProps<typeof Command> & {
   popoverOptions?: ComponentProps<typeof PopoverContent>;
 };
 
-export const MicSelectorContent = ({
+const MicSelectorContent = ({
   className,
   popoverOptions,
   ...props
@@ -267,42 +267,39 @@ export const MicSelectorContent = ({
   );
 };
 
-export type MicSelectorInputProps = ComponentProps<typeof CommandInput> & {
+type MicSelectorInputProps = ComponentProps<typeof CommandInput> & {
   value?: string;
   defaultValue?: string;
   onValueChange?: (value: string) => void;
 };
 
-export const MicSelectorInput = ({ ...props }: MicSelectorInputProps) => (
+const MicSelectorInput = ({ ...props }: MicSelectorInputProps) => (
   <CommandInput placeholder="Search microphones..." {...props} />
 );
 
-export type MicSelectorListProps = Omit<
+type MicSelectorListProps = Omit<
   ComponentProps<typeof CommandList>,
   "children"
 > & {
   children: (devices: MediaDeviceInfo[]) => ReactNode;
 };
 
-export const MicSelectorList = ({
-  children,
-  ...props
-}: MicSelectorListProps) => {
+const MicSelectorList = ({ children, ...props }: MicSelectorListProps) => {
   const { data } = useContext(MicSelectorContext);
 
   return <CommandList {...props}>{children(data)}</CommandList>;
 };
 
-export type MicSelectorEmptyProps = ComponentProps<typeof CommandEmpty>;
+type MicSelectorEmptyProps = ComponentProps<typeof CommandEmpty>;
 
-export const MicSelectorEmpty = ({
+const MicSelectorEmpty = ({
   children = "No microphone found.",
   ...props
 }: MicSelectorEmptyProps) => <CommandEmpty {...props}>{children}</CommandEmpty>;
 
-export type MicSelectorItemProps = ComponentProps<typeof CommandItem>;
+type MicSelectorItemProps = ComponentProps<typeof CommandItem>;
 
-export const MicSelectorItem = (props: MicSelectorItemProps) => {
+const MicSelectorItem = (props: MicSelectorItemProps) => {
   const { onValueChange, onOpenChange } = useContext(MicSelectorContext);
 
   const handleSelect = useCallback(
@@ -316,11 +313,11 @@ export const MicSelectorItem = (props: MicSelectorItemProps) => {
   return <CommandItem onSelect={handleSelect} {...props} />;
 };
 
-export type MicSelectorLabelProps = ComponentProps<"span"> & {
+type MicSelectorLabelProps = ComponentProps<"span"> & {
   device: MediaDeviceInfo;
 };
 
-export const MicSelectorLabel = ({
+const MicSelectorLabel = ({
   device,
   className,
   ...props
@@ -346,12 +343,9 @@ export const MicSelectorLabel = ({
   );
 };
 
-export type MicSelectorValueProps = ComponentProps<"span">;
+type MicSelectorValueProps = ComponentProps<"span">;
 
-export const MicSelectorValue = ({
-  className,
-  ...props
-}: MicSelectorValueProps) => {
+const MicSelectorValue = ({ className, ...props }: MicSelectorValueProps) => {
   const { data, value } = useContext(MicSelectorContext);
   const currentDevice = data.find((d) => d.deviceId === value);
 
@@ -370,4 +364,26 @@ export const MicSelectorValue = ({
       {...props}
     />
   );
+};
+
+export {
+  useAudioDevices,
+  MicSelector,
+  MicSelectorTrigger,
+  MicSelectorContent,
+  MicSelectorInput,
+  MicSelectorList,
+  MicSelectorEmpty,
+  MicSelectorItem,
+  MicSelectorLabel,
+  MicSelectorValue,
+  type MicSelectorProps,
+  type MicSelectorTriggerProps,
+  type MicSelectorContentProps,
+  type MicSelectorInputProps,
+  type MicSelectorListProps,
+  type MicSelectorEmptyProps,
+  type MicSelectorItemProps,
+  type MicSelectorLabelProps,
+  type MicSelectorValueProps,
 };

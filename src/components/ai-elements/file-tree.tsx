@@ -38,7 +38,7 @@ const FileTreeContext = createContext<FileTreeContextType>({
   togglePath: noop,
 });
 
-export type FileTreeProps = Omit<HTMLAttributes<HTMLDivElement>, "onSelect"> & {
+type FileTreeProps = Omit<HTMLAttributes<HTMLDivElement>, "onSelect"> & {
   expanded?: Set<string>;
   defaultExpanded?: Set<string>;
   selectedPath?: string;
@@ -46,7 +46,7 @@ export type FileTreeProps = Omit<HTMLAttributes<HTMLDivElement>, "onSelect"> & {
   onExpandedChange?: (expanded: Set<string>) => void;
 };
 
-export const FileTree = ({
+const FileTree = ({
   expanded: controlledExpanded,
   defaultExpanded = new Set(),
   selectedPath,
@@ -94,25 +94,17 @@ export const FileTree = ({
   );
 };
 
-export type FileTreeIconProps = HTMLAttributes<HTMLSpanElement>;
+type FileTreeIconProps = HTMLAttributes<HTMLSpanElement>;
 
-export const FileTreeIcon = ({
-  className,
-  children,
-  ...props
-}: FileTreeIconProps) => (
+const FileTreeIcon = ({ className, children, ...props }: FileTreeIconProps) => (
   <span className={cn("shrink-0", className)} {...props}>
     {children}
   </span>
 );
 
-export type FileTreeNameProps = HTMLAttributes<HTMLSpanElement>;
+type FileTreeNameProps = HTMLAttributes<HTMLSpanElement>;
 
-export const FileTreeName = ({
-  className,
-  children,
-  ...props
-}: FileTreeNameProps) => (
+const FileTreeName = ({ className, children, ...props }: FileTreeNameProps) => (
   <span className={cn("truncate", className)} {...props}>
     {children}
   </span>
@@ -130,12 +122,12 @@ const FileTreeFolderContext = createContext<FileTreeFolderContextType>({
   path: "",
 });
 
-export type FileTreeFolderProps = HTMLAttributes<HTMLDivElement> & {
+type FileTreeFolderProps = HTMLAttributes<HTMLDivElement> & {
   path: string;
   name: string;
 };
 
-export const FileTreeFolder = ({
+const FileTreeFolder = ({
   path,
   name,
   className,
@@ -224,13 +216,13 @@ const FileTreeFileContext = createContext<FileTreeFileContextType>({
   path: "",
 });
 
-export type FileTreeFileProps = HTMLAttributes<HTMLDivElement> & {
+type FileTreeFileProps = HTMLAttributes<HTMLDivElement> & {
   path: string;
   name: string;
   icon?: ReactNode;
 };
 
-export const FileTreeFile = ({
+const FileTreeFile = ({
   path,
   name,
   icon,
@@ -285,11 +277,11 @@ export const FileTreeFile = ({
   );
 };
 
-export type FileTreeActionsProps = HTMLAttributes<HTMLDivElement>;
+type FileTreeActionsProps = HTMLAttributes<HTMLDivElement>;
 
 const stopPropagation = (e: React.SyntheticEvent) => e.stopPropagation();
 
-export const FileTreeActions = ({
+const FileTreeActions = ({
   className,
   children,
   ...props
@@ -304,3 +296,18 @@ export const FileTreeActions = ({
     {children}
   </div>
 );
+
+export {
+  FileTree,
+  FileTreeIcon,
+  FileTreeName,
+  FileTreeFolder,
+  FileTreeFile,
+  FileTreeActions,
+  type FileTreeProps,
+  type FileTreeIconProps,
+  type FileTreeNameProps,
+  type FileTreeFolderProps,
+  type FileTreeFileProps,
+  type FileTreeActionsProps,
+};

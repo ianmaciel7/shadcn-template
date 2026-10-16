@@ -28,16 +28,11 @@ const SnippetContext = createContext<SnippetContextType>({
   code: "",
 });
 
-export type SnippetProps = ComponentProps<typeof InputGroup> & {
+type SnippetProps = ComponentProps<typeof InputGroup> & {
   code: string;
 };
 
-export const Snippet = ({
-  code,
-  className,
-  children,
-  ...props
-}: SnippetProps) => {
+const Snippet = ({ code, className, children, ...props }: SnippetProps) => {
   const contextValue = useMemo(() => ({ code }), [code]);
 
   return (
@@ -49,27 +44,27 @@ export const Snippet = ({
   );
 };
 
-export type SnippetAddonProps = ComponentProps<typeof InputGroupAddon>;
+type SnippetAddonProps = ComponentProps<typeof InputGroupAddon>;
 
-export const SnippetAddon = (props: SnippetAddonProps) => (
+const SnippetAddon = (props: SnippetAddonProps) => (
   <InputGroupAddon {...props} />
 );
 
-export type SnippetTextProps = ComponentProps<typeof InputGroupText>;
+type SnippetTextProps = ComponentProps<typeof InputGroupText>;
 
-export const SnippetText = ({ className, ...props }: SnippetTextProps) => (
+const SnippetText = ({ className, ...props }: SnippetTextProps) => (
   <InputGroupText
     className={cn("pl-2 font-normal text-muted-foreground", className)}
     {...props}
   />
 );
 
-export type SnippetInputProps = Omit<
+type SnippetInputProps = Omit<
   ComponentProps<typeof InputGroupInput>,
   "readOnly" | "value"
 >;
 
-export const SnippetInput = ({ className, ...props }: SnippetInputProps) => {
+const SnippetInput = ({ className, ...props }: SnippetInputProps) => {
   const { code } = useContext(SnippetContext);
 
   return (
@@ -82,13 +77,13 @@ export const SnippetInput = ({ className, ...props }: SnippetInputProps) => {
   );
 };
 
-export type SnippetCopyButtonProps = ComponentProps<typeof InputGroupButton> & {
+type SnippetCopyButtonProps = ComponentProps<typeof InputGroupButton> & {
   onCopy?: () => void;
   onError?: (error: Error) => void;
   timeout?: number;
 };
 
-export const SnippetCopyButton = ({
+const SnippetCopyButton = ({
   onCopy,
   onError,
   timeout = 2000,
@@ -142,4 +137,17 @@ export const SnippetCopyButton = ({
       {children ?? <Icon className="size-3.5" size={14} />}
     </InputGroupButton>
   );
+};
+
+export {
+  Snippet,
+  SnippetAddon,
+  SnippetText,
+  SnippetInput,
+  SnippetCopyButton,
+  type SnippetProps,
+  type SnippetAddonProps,
+  type SnippetTextProps,
+  type SnippetInputProps,
+  type SnippetCopyButtonProps,
 };

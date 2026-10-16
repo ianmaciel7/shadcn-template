@@ -84,7 +84,10 @@
             "noImgElement": "off"
           },
           "style": {
-            "noJsxLiterals": "off"
+            "noDefaultExport": "error",
+            "noJsxLiterals": "off",
+            "useExportType": "error",
+            "useExportsLast": "error"
           }
         }
       }

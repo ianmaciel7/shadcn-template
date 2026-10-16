@@ -137,7 +137,9 @@ const Animated = ({ id, source, target, markerEnd, style }: EdgeProps) => {
   );
 };
 
-export const Edge = {
+const Edge = {
   Animated,
   Temporary,
 };
+
+export { Edge };

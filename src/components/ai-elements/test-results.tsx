@@ -40,9 +40,9 @@ const formatDuration = (ms: number) => {
   return `${(ms / 1000).toFixed(2)}s`;
 };
 
-export type TestResultsHeaderProps = HTMLAttributes<HTMLDivElement>;
+type TestResultsHeaderProps = HTMLAttributes<HTMLDivElement>;
 
-export const TestResultsHeader = ({
+const TestResultsHeader = ({
   className,
   children,
   ...props
@@ -58,9 +58,9 @@ export const TestResultsHeader = ({
   </div>
 );
 
-export type TestResultsDurationProps = HTMLAttributes<HTMLSpanElement>;
+type TestResultsDurationProps = HTMLAttributes<HTMLSpanElement>;
 
-export const TestResultsDuration = ({
+const TestResultsDuration = ({
   className,
   children,
   ...props
@@ -78,9 +78,9 @@ export const TestResultsDuration = ({
   );
 };
 
-export type TestResultsSummaryProps = HTMLAttributes<HTMLDivElement>;
+type TestResultsSummaryProps = HTMLAttributes<HTMLDivElement>;
 
-export const TestResultsSummary = ({
+const TestResultsSummary = ({
   className,
   children,
   ...props
@@ -126,11 +126,11 @@ export const TestResultsSummary = ({
   );
 };
 
-export type TestResultsProps = HTMLAttributes<HTMLDivElement> & {
+type TestResultsProps = HTMLAttributes<HTMLDivElement> & {
   summary?: TestResultsSummary;
 };
 
-export const TestResults = ({
+const TestResults = ({
   summary,
   className,
   children,
@@ -156,9 +156,9 @@ export const TestResults = ({
   );
 };
 
-export type TestResultsProgressProps = HTMLAttributes<HTMLDivElement>;
+type TestResultsProgressProps = HTMLAttributes<HTMLDivElement>;
 
-export const TestResultsProgress = ({
+const TestResultsProgress = ({
   className,
   children,
   ...props
@@ -198,9 +198,9 @@ export const TestResultsProgress = ({
   );
 };
 
-export type TestResultsContentProps = HTMLAttributes<HTMLDivElement>;
+type TestResultsContentProps = HTMLAttributes<HTMLDivElement>;
 
-export const TestResultsContent = ({
+const TestResultsContent = ({
   className,
   children,
   ...props
@@ -240,12 +240,12 @@ const TestStatusIcon = ({ status }: { status: TestStatus }) => (
   </span>
 );
 
-export type TestSuiteProps = ComponentProps<typeof Collapsible> & {
+type TestSuiteProps = ComponentProps<typeof Collapsible> & {
   name: string;
   status: TestStatus;
 };
 
-export const TestSuite = ({
+const TestSuite = ({
   name,
   status,
   className,
@@ -263,9 +263,9 @@ export const TestSuite = ({
   );
 };
 
-export type TestSuiteNameProps = ComponentProps<typeof CollapsibleTrigger>;
+type TestSuiteNameProps = ComponentProps<typeof CollapsibleTrigger>;
 
-export const TestSuiteName = ({
+const TestSuiteName = ({
   className,
   children,
   ...props
@@ -287,13 +287,13 @@ export const TestSuiteName = ({
   );
 };
 
-export type TestSuiteStatsProps = HTMLAttributes<HTMLDivElement> & {
+type TestSuiteStatsProps = HTMLAttributes<HTMLDivElement> & {
   passed?: number;
   failed?: number;
   skipped?: number;
 };
 
-export const TestSuiteStats = ({
+const TestSuiteStats = ({
   passed = 0,
   failed = 0,
   skipped = 0,
@@ -327,9 +327,9 @@ export const TestSuiteStats = ({
   </div>
 );
 
-export type TestSuiteContentProps = ComponentProps<typeof CollapsibleContent>;
+type TestSuiteContentProps = ComponentProps<typeof CollapsibleContent>;
 
-export const TestSuiteContent = ({
+const TestSuiteContent = ({
   className,
   children,
   ...props
@@ -350,9 +350,9 @@ const TestContext = createContext<TestContextType>({
   status: "passed",
 });
 
-export type TestNameProps = HTMLAttributes<HTMLSpanElement>;
+type TestNameProps = HTMLAttributes<HTMLSpanElement>;
 
-export const TestName = ({ className, children, ...props }: TestNameProps) => {
+const TestName = ({ className, children, ...props }: TestNameProps) => {
   const { name } = useContext(TestContext);
 
   return (
@@ -362,13 +362,9 @@ export const TestName = ({ className, children, ...props }: TestNameProps) => {
   );
 };
 
-export type TestDurationProps = HTMLAttributes<HTMLSpanElement>;
+type TestDurationProps = HTMLAttributes<HTMLSpanElement>;
 
-export const TestDuration = ({
-  className,
-  children,
-  ...props
-}: TestDurationProps) => {
+const TestDuration = ({ className, children, ...props }: TestDurationProps) => {
   const { duration } = useContext(TestContext);
 
   if (duration === undefined) {
@@ -385,13 +381,9 @@ export const TestDuration = ({
   );
 };
 
-export type TestStatusProps = HTMLAttributes<HTMLSpanElement>;
+type TestStatusProps = HTMLAttributes<HTMLSpanElement>;
 
-export const TestStatus = ({
-  className,
-  children,
-  ...props
-}: TestStatusProps) => {
+const TestStatus = ({ className, children, ...props }: TestStatusProps) => {
   const { status } = useContext(TestContext);
 
   return (
@@ -404,13 +396,13 @@ export const TestStatus = ({
   );
 };
 
-export type TestProps = HTMLAttributes<HTMLDivElement> & {
+type TestProps = HTMLAttributes<HTMLDivElement> & {
   name: string;
   status: TestStatus;
   duration?: number;
 };
 
-export const Test = ({
+const Test = ({
   name,
   status,
   duration,
@@ -441,13 +433,9 @@ export const Test = ({
   );
 };
 
-export type TestErrorProps = HTMLAttributes<HTMLDivElement>;
+type TestErrorProps = HTMLAttributes<HTMLDivElement>;
 
-export const TestError = ({
-  className,
-  children,
-  ...props
-}: TestErrorProps) => (
+const TestError = ({ className, children, ...props }: TestErrorProps) => (
   <div
     className={cn(
       "mt-2 rounded-md bg-red-50 p-3 dark:bg-red-900/20",
@@ -459,9 +447,9 @@ export const TestError = ({
   </div>
 );
 
-export type TestErrorMessageProps = HTMLAttributes<HTMLParagraphElement>;
+type TestErrorMessageProps = HTMLAttributes<HTMLParagraphElement>;
 
-export const TestErrorMessage = ({
+const TestErrorMessage = ({
   className,
   children,
   ...props
@@ -477,9 +465,9 @@ export const TestErrorMessage = ({
   </p>
 );
 
-export type TestErrorStackProps = HTMLAttributes<HTMLPreElement>;
+type TestErrorStackProps = HTMLAttributes<HTMLPreElement>;
 
-export const TestErrorStack = ({
+const TestErrorStack = ({
   className,
   children,
   ...props
@@ -494,3 +482,40 @@ export const TestErrorStack = ({
     {children}
   </pre>
 );
+
+export {
+  TestResultsHeader,
+  TestResultsDuration,
+  TestResultsSummary,
+  TestResults,
+  TestResultsProgress,
+  TestResultsContent,
+  TestSuite,
+  TestSuiteName,
+  TestSuiteStats,
+  TestSuiteContent,
+  TestName,
+  TestDuration,
+  TestStatus,
+  Test,
+  TestError,
+  TestErrorMessage,
+  TestErrorStack,
+  type TestResultsHeaderProps,
+  type TestResultsDurationProps,
+  type TestResultsSummaryProps,
+  type TestResultsProps,
+  type TestResultsProgressProps,
+  type TestResultsContentProps,
+  type TestSuiteProps,
+  type TestSuiteNameProps,
+  type TestSuiteStatsProps,
+  type TestSuiteContentProps,
+  type TestNameProps,
+  type TestDurationProps,
+  type TestStatusProps,
+  type TestProps,
+  type TestErrorProps,
+  type TestErrorMessageProps,
+  type TestErrorStackProps,
+};

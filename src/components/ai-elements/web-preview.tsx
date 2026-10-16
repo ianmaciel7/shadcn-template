@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
-export interface WebPreviewContextValue {
+interface WebPreviewContextValue {
   url: string;
   setUrl: (url: string) => void;
   consoleOpen: boolean;
@@ -41,12 +41,12 @@ const useWebPreview = () => {
   return context;
 };
 
-export type WebPreviewProps = ComponentProps<"div"> & {
+type WebPreviewProps = ComponentProps<"div"> & {
   defaultUrl?: string;
   onUrlChange?: (url: string) => void;
 };
 
-export const WebPreview = ({
+const WebPreview = ({
   className,
   children,
   defaultUrl = "",
@@ -89,9 +89,9 @@ export const WebPreview = ({
   );
 };
 
-export type WebPreviewNavigationProps = ComponentProps<"div">;
+type WebPreviewNavigationProps = ComponentProps<"div">;
 
-export const WebPreviewNavigation = ({
+const WebPreviewNavigation = ({
   className,
   children,
   ...props
@@ -104,11 +104,11 @@ export const WebPreviewNavigation = ({
   </div>
 );
 
-export type WebPreviewNavigationButtonProps = ComponentProps<typeof Button> & {
+type WebPreviewNavigationButtonProps = ComponentProps<typeof Button> & {
   tooltip?: string;
 };
 
-export const WebPreviewNavigationButton = ({
+const WebPreviewNavigationButton = ({
   onClick,
   disabled,
   tooltip,
@@ -138,9 +138,9 @@ export const WebPreviewNavigationButton = ({
   </TooltipProvider>
 );
 
-export type WebPreviewUrlProps = ComponentProps<typeof Input>;
+type WebPreviewUrlProps = ComponentProps<typeof Input>;
 
-export const WebPreviewUrl = ({
+const WebPreviewUrl = ({
   value,
   onChange,
   onKeyDown,
@@ -184,11 +184,11 @@ export const WebPreviewUrl = ({
   );
 };
 
-export type WebPreviewBodyProps = ComponentProps<"iframe"> & {
+type WebPreviewBodyProps = ComponentProps<"iframe"> & {
   loading?: ReactNode;
 };
 
-export const WebPreviewBody = ({
+const WebPreviewBody = ({
   className,
   loading,
   src,
@@ -211,7 +211,7 @@ export const WebPreviewBody = ({
   );
 };
 
-export type WebPreviewConsoleProps = ComponentProps<"div"> & {
+type WebPreviewConsoleProps = ComponentProps<"div"> & {
   logs?: {
     level: "log" | "warn" | "error";
     message: string;
@@ -219,7 +219,7 @@ export type WebPreviewConsoleProps = ComponentProps<"div"> & {
   }[];
 };
 
-export const WebPreviewConsole = ({
+const WebPreviewConsole = ({
   className,
   logs = [],
   children,
@@ -282,4 +282,20 @@ export const WebPreviewConsole = ({
       </CollapsibleContent>
     </Collapsible>
   );
+};
+
+export {
+  WebPreview,
+  WebPreviewNavigation,
+  WebPreviewNavigationButton,
+  WebPreviewUrl,
+  WebPreviewBody,
+  WebPreviewConsole,
+  type WebPreviewContextValue,
+  type WebPreviewProps,
+  type WebPreviewNavigationProps,
+  type WebPreviewNavigationButtonProps,
+  type WebPreviewUrlProps,
+  type WebPreviewBodyProps,
+  type WebPreviewConsoleProps,
 };

@@ -29,14 +29,14 @@ const useTranscription = () => {
   return context;
 };
 
-export type TranscriptionProps = Omit<ComponentProps<"div">, "children"> & {
+type TranscriptionProps = Omit<ComponentProps<"div">, "children"> & {
   segments: TranscriptionSegment[];
   currentTime?: number;
   onSeek?: (time: number) => void;
   children: (segment: TranscriptionSegment, index: number) => ReactNode;
 };
 
-export const Transcription = ({
+const Transcription = ({
   segments,
   currentTime: externalCurrentTime,
   onSeek,
@@ -73,12 +73,12 @@ export const Transcription = ({
   );
 };
 
-export type TranscriptionSegmentProps = ComponentProps<"button"> & {
+type TranscriptionSegmentProps = ComponentProps<"button"> & {
   segment: TranscriptionSegment;
   index: number;
 };
 
-export const TranscriptionSegment = ({
+const TranscriptionSegment = ({
   segment,
   index,
   className,
@@ -122,4 +122,11 @@ export const TranscriptionSegment = ({
       {segment.text}
     </button>
   );
+};
+
+export {
+  Transcription,
+  TranscriptionSegment,
+  type TranscriptionProps,
+  type TranscriptionSegmentProps,
 };

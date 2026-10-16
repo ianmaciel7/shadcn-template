@@ -15,21 +15,21 @@ import { cn } from "@/lib/utils";
 
 import { CodeBlock } from "./code-block";
 
-export type AgentProps = ComponentProps<"div">;
+type AgentProps = ComponentProps<"div">;
 
-export const Agent = memo(({ className, ...props }: AgentProps) => (
+const Agent = memo(({ className, ...props }: AgentProps) => (
   <div
     className={cn("not-prose w-full rounded-md border", className)}
     {...props}
   />
 ));
 
-export type AgentHeaderProps = ComponentProps<"div"> & {
+type AgentHeaderProps = ComponentProps<"div"> & {
   name: string;
   model?: string;
 };
 
-export const AgentHeader = memo(
+const AgentHeader = memo(
   ({ className, name, model, ...props }: AgentHeaderProps) => (
     <div
       className={cn(
@@ -51,19 +51,17 @@ export const AgentHeader = memo(
   ),
 );
 
-export type AgentContentProps = ComponentProps<"div">;
+type AgentContentProps = ComponentProps<"div">;
 
-export const AgentContent = memo(
-  ({ className, ...props }: AgentContentProps) => (
-    <div className={cn("space-y-4 p-4 pt-0", className)} {...props} />
-  ),
-);
+const AgentContent = memo(({ className, ...props }: AgentContentProps) => (
+  <div className={cn("space-y-4 p-4 pt-0", className)} {...props} />
+));
 
-export type AgentInstructionsProps = ComponentProps<"div"> & {
+type AgentInstructionsProps = ComponentProps<"div"> & {
   children: string;
 };
 
-export const AgentInstructions = memo(
+const AgentInstructions = memo(
   ({ className, children, ...props }: AgentInstructionsProps) => (
     <div className={cn("space-y-2", className)} {...props}>
       <span className="font-medium text-muted-foreground text-sm">
@@ -76,20 +74,20 @@ export const AgentInstructions = memo(
   ),
 );
 
-export type AgentToolsProps = ComponentProps<typeof Accordion>;
+type AgentToolsProps = ComponentProps<typeof Accordion>;
 
-export const AgentTools = memo(({ className, ...props }: AgentToolsProps) => (
+const AgentTools = memo(({ className, ...props }: AgentToolsProps) => (
   <div className={cn("space-y-2", className)}>
     <span className="font-medium text-muted-foreground text-sm">Tools</span>
     <Accordion className="rounded-md border" {...props} />
   </div>
 ));
 
-export type AgentToolProps = ComponentProps<typeof AccordionItem> & {
+type AgentToolProps = ComponentProps<typeof AccordionItem> & {
   tool: Tool;
 };
 
-export const AgentTool = memo(
+const AgentTool = memo(
   ({ className, tool, value, ...props }: AgentToolProps) => {
     const schema =
       "jsonSchema" in tool && tool.jsonSchema
@@ -117,11 +115,11 @@ export const AgentTool = memo(
   },
 );
 
-export type AgentOutputProps = ComponentProps<"div"> & {
+type AgentOutputProps = ComponentProps<"div"> & {
   schema: string;
 };
 
-export const AgentOutput = memo(
+const AgentOutput = memo(
   ({ className, schema, ...props }: AgentOutputProps) => (
     <div className={cn("space-y-2", className)} {...props}>
       <span className="font-medium text-muted-foreground text-sm">
@@ -141,3 +139,20 @@ AgentInstructions.displayName = "AgentInstructions";
 AgentTools.displayName = "AgentTools";
 AgentTool.displayName = "AgentTool";
 AgentOutput.displayName = "AgentOutput";
+
+export {
+  Agent,
+  AgentHeader,
+  AgentContent,
+  AgentInstructions,
+  AgentTools,
+  AgentTool,
+  AgentOutput,
+  type AgentProps,
+  type AgentHeaderProps,
+  type AgentContentProps,
+  type AgentInstructionsProps,
+  type AgentToolsProps,
+  type AgentToolProps,
+  type AgentOutputProps,
+};

@@ -36,7 +36,7 @@ interface ReasoningContextValue {
 
 const ReasoningContext = createContext<ReasoningContextValue | null>(null);
 
-export const useReasoning = () => {
+const useReasoning = () => {
   const context = useContext(ReasoningContext);
   if (!context) {
     throw new Error("Reasoning components must be used within Reasoning");
@@ -44,7 +44,7 @@ export const useReasoning = () => {
   return context;
 };
 
-export type ReasoningProps = ComponentProps<typeof Collapsible> & {
+type ReasoningProps = ComponentProps<typeof Collapsible> & {
   isStreaming?: boolean;
   open?: boolean;
   defaultOpen?: boolean;
@@ -55,7 +55,7 @@ export type ReasoningProps = ComponentProps<typeof Collapsible> & {
 const AUTO_CLOSE_DELAY = 1000;
 const MS_IN_S = 1000;
 
-export const Reasoning = memo(
+const Reasoning = memo(
   ({
     className,
     isStreaming = false,
@@ -148,9 +148,7 @@ export const Reasoning = memo(
   },
 );
 
-export type ReasoningTriggerProps = ComponentProps<
-  typeof CollapsibleTrigger
-> & {
+type ReasoningTriggerProps = ComponentProps<typeof CollapsibleTrigger> & {
   getThinkingMessage?: (isStreaming: boolean, duration?: number) => ReactNode;
 };
 
@@ -164,7 +162,7 @@ const defaultGetThinkingMessage = (isStreaming: boolean, duration?: number) => {
   return <p>Thought for {duration} seconds</p>;
 };
 
-export const ReasoningTrigger = memo(
+const ReasoningTrigger = memo(
   ({
     className,
     children,
@@ -198,15 +196,13 @@ export const ReasoningTrigger = memo(
   },
 );
 
-export type ReasoningContentProps = ComponentProps<
-  typeof CollapsibleContent
-> & {
+type ReasoningContentProps = ComponentProps<typeof CollapsibleContent> & {
   children: string;
 };
 
 const streamdownPlugins = { cjk, code, math, mermaid };
 
-export const ReasoningContent = memo(
+const ReasoningContent = memo(
   ({ className, children, ...props }: ReasoningContentProps) => (
     <CollapsibleContent
       className={cn(
@@ -224,3 +220,13 @@ export const ReasoningContent = memo(
 Reasoning.displayName = "Reasoning";
 ReasoningTrigger.displayName = "ReasoningTrigger";
 ReasoningContent.displayName = "ReasoningContent";
+
+export {
+  useReasoning,
+  Reasoning,
+  ReasoningTrigger,
+  ReasoningContent,
+  type ReasoningProps,
+  type ReasoningTriggerProps,
+  type ReasoningContentProps,
+};

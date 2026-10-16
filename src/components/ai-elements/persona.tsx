@@ -29,12 +29,7 @@ const useStrictModeSafeInit = () => {
   return ready;
 };
 
-export type PersonaState =
-  | "idle"
-  | "listening"
-  | "thinking"
-  | "speaking"
-  | "asleep";
+type PersonaState = "idle" | "listening" | "thinking" | "speaking" | "asleep";
 
 interface PersonaProps {
   state: PersonaState;
@@ -187,7 +182,7 @@ const PersonaWithoutModel = memo(
 
 PersonaWithoutModel.displayName = "PersonaWithoutModel";
 
-export const Persona: FC<PersonaProps> = memo(
+const Persona: FC<PersonaProps> = memo(
   ({
     variant = "obsidian",
     state = "idle",
@@ -304,3 +299,5 @@ export const Persona: FC<PersonaProps> = memo(
 );
 
 Persona.displayName = "Persona";
+
+export { Persona, type PersonaState };

@@ -31,13 +31,13 @@ const EnvironmentVariablesContext =
     showValues: false,
   });
 
-export type EnvironmentVariablesProps = HTMLAttributes<HTMLDivElement> & {
+type EnvironmentVariablesProps = HTMLAttributes<HTMLDivElement> & {
   showValues?: boolean;
   defaultShowValues?: boolean;
   onShowValuesChange?: (show: boolean) => void;
 };
 
-export const EnvironmentVariables = ({
+const EnvironmentVariables = ({
   showValues: controlledShowValues,
   defaultShowValues = false,
   onShowValuesChange,
@@ -74,9 +74,9 @@ export const EnvironmentVariables = ({
   );
 };
 
-export type EnvironmentVariablesHeaderProps = HTMLAttributes<HTMLDivElement>;
+type EnvironmentVariablesHeaderProps = HTMLAttributes<HTMLDivElement>;
 
-export const EnvironmentVariablesHeader = ({
+const EnvironmentVariablesHeader = ({
   className,
   children,
   ...props
@@ -92,9 +92,9 @@ export const EnvironmentVariablesHeader = ({
   </div>
 );
 
-export type EnvironmentVariablesTitleProps = HTMLAttributes<HTMLHeadingElement>;
+type EnvironmentVariablesTitleProps = HTMLAttributes<HTMLHeadingElement>;
 
-export const EnvironmentVariablesTitle = ({
+const EnvironmentVariablesTitle = ({
   className,
   children,
   ...props
@@ -104,9 +104,9 @@ export const EnvironmentVariablesTitle = ({
   </h3>
 );
 
-export type EnvironmentVariablesToggleProps = ComponentProps<typeof Switch>;
+type EnvironmentVariablesToggleProps = ComponentProps<typeof Switch>;
 
-export const EnvironmentVariablesToggle = ({
+const EnvironmentVariablesToggle = ({
   className,
   ...props
 }: EnvironmentVariablesToggleProps) => {
@@ -127,9 +127,9 @@ export const EnvironmentVariablesToggle = ({
   );
 };
 
-export type EnvironmentVariablesContentProps = HTMLAttributes<HTMLDivElement>;
+type EnvironmentVariablesContentProps = HTMLAttributes<HTMLDivElement>;
 
-export const EnvironmentVariablesContent = ({
+const EnvironmentVariablesContent = ({
   className,
   children,
   ...props
@@ -150,9 +150,9 @@ const EnvironmentVariableContext =
     value: "",
   });
 
-export type EnvironmentVariableGroupProps = HTMLAttributes<HTMLDivElement>;
+type EnvironmentVariableGroupProps = HTMLAttributes<HTMLDivElement>;
 
-export const EnvironmentVariableGroup = ({
+const EnvironmentVariableGroup = ({
   className,
   children,
   ...props
@@ -162,9 +162,9 @@ export const EnvironmentVariableGroup = ({
   </div>
 );
 
-export type EnvironmentVariableNameProps = HTMLAttributes<HTMLSpanElement>;
+type EnvironmentVariableNameProps = HTMLAttributes<HTMLSpanElement>;
 
-export const EnvironmentVariableName = ({
+const EnvironmentVariableName = ({
   className,
   children,
   ...props
@@ -178,9 +178,9 @@ export const EnvironmentVariableName = ({
   );
 };
 
-export type EnvironmentVariableValueProps = HTMLAttributes<HTMLSpanElement>;
+type EnvironmentVariableValueProps = HTMLAttributes<HTMLSpanElement>;
 
-export const EnvironmentVariableValue = ({
+const EnvironmentVariableValue = ({
   className,
   children,
   ...props
@@ -206,12 +206,12 @@ export const EnvironmentVariableValue = ({
   );
 };
 
-export type EnvironmentVariableProps = HTMLAttributes<HTMLDivElement> & {
+type EnvironmentVariableProps = HTMLAttributes<HTMLDivElement> & {
   name: string;
   value: string;
 };
 
-export const EnvironmentVariable = ({
+const EnvironmentVariable = ({
   name,
   value,
   className,
@@ -242,16 +242,14 @@ export const EnvironmentVariable = ({
   );
 };
 
-export type EnvironmentVariableCopyButtonProps = ComponentProps<
-  typeof Button
-> & {
+type EnvironmentVariableCopyButtonProps = ComponentProps<typeof Button> & {
   onCopy?: () => void;
   onError?: (error: Error) => void;
   timeout?: number;
   copyFormat?: "name" | "value" | "export";
 };
 
-export const EnvironmentVariableCopyButton = ({
+const EnvironmentVariableCopyButton = ({
   onCopy,
   onError,
   timeout = 2000,
@@ -311,9 +309,9 @@ export const EnvironmentVariableCopyButton = ({
   );
 };
 
-export type EnvironmentVariableRequiredProps = ComponentProps<typeof Badge>;
+type EnvironmentVariableRequiredProps = ComponentProps<typeof Badge>;
 
-export const EnvironmentVariableRequired = ({
+const EnvironmentVariableRequired = ({
   className,
   children,
   ...props
@@ -322,3 +320,28 @@ export const EnvironmentVariableRequired = ({
     {children ?? "Required"}
   </Badge>
 );
+
+export {
+  EnvironmentVariables,
+  EnvironmentVariablesHeader,
+  EnvironmentVariablesTitle,
+  EnvironmentVariablesToggle,
+  EnvironmentVariablesContent,
+  EnvironmentVariableGroup,
+  EnvironmentVariableName,
+  EnvironmentVariableValue,
+  EnvironmentVariable,
+  EnvironmentVariableCopyButton,
+  EnvironmentVariableRequired,
+  type EnvironmentVariablesProps,
+  type EnvironmentVariablesHeaderProps,
+  type EnvironmentVariablesTitleProps,
+  type EnvironmentVariablesToggleProps,
+  type EnvironmentVariablesContentProps,
+  type EnvironmentVariableGroupProps,
+  type EnvironmentVariableNameProps,
+  type EnvironmentVariableValueProps,
+  type EnvironmentVariableProps,
+  type EnvironmentVariableCopyButtonProps,
+  type EnvironmentVariableRequiredProps,
+};

@@ -24,11 +24,11 @@ import { cn } from "@/lib/utils";
 // Types
 // ============================================================================
 
-export type AttachmentData =
+type AttachmentData =
   | (FileUIPart & { id: string })
   | (SourceDocumentUIPart & { id: string });
 
-export type AttachmentMediaCategory =
+type AttachmentMediaCategory =
   | "image"
   | "video"
   | "audio"
@@ -36,7 +36,7 @@ export type AttachmentMediaCategory =
   | "source"
   | "unknown";
 
-export type AttachmentVariant = "grid" | "inline" | "list";
+type AttachmentVariant = "grid" | "inline" | "list";
 
 const mediaCategoryIcons: Record<AttachmentMediaCategory, typeof ImageIcon> = {
   audio: Music2Icon,
@@ -51,9 +51,7 @@ const mediaCategoryIcons: Record<AttachmentMediaCategory, typeof ImageIcon> = {
 // Utility Functions
 // ============================================================================
 
-export const getMediaCategory = (
-  data: AttachmentData,
-): AttachmentMediaCategory => {
+const getMediaCategory = (data: AttachmentData): AttachmentMediaCategory => {
   if (data.type === "source-document") {
     return "source";
   }
@@ -76,7 +74,7 @@ export const getMediaCategory = (
   return "unknown";
 };
 
-export const getAttachmentLabel = (data: AttachmentData): string => {
+const getAttachmentLabel = (data: AttachmentData): string => {
   if (data.type === "source-document") {
     return data.title || data.filename || "Source";
   }
@@ -131,10 +129,10 @@ const AttachmentContext = createContext<AttachmentContextValue | null>(null);
 // Hooks
 // ============================================================================
 
-export const useAttachmentsContext = () =>
+const useAttachmentsContext = () =>
   useContext(AttachmentsContext) ?? { variant: "grid" as const };
 
-export const useAttachmentContext = () => {
+const useAttachmentContext = () => {
   const ctx = useContext(AttachmentContext);
   if (!ctx) {
     throw new Error("Attachment components must be used within <Attachment>");
@@ -146,11 +144,11 @@ export const useAttachmentContext = () => {
 // Attachments - Container
 // ============================================================================
 
-export type AttachmentsProps = HTMLAttributes<HTMLDivElement> & {
+type AttachmentsProps = HTMLAttributes<HTMLDivElement> & {
   variant?: AttachmentVariant;
 };
 
-export const Attachments = ({
+const Attachments = ({
   variant = "grid",
   className,
   children,
@@ -179,12 +177,12 @@ export const Attachments = ({
 // Attachment - Item
 // ============================================================================
 
-export type AttachmentProps = HTMLAttributes<HTMLDivElement> & {
+type AttachmentProps = HTMLAttributes<HTMLDivElement> & {
   data: AttachmentData;
   onRemove?: () => void;
 };
 
-export const Attachment = ({
+const Attachment = ({
   data,
   onRemove,
   className,
@@ -229,11 +227,11 @@ export const Attachment = ({
 // AttachmentPreview - Media preview
 // ============================================================================
 
-export type AttachmentPreviewProps = HTMLAttributes<HTMLDivElement> & {
+type AttachmentPreviewProps = HTMLAttributes<HTMLDivElement> & {
   fallbackIcon?: ReactNode;
 };
 
-export const AttachmentPreview = ({
+const AttachmentPreview = ({
   fallbackIcon,
   className,
   ...props
@@ -279,11 +277,11 @@ export const AttachmentPreview = ({
 // AttachmentInfo - Name and type display
 // ============================================================================
 
-export type AttachmentInfoProps = HTMLAttributes<HTMLDivElement> & {
+type AttachmentInfoProps = HTMLAttributes<HTMLDivElement> & {
   showMediaType?: boolean;
 };
 
-export const AttachmentInfo = ({
+const AttachmentInfo = ({
   showMediaType = false,
   className,
   ...props
@@ -311,11 +309,11 @@ export const AttachmentInfo = ({
 // AttachmentRemove - Remove button
 // ============================================================================
 
-export type AttachmentRemoveProps = ComponentProps<typeof Button> & {
+type AttachmentRemoveProps = ComponentProps<typeof Button> & {
   label?: string;
 };
 
-export const AttachmentRemove = ({
+const AttachmentRemove = ({
   label = "Remove",
   className,
   children,
@@ -369,30 +367,26 @@ export const AttachmentRemove = ({
 // AttachmentHoverCard - Hover preview
 // ============================================================================
 
-export type AttachmentHoverCardProps = ComponentProps<typeof HoverCard> & {
+type AttachmentHoverCardProps = ComponentProps<typeof HoverCard> & {
   openDelay?: number;
   closeDelay?: number;
 };
 
-export const AttachmentHoverCard = ({
+const AttachmentHoverCard = ({
   openDelay = 0,
   closeDelay = 0,
   ...props
 }: AttachmentHoverCardProps) => <HoverCard {...props} />;
 
-export type AttachmentHoverCardTriggerProps = ComponentProps<
-  typeof HoverCardTrigger
->;
+type AttachmentHoverCardTriggerProps = ComponentProps<typeof HoverCardTrigger>;
 
-export const AttachmentHoverCardTrigger = (
-  props: AttachmentHoverCardTriggerProps,
-) => <HoverCardTrigger {...props} />;
+const AttachmentHoverCardTrigger = (props: AttachmentHoverCardTriggerProps) => (
+  <HoverCardTrigger {...props} />
+);
 
-export type AttachmentHoverCardContentProps = ComponentProps<
-  typeof HoverCardContent
->;
+type AttachmentHoverCardContentProps = ComponentProps<typeof HoverCardContent>;
 
-export const AttachmentHoverCardContent = ({
+const AttachmentHoverCardContent = ({
   align = "start",
   className,
   ...props
@@ -408,9 +402,9 @@ export const AttachmentHoverCardContent = ({
 // AttachmentEmpty - Empty state
 // ============================================================================
 
-export type AttachmentEmptyProps = HTMLAttributes<HTMLDivElement>;
+type AttachmentEmptyProps = HTMLAttributes<HTMLDivElement>;
 
-export const AttachmentEmpty = ({
+const AttachmentEmpty = ({
   className,
   children,
   ...props
@@ -425,3 +419,31 @@ export const AttachmentEmpty = ({
     {children ?? "No attachments"}
   </div>
 );
+
+export {
+  getMediaCategory,
+  getAttachmentLabel,
+  useAttachmentsContext,
+  useAttachmentContext,
+  Attachments,
+  Attachment,
+  AttachmentPreview,
+  AttachmentInfo,
+  AttachmentRemove,
+  AttachmentHoverCard,
+  AttachmentHoverCardTrigger,
+  AttachmentHoverCardContent,
+  AttachmentEmpty,
+  type AttachmentData,
+  type AttachmentMediaCategory,
+  type AttachmentVariant,
+  type AttachmentsProps,
+  type AttachmentProps,
+  type AttachmentPreviewProps,
+  type AttachmentInfoProps,
+  type AttachmentRemoveProps,
+  type AttachmentHoverCardProps,
+  type AttachmentHoverCardTriggerProps,
+  type AttachmentHoverCardContentProps,
+  type AttachmentEmptyProps,
+};

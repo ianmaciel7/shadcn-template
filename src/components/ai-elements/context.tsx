@@ -40,9 +40,9 @@ const useContextValue = () => {
   return context;
 };
 
-export type ContextProps = ComponentProps<typeof HoverCard> & ContextSchema;
+type ContextProps = ComponentProps<typeof HoverCard> & ContextSchema;
 
-export const Context = ({
+const Context = ({
   usedTokens,
   maxTokens,
   usage,
@@ -102,9 +102,9 @@ const ContextIcon = () => {
   );
 };
 
-export type ContextTriggerProps = ComponentProps<typeof Button>;
+type ContextTriggerProps = ComponentProps<typeof Button>;
 
-export const ContextTrigger = ({ children, ...props }: ContextTriggerProps) => {
+const ContextTrigger = ({ children, ...props }: ContextTriggerProps) => {
   const { usedTokens, maxTokens } = useContextValue();
   const usedPercent = usedTokens / maxTokens;
   const renderedPercent = new Intl.NumberFormat("en-US", {
@@ -126,21 +126,18 @@ export const ContextTrigger = ({ children, ...props }: ContextTriggerProps) => {
   );
 };
 
-export type ContextContentProps = ComponentProps<typeof HoverCardContent>;
+type ContextContentProps = ComponentProps<typeof HoverCardContent>;
 
-export const ContextContent = ({
-  className,
-  ...props
-}: ContextContentProps) => (
+const ContextContent = ({ className, ...props }: ContextContentProps) => (
   <HoverCardContent
     className={cn("min-w-60 divide-y overflow-hidden p-0", className)}
     {...props}
   />
 );
 
-export type ContextContentHeaderProps = ComponentProps<"div">;
+type ContextContentHeaderProps = ComponentProps<"div">;
 
-export const ContextContentHeader = ({
+const ContextContentHeader = ({
   children,
   className,
   ...props
@@ -177,9 +174,9 @@ export const ContextContentHeader = ({
   );
 };
 
-export type ContextContentBodyProps = ComponentProps<"div">;
+type ContextContentBodyProps = ComponentProps<"div">;
 
-export const ContextContentBody = ({
+const ContextContentBody = ({
   children,
   className,
   ...props
@@ -189,9 +186,9 @@ export const ContextContentBody = ({
   </div>
 );
 
-export type ContextContentFooterProps = ComponentProps<"div">;
+type ContextContentFooterProps = ComponentProps<"div">;
 
-export const ContextContentFooter = ({
+const ContextContentFooter = ({
   children,
   className,
   ...props
@@ -248,9 +245,9 @@ const TokensWithCost = ({
   </span>
 );
 
-export type ContextInputUsageProps = ComponentProps<"div">;
+type ContextInputUsageProps = ComponentProps<"div">;
 
-export const ContextInputUsage = ({
+const ContextInputUsage = ({
   className,
   children,
   ...props
@@ -288,9 +285,9 @@ export const ContextInputUsage = ({
   );
 };
 
-export type ContextOutputUsageProps = ComponentProps<"div">;
+type ContextOutputUsageProps = ComponentProps<"div">;
 
-export const ContextOutputUsage = ({
+const ContextOutputUsage = ({
   className,
   children,
   ...props
@@ -328,9 +325,9 @@ export const ContextOutputUsage = ({
   );
 };
 
-export type ContextReasoningUsageProps = ComponentProps<"div">;
+type ContextReasoningUsageProps = ComponentProps<"div">;
 
-export const ContextReasoningUsage = ({
+const ContextReasoningUsage = ({
   className,
   children,
   ...props
@@ -368,9 +365,9 @@ export const ContextReasoningUsage = ({
   );
 };
 
-export type ContextCacheUsageProps = ComponentProps<"div">;
+type ContextCacheUsageProps = ComponentProps<"div">;
 
-export const ContextCacheUsage = ({
+const ContextCacheUsage = ({
   className,
   children,
   ...props
@@ -406,4 +403,27 @@ export const ContextCacheUsage = ({
       <TokensWithCost costText={cacheCostText} tokens={cacheTokens} />
     </div>
   );
+};
+
+export {
+  Context,
+  ContextTrigger,
+  ContextContent,
+  ContextContentHeader,
+  ContextContentBody,
+  ContextContentFooter,
+  ContextInputUsage,
+  ContextOutputUsage,
+  ContextReasoningUsage,
+  ContextCacheUsage,
+  type ContextProps,
+  type ContextTriggerProps,
+  type ContextContentProps,
+  type ContextContentHeaderProps,
+  type ContextContentBodyProps,
+  type ContextContentFooterProps,
+  type ContextInputUsageProps,
+  type ContextOutputUsageProps,
+  type ContextReasoningUsageProps,
+  type ContextCacheUsageProps,
 };

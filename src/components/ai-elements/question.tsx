@@ -19,12 +19,12 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
-export interface QuestionValue {
+interface QuestionValue {
   selectedValues: readonly string[];
   text: string;
 }
 
-export interface QuestionResponse {
+interface QuestionResponse {
   selectedValues: readonly string[];
   text?: string;
 }
@@ -52,7 +52,7 @@ const useQuestion = () => {
   return context;
 };
 
-export type QuestionProps = Omit<
+type QuestionProps = Omit<
   ComponentProps<"form">,
   "defaultValue" | "onSubmit" | "value"
 > & {
@@ -87,7 +87,7 @@ const getSelectedValues = (
   return [...currentValues, optionValue];
 };
 
-export const Question = ({
+const Question = ({
   children,
   className,
   defaultValue = EMPTY_VALUE,
@@ -181,30 +181,24 @@ export const Question = ({
   );
 };
 
-export type QuestionPromptProps = HTMLAttributes<HTMLParagraphElement>;
+type QuestionPromptProps = HTMLAttributes<HTMLParagraphElement>;
 
-export const QuestionPrompt = ({
-  className,
-  ...props
-}: QuestionPromptProps) => (
+const QuestionPrompt = ({ className, ...props }: QuestionPromptProps) => (
   <p className={cn("font-medium text-sm", className)} {...props} />
 );
 
-export type QuestionDescriptionProps = HTMLAttributes<HTMLParagraphElement>;
+type QuestionDescriptionProps = HTMLAttributes<HTMLParagraphElement>;
 
-export const QuestionDescription = ({
+const QuestionDescription = ({
   className,
   ...props
 }: QuestionDescriptionProps) => (
   <p className={cn("text-muted-foreground text-sm", className)} {...props} />
 );
 
-export type QuestionOptionsProps = HTMLAttributes<HTMLDivElement>;
+type QuestionOptionsProps = HTMLAttributes<HTMLDivElement>;
 
-export const QuestionOptions = ({
-  className,
-  ...props
-}: QuestionOptionsProps) => {
+const QuestionOptions = ({ className, ...props }: QuestionOptionsProps) => {
   const { selectionMode } = useQuestion();
 
   return (
@@ -216,14 +210,11 @@ export const QuestionOptions = ({
   );
 };
 
-export type QuestionOptionProps = Omit<
-  ComponentProps<typeof Button>,
-  "value"
-> & {
+type QuestionOptionProps = Omit<ComponentProps<typeof Button>, "value"> & {
   value: string;
 };
 
-export const QuestionOption = ({
+const QuestionOption = ({
   children,
   className,
   disabled,
@@ -259,12 +250,12 @@ export const QuestionOption = ({
   );
 };
 
-export type QuestionInputProps = Omit<
+type QuestionInputProps = Omit<
   ComponentProps<typeof Textarea>,
   "defaultValue" | "value"
 >;
 
-export const QuestionInput = ({
+const QuestionInput = ({
   className,
   disabled,
   onChange,
@@ -290,23 +281,20 @@ export const QuestionInput = ({
   );
 };
 
-export type QuestionActionsProps = HTMLAttributes<HTMLDivElement>;
+type QuestionActionsProps = HTMLAttributes<HTMLDivElement>;
 
-export const QuestionActions = ({
-  className,
-  ...props
-}: QuestionActionsProps) => (
+const QuestionActions = ({ className, ...props }: QuestionActionsProps) => (
   <div
     className={cn("flex items-center justify-end gap-2", className)}
     {...props}
   />
 );
 
-export type QuestionSubmitProps = ComponentProps<typeof Button> & {
+type QuestionSubmitProps = ComponentProps<typeof Button> & {
   children?: ReactNode;
 };
 
-export const QuestionSubmit = ({
+const QuestionSubmit = ({
   children = "Submit",
   disabled,
   ...props
@@ -324,4 +312,25 @@ export const QuestionSubmit = ({
       {children}
     </Button>
   );
+};
+
+export {
+  Question,
+  QuestionPrompt,
+  QuestionDescription,
+  QuestionOptions,
+  QuestionOption,
+  QuestionInput,
+  QuestionActions,
+  QuestionSubmit,
+  type QuestionValue,
+  type QuestionResponse,
+  type QuestionProps,
+  type QuestionPromptProps,
+  type QuestionDescriptionProps,
+  type QuestionOptionsProps,
+  type QuestionOptionProps,
+  type QuestionInputProps,
+  type QuestionActionsProps,
+  type QuestionSubmitProps,
 };
