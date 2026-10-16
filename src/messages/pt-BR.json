@@ -1,7 +1,35 @@
 {
   "App": {
     "title": "shadcn-template",
-    "description": "Template Next.js + shadcn/ui com Biome, React Compiler e i18n"
+    "description": "Template Next.js + shadcn/ui com Biome, React Compiler e i18n",
+    "badge": "Next.js 16 + shadcn/ui",
+    "getStarted": "Para começar, edite o arquivo",
+    "file": "src/app/page.tsx",
+    "subtext": "Procurando um ponto de partida ou mais instruções? Acesse",
+    "templates": "Modelos",
+    "learning": "Aprendizado",
+    "center": "ou a central de documentação.",
+    "deployNow": "Implantar agora",
+    "documentation": "Documentação",
+    "featuresTitle": "Incluído neste template",
+    "features": {
+      "biome": {
+        "title": "Biome",
+        "description": "Formatação e linting ultra-rápidos prontos para uso."
+      },
+      "compiler": {
+        "title": "React Compiler",
+        "description": "Memoização e otimização automáticas habilitadas."
+      },
+      "shadcn": {
+        "title": "shadcn/ui",
+        "description": "Componentes acessíveis e customizáveis com Tailwind CSS v4."
+      },
+      "i18n": {
+        "title": "next-intl",
+        "description": "Internacionalização leve com suporte no servidor."
+      }
+    }
   },
   "Theme": {
     "toggle": "Alternar tema",

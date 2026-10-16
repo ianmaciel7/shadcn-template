@@ -32,8 +32,29 @@ We adopt `next-intl` with a decoupled routing, provider, and message structure:
 3. **Localized Navigation (`src/i18n/navigation.ts`)**:
    Provides localized primitives (`Link`, `redirect`, `usePathname`, `useRouter`, `getPathname`) via `createNavigation(routing)`.
 
-4. **Client Provider Wrapper (`src/components/ui/extensions/intl-provider.tsx`)**:
-   An async Server Component that retrieves the locale via `getLocale()` and provides messages to client components via `<NextIntlClientProvider>` without layout shift (`className="contents"`).
+4. **Context Provider Wrapper (`src/components/ui/extensions/intl-provider.tsx`)**:
+   An async Server Component adhering to pure React context provider standards. It extends `React.ComponentProps<typeof NextIntlClientProvider>`, removes unnecessary DOM wrapper markup (`<div className="contents">`) to eliminate DOM tree pollution, resolves messages and locale server-side cleanly (`getLocale()`, `getMessages()`), and adopts the standardized shadcn `function ... export { ... }` convention:
+   ```tsx
+   import { NextIntlClientProvider } from "next-intl";
+   import { getLocale, getMessages } from "next-intl/server";
+   import type * as React from "react";
+
+   async function IntlProvider({
+     children,
+     ...props
+   }: React.ComponentProps<typeof NextIntlClientProvider>) {
+     const locale = await getLocale();
+     const messages = await getMessages();
+
+     return (
+       <NextIntlClientProvider locale={locale} messages={messages} {...props}>
+         {children}
+       </NextIntlClientProvider>
+     );
+   }
+
+   export { IntlProvider };
+   ```
 
 5. **Message Catalogs (`src/messages/*.json`)**:
    Structured JSON files per locale (`en.json`, `pt-BR.json`, `es.json`) maintaining type-safe translation keys.
@@ -55,7 +76,8 @@ We adopt `next-intl` with a decoupled routing, provider, and message structure:
   - Full support for Server Components and Client Components out-of-the-box.
   - Automatic locale detection with cookie-based persistence (`NEXT_LOCALE`).
   - Compile-time type-safety for translation keys via global type augmentation.
-  - Zero layout shift with `display: contents` wrapper.
+  - Pure React context provider with zero DOM pollution or unexpected layout side effects.
+  - Consistent shadcn component declaration and export pattern across UI extensions.
 - **Negative / Trade-offs**:
   - Requires maintaining translations across 3 language JSON files for UI strings.
   - Requires configuring `next.config.ts` with `createNextIntlPlugin`.

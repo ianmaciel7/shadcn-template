@@ -16,23 +16,27 @@ We adopt `next-themes` and create a dedicated `ThemeProvider` wrapper component 
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import type * as React from "react";
 
-export function ThemeProvider({
+function ThemeProvider({
   children,
   ...props
 }: React.ComponentProps<typeof NextThemesProvider>) {
   return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
 }
+
+export { ThemeProvider };
 ```
 
 Key architectural choices:
 1. **Dedicated Client Seam**: Encapsulates client-side theme context inside a reusable boundary (`src/components/ui/extensions/theme-provider.tsx`), allowing root `layout.tsx` to remain a Server Component.
 2. **Tailwind Class Synchronization**: Configured with `attribute="class"`, `defaultTheme="system"`, and `enableSystem` to toggle the `.dark` class on the `<html>` root, matching Tailwind CSS custom variant `@custom-variant dark (&:is(.dark *));`.
 3. **Hydration Warning Suppression**: Root `<html>` element will include `suppressHydrationWarning` to eliminate attribute mismatch warnings from client theme injection.
+4. **Standardized shadcn Component Pattern**: Strictly follows shadcn/ui component declaration and export conventions using `function Component(...)` with explicit `export { Component }` instead of inline exports.
 
 ## Consequences
 - **Positive**:
   - Zero hydration mismatch flash during server-to-client rendering.
   - Native integration with Tailwind CSS and shadcn CSS variables.
+  - Adherence to standard shadcn component declaration and export conventions.
   - Flexibility to use system preference or explicit user toggles.
 - **Negative / Trade-offs**:
   - Adds `next-themes` as an explicit dependency.
