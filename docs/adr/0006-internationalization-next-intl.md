@@ -32,7 +32,7 @@ We adopt `next-intl` with a decoupled routing, provider, and message structure:
 3. **Localized Navigation (`src/i18n/navigation.ts`)**:
    Provides localized primitives (`Link`, `redirect`, `usePathname`, `useRouter`, `getPathname`) via `createNavigation(routing)`.
 
-4. **Client Provider Wrapper (`src/app/_components/intl-provider.tsx`)**:
+4. **Client Provider Wrapper (`src/components/ui/extensions/intl-provider.tsx`)**:
    An async Server Component that retrieves the locale via `getLocale()` and provides messages to client components via `<NextIntlClientProvider>` without layout shift (`className="contents"`).
 
 5. **Message Catalogs (`src/messages/*.json`)**:
