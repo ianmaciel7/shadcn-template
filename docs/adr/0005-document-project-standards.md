@@ -40,12 +40,18 @@ documentation entrypoints, except for the domain records described below:
    their current baseline status, and expectations for future test tooling.
 8. `GLOSSARY.md` is the single-context domain glossary when product-specific
    terminology is agreed.
-9. `TOOLING.md` is the operational inventory of every installed or configured
+9. `DER.md` is the single entrypoint for the entity-relationship diagram. Until
+   a database and persistence model are adopted, it must state that it is
+   pending and must not include speculative entities or relationships. Once
+   persistence is introduced, it must document the implemented entities,
+   relevant attributes, relationships, cardinalities, and integrity
+   constraints.
+10. `TOOLING.md` is the operational inventory of every installed or configured
    development tool, including its version or status, purpose, and source of
    truth. It covers the package manager, build toolchain, code-quality tools
    (including Biome and GritQL rules), UI scaffolding, commands, and agent
    tooling; it does not duplicate the application dependency catalog.
-10. `CODING_STANDARDS.md` consolidates day-to-day code conventions whose
+11. `CODING_STANDARDS.md` consolidates day-to-day code conventions whose
    executable form is split across tool configuration and accepted ADRs.
 
 Lasting architectural choices continue to be recorded as sequential ADRs in
@@ -70,6 +76,10 @@ If `GLOSSARY.md` is present before a domain is defined, it must state that its
 content is pending. Do not create `GLOSSARY-MAP.md` unless the repository has
 multiple domain contexts.
 
+`DER.md` is required even before a database exists. In that state, it must
+clearly state that its content is pending the adoption of a database and
+persistence model.
+
 ## Consequences
 
 - **Positive**:
@@ -80,7 +90,7 @@ multiple domain contexts.
   - Future test or security tooling changes have clear documentation owners.
   - Contributors have a single source for installed and configured tooling,
     including its ownership and configuration, and a prepared location for
-    agreed domain vocabulary.
+    agreed domain vocabulary and the future data model.
   - Code conventions are discoverable without duplicating tool configuration.
 - **Negative / Trade-offs**:
   - These documents must be maintained whenever practices or tooling change.

@@ -25,6 +25,7 @@ auto-updates as you edit the file.
 - [Contributing](CONTRIBUTING.md)
 - [Security](SECURITY.md)
 - [Glossary](GLOSSARY.md)
+- [Entity-relationship diagram](DER.md)
 - [Architecture decision records](docs/adr/)
 
 ## Validation

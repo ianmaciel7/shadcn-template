@@ -48,6 +48,8 @@ Deliver correct, maintainable changes with minimal risk.
 - `CONTRIBUTING.md`: branch, commit, release, and pull-request conventions.
 - `GLOSSARY.md`: agreed domain terminology; preserve its pending status until
   product-specific terms are resolved.
+- `DER.md`: entity-relationship diagram; preserve its pending status until a
+  database and persistence model are adopted.
 - `.agents/rules/adr-naming.md`: naming and immutability policy for future
   architecture decision records.
 

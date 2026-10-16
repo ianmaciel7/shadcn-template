@@ -26,6 +26,7 @@ configuration and repository documentation.
 ├── ARCHITECTURE.md
 ├── CONTRIBUTING.md
 ├── CODING_STANDARDS.md
+├── DER.md                 # Entity-relationship diagram (pending persistence)
 ├── GLOSSARY.md
 ├── SECURITY.md
 ├── TESTING.md
