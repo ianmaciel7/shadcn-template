@@ -122,17 +122,13 @@
       }
     },
     {
-      "includes": [
-        "src/app/typeset.css"
-      ],
+      "includes": ["src/app/typeset.css"],
       "formatter": {
         "enabled": false
       }
     },
     {
-      "includes": [
-        "src/**/*.stories.tsx"
-      ],
+      "includes": ["src/**/*.stories.tsx"],
       "linter": {
         "rules": {
           "style": {
