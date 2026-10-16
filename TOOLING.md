@@ -23,7 +23,7 @@ repository. It is not a catalog of every runtime library; `package.json` and
 | Browser component testing | Vitest Browser Mode + `vitest-browser-react` | Chromium through Playwright | Runs `*.browser.test.tsx` files in a real browser (`browser` project). | `vitest.config.mts`, `package.json` |
 | End-to-end testing | Playwright | `^1.64.1` | Runs `tests/*.spec.ts` against a production build. | `playwright.config.ts`, `tests/` |
 | Accessibility testing | `@axe-core/playwright` | 4.14.0 | Scans pages for WCAG 2.x A/AA violations in Playwright (`@a11y`). | `tests/a11y.spec.ts` |
-| Visual regression | Playwright screenshots | Committed per-platform baselines | Compares full-page screenshots against baselines (`@visual`). | `tests/visual.spec.ts`, `tests/visual.spec.ts-snapshots/` |
+| Visual regression | Playwright screenshots | Linux baselines generated and compared in CI | Compares full-page screenshots against baselines (`@visual`). | `tests/visual.spec.ts`, `tests/visual.spec.ts-snapshots/` |
 | Mutation testing | Stryker with the `command` runner | 10.0.0 (see [Known limitations](#known-limitations)) | On-demand mutation analysis of selected logic; runs the unit tests once per mutant. | `stryker.config.json`, `vitest.mutation.config.mts` |
 | Unused code | Knip | 6.41.0 | Finds unused files, exports, and dependencies. | `knip.jsonc` |
 | Architecture boundaries | dependency-cruiser | 18.6.0 | Enforces layering rules and forbids dependency cycles. | `.dependency-cruiser.cjs` |
@@ -92,9 +92,8 @@ leave them unapproved.
 | `pnpm test:browser` | `browser` Vitest project in Chromium. |
 | `pnpm test:e2e` | Functional Playwright specs (excludes `@a11y` and `@visual`). |
 | `pnpm test:a11y` | Axe accessibility scans. |
-| `pnpm test:visual` | Compare screenshots with baselines. Never rewrites them. |
-| `pnpm test:visual:update` | Rewrite this platform's baselines after a reviewed, intentional UI change. |
-| `pnpm test:visual:update:linux` | Rewrite the Linux baselines (the ones CI uses) in a Playwright Docker container. Needs Docker. |
+| `pnpm test:visual` | Compare screenshots with baselines. Never rewrites them. Skipped locally; runs in CI (or with `PLAYWRIGHT_VISUAL=1`). |
+| `pnpm test:visual:update` | Rewrite baselines. Run it through the **Update visual baselines** workflow, not on your machine. |
 | `pnpm test:mutation` | Stryker on selected logic (on demand; see limitations). |
 | `pnpm ladle` / `pnpm ladle:build` | Serve or build the component workbench (`reports/ladle`). |
 | `pnpm check:architecture` | dependency-cruiser. |
@@ -156,7 +155,7 @@ theming decision is recorded in ADR 0003.
 | `.semgrep.yml` | Static security rules. |
 | `.husky/`, `commitlint.config.mjs`, `.pre-commit-config.yaml` | Git hooks and commit validation. |
 | `.github/workflows/ci.yml` | Continuous integration. |
-| `scripts/visual-baselines-linux.sh` | Regenerates Linux visual baselines in Docker. |
+| `.github/workflows/visual-baselines.yml` | Manual workflow that regenerates the visual baselines in CI. |
 | `.gitattributes` | Enforces LF line endings so Biome and hooks behave the same on Windows. |
 | `.agents/agents.json` | Agent and MCP configuration. |
 
@@ -183,10 +182,11 @@ configuration in `.ladle/` is versioned; only its build output is ignored.
   glob patterns. Remove the exception if the advisory is withdrawn or the chain
   drops `braces`; a local `pnpm patch` is not worth maintaining for this
   exposure.
-- **Visual baselines are per platform.** Screenshots are committed for Windows
-  (`*-chromium-win32.png`) and Linux (`*-chromium-linux.png`, used by CI). A
-  third platform needs its own baselines. Regenerate the Linux ones with
-  `pnpm test:visual:update:linux` after a reviewed UI change.
+- **Visual tests run only in CI.** Baselines are Linux screenshots, generated and
+  compared inside the pinned Playwright container (the `container` image in
+  `ci.yml` and `visual-baselines.yml`), so rendering is identical every time.
+  Locally the visual specs are skipped. Keep the image tag and digest in step with
+  the `@playwright/test` version in `package.json` when you upgrade Playwright.
 
 ## Agent tooling
 

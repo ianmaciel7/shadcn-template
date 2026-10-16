@@ -27,7 +27,7 @@ browser, including its loading, error, and localized states where applicable.
 | Browser component | `src/**/*.browser.test.tsx` | Vitest `browser` project, Chromium | `pnpm test:browser` | Behavior that needs a real browser: viewport and media queries, focus, real events. |
 | End-to-end | `tests/*.spec.ts` | Playwright | `pnpm test:e2e` | User journeys against a production build. |
 | Accessibility | `tests/a11y.spec.ts`, titled `@a11y` | Playwright and axe-core | `pnpm test:a11y` | Automated WCAG 2.x A/AA scans in light and dark mode. |
-| Visual regression | `tests/visual.spec.ts`, titled `@visual` | Playwright screenshots | `pnpm test:visual` | Layout and theme changes in rendered pages. |
+| Visual regression | `tests/visual.spec.ts`, titled `@visual` | Playwright screenshots (CI only) | `pnpm test:visual` | Layout and theme changes in rendered pages. |
 | Mutation | `stryker.config.json` | Stryker | `pnpm test:mutation` | On-demand check of test strength. Currently unreliable; see [TOOLING.md](TOOLING.md#known-limitations). |
 
 Choose the lightest layer that can fail for the right reason. Keep a behavior
@@ -68,25 +68,24 @@ needed. Do not store production credentials or personal data in test fixtures.
 
 ## Visual regression workflow
 
-Verification and baseline updates are separate commands:
+Baselines are Linux screenshots, generated and compared in CI inside the pinned
+Playwright container, so they never depend on your machine. Locally, the
+`@visual` specs are skipped (set `PLAYWRIGHT_VISUAL=1` to run them anyway).
 
-```bash
-pnpm test:visual          # compare; fails on a difference, never rewrites
-pnpm test:visual:update   # rewrite baselines after reviewing the change
-```
+1. Open a pull request or push. The **End-to-end, accessibility and visual** job
+   compares screenshots and uploads the `playwright-report` artifact; open it to
+   see the expected, actual, and diff images.
+2. If the change is not intentional, fix the code.
+3. If it is intentional, run the **Update visual baselines** workflow (Actions
+   tab, or `gh workflow run visual-baselines.yml --ref <branch>`), then download
+   and review the images and commit them:
 
-1. Run `pnpm test:visual`. On failure, open the diff in `playwright-report/`.
-2. If the change is intentional, run `pnpm test:visual:update`, review the new
-   PNGs in `tests/visual.spec.ts-snapshots/`, and commit them with the change.
-3. If it is not intentional, fix the code instead.
+   ```bash
+   gh run download <run-id> --name visual-baselines      --dir tests/visual.spec.ts-snapshots
+   ```
 
-Baselines are committed so every contributor and CI compare against the same
-image. They are named per platform: `-chromium-win32.png` for local Windows runs
-and `-chromium-linux.png`, which CI uses. After an intentional UI change, update
-both: `pnpm test:visual:update` for your platform and
-`pnpm test:visual:update:linux` (Docker) for CI. Another operating system needs
-its own baselines. Differences up to 1% of pixels are tolerated
-(`maxDiffPixelRatio` in `playwright.config.ts`).
+Differences up to 1% of pixels are tolerated (`maxDiffPixelRatio` in
+`playwright.config.ts`). Never update baselines just to silence a failure.
 
 ## Component workbench
 
@@ -115,7 +114,8 @@ Cover the variants and states a reviewer needs to see, not every prop.
 
 `.github/workflows/ci.yml` runs `pnpm verify:full`, `pnpm verify:e2e`, and
 `pnpm audit` on pushes to `main` and on pull requests. Run `pnpm check:workflows`
-after editing a workflow, and keep actions pinned by commit SHA.
+after editing a workflow, and keep actions and the Playwright container pinned
+by commit SHA or digest.
 
 ## First-time setup
 

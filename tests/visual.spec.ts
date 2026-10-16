@@ -1,7 +1,14 @@
 import { expect, test } from "@playwright/test";
 
-// Run `pnpm test:visual` to compare against the committed baselines and
-// `pnpm test:visual:update` only after reviewing an intentional UI change.
+// Baselines are Linux screenshots generated and compared in CI, inside the
+// Playwright container, so fonts and rendering never differ between machines.
+// Locally these tests are skipped instead of passing without comparing. Set
+// PLAYWRIGHT_VISUAL=1 to run them anyway (for example inside that container).
+test.skip(
+  !process.env.CI && !process.env.PLAYWRIGHT_VISUAL,
+  "Visual baselines are generated and compared on Linux CI",
+);
+
 for (const colorScheme of ["light", "dark"] as const) {
   test.describe(`@visual home page in ${colorScheme} mode`, () => {
     test.use({ colorScheme, viewport: { width: 1280, height: 720 } });
