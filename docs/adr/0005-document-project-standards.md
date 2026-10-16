@@ -53,6 +53,25 @@ documentation entrypoints, except for the domain records described below:
    tooling; it does not duplicate the application dependency catalog.
 11. `CODING_STANDARDS.md` consolidates day-to-day code conventions whose
    executable form is split across tool configuration and accepted ADRs.
+12. `DESIGN.md` is the visual design reference. It documents the design tokens
+   (light and dark colors, typography, radius), the shadcn/ui setup, and the
+   component inventory as they are implemented. `src/app/globals.css` is the
+   source of truth for tokens; `DESIGN.md` mirrors it (hex values are the sRGB
+   equivalents of the `oklch()` values) and must be updated in the same change
+   whenever the theme, fonts, or shadcn configuration change. It must not
+   describe tokens, components, or brand rules that the code does not
+   implement. The document must follow this structure:
+   - YAML front matter with `version`, `name`, `description`, and the token
+     groups `colors` (split into `light` and `dark`), `typography`, and
+     `rounded`. Add `spacing` or `components` only when the code defines them.
+   - Colors are quoted hex strings (`#rrggbb`, or `#rrggbbaa` for alpha). Each
+     token name matches its CSS variable in `globals.css` without the `--`
+     prefix, and every token has both a light and a dark value.
+   - Body sections in this order: Overview, Project setup, Colors, Typography,
+     Components, Shape, Behavior, Do's and Don'ts. Sections without
+     implemented content are omitted, not filled with placeholders.
+   - Each documented value cites its source (`globals.css`, `layout.tsx`,
+     `components.json`, `typeset.css`) so it can be verified.
 
 Lasting architectural choices continue to be recorded as sequential ADRs in
 `docs/adr/`. Future ADRs follow the filename and title convention in
@@ -92,8 +111,12 @@ persistence model.
     including its ownership and configuration, and a prepared location for
     agreed domain vocabulary and the future data model.
   - Code conventions are discoverable without duplicating tool configuration.
+  - The visual design system is documented in one place that matches the
+    implemented theme, so design and code do not drift apart.
 - **Negative / Trade-offs**:
   - These documents must be maintained whenever practices or tooling change.
+  - `DESIGN.md` duplicates token values from `globals.css` and has no automated
+    sync check yet, so it can drift if a theme change omits it.
   - The template does not yet provide an automated test runner; contributors
     must rely on the documented static analysis, production build, and relevant
     manual verification until one is adopted.
