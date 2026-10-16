@@ -37,7 +37,7 @@ test.describe("home page smoke tests", () => {
     });
   }
 
-  test("safely falls back for an unsupported locale cookie", async ({
+  test("serves the page without errors for an unsupported locale cookie", async ({
     context,
     page,
   }) => {
