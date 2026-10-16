@@ -100,6 +100,17 @@
           }
         }
       }
+    },
+    {
+      "includes": ["src/**/*.stories.tsx"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noDefaultExport": "off",
+            "useExportsLast": "off"
+          }
+        }
+      }
     }
   ]
 }

@@ -1,8 +1,36 @@
 {
   "$schema": "https://unpkg.com/@stryker-mutator/core@10.0.0/schema/stryker-schema.json",
   "testRunner": "vitest",
-  "mutate": ["src/lib/utils.ts"],
+  "vitest": {
+    "configFile": "vitest.mutation.config.mts"
+  },
+  "mutate": [
+    "src/i18n/routing.ts",
+    "src/hooks/use-mobile.ts",
+    "src/hooks/use-highlighted-code.ts",
+    "src/lib/highlighter.tsx"
+  ],
   "coverageAnalysis": "perTest",
   "concurrency": 2,
-  "reporters": ["clear-text", "progress"]
+  "thresholds": {
+    "high": 85,
+    "low": 70
+  },
+  "reporters": ["clear-text", "progress"],
+  "ignorePatterns": [
+    ".agents",
+    ".claude",
+    ".codex",
+    ".cursor",
+    ".gemini",
+    ".serena",
+    ".next",
+    ".husky",
+    "reports",
+    "coverage",
+    "docs",
+    "playwright-report",
+    "test-results"
+  ],
+  "plugins": ["@stryker-mutator/vitest-runner"]
 }

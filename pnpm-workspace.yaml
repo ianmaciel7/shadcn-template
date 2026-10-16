@@ -12,3 +12,9 @@ overrides:
   qs: ">=6.16.0"
   smol-toml: ">=1.9.0"
   katex: ">=0.18.2"
+auditConfig:
+  ignoreGhsas:
+    # braces <=3.0.3 (stack exhaustion DoS on deeply nested patterns) has no
+    # patched release. It is reached only through the shadcn CLI's fast-glob.
+    # Reassess when a fixed braces version exists.
+    - GHSA-vfj7-8cjw-p6xm

@@ -4,9 +4,12 @@
     "default": true,
     "MD013": false,
     "MD033": false,
+    // DESIGN.md is a spec-defined document whose front matter has `name:`
+    // and whose body starts at `## Overview`.
+    "MD041": { "front_matter_title": "^\\s*name\\s*[:=]" },
     "MD060": false
   },
-  // Skip vendored/generated agent files and accepted ADRs 0001-0004, which
+  // Skip vendored/generated agent files and accepted ADRs 0001-0005, which
   // are immutable per .agents/rules/adr-naming.md.
   "globs": ["**/*.md"],
   "ignores": [
@@ -20,6 +23,6 @@
     ".serena",
     "AGENTS.md",
     "CLAUDE.md",
-    "docs/adr/000[1-4]-*.md"
+    "docs/adr/000[1-5]-*.md"
   ]
 }

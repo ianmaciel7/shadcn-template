@@ -1,2 +1,9 @@
 pnpm exec lint-staged
-pre-commit run --hook-stage pre-commit
+
+# pre-commit (Python) is a host tool, not a pnpm dependency. Skip with a clear
+# message instead of failing opaquely when it is not installed; see TOOLING.md.
+if command -v pre-commit >/dev/null 2>&1; then
+  pre-commit run --hook-stage pre-commit
+else
+  echo "husky: 'pre-commit' not found; skipping repository-integrity hooks (see TOOLING.md)." >&2
+fi
