@@ -39,6 +39,19 @@ Deliver correct, maintainable changes with minimal risk.
 3. Validate (lint/tests/build/smoke as needed).
 4. Report results and residual risks.
 
+## Project documentation
+- `ARCHITECTURE.md`: repository layout and application boundaries.
+- `CODING_STANDARDS.md`: conventions for TypeScript, React, Next.js, UI, and i18n.
+- `TOOLING.md`: package manager, commands, and configuration ownership.
+- `TESTING.md`: required validation and test strategy.
+- `SECURITY.md`: vulnerability reporting and secure contribution practices.
+- `CONTRIBUTING.md`: branch, commit, release, and pull-request conventions.
+- `GLOSSARY.md`: agreed domain terminology; preserve its pending status until
+  product-specific terms are resolved.
+
+Read the documentation relevant to the change before editing it. Keep these
+documents and the relevant ADR current when a durable project practice changes.
+
 ## Agent skills
 
 ### Issue tracker
