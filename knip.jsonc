@@ -23,12 +23,7 @@
     "tailwindcss",
     "tw-animate-css",
     // Launched by .agents/agents.json as an MCP server.
-    "next-devtools-mcp",
-    // Accepted by ADR 0007 but without a suitable subject yet: no ast-grep
-    // rules exist and no jsdom component test needs these helpers.
-    "@ast-grep/cli",
-    "@testing-library/jest-dom",
-    "@testing-library/user-event"
+    "next-devtools-mcp"
   ],
   // Host tools installed outside pnpm (see TOOLING.md).
   "ignoreBinaries": ["semgrep", "gitleaks"]

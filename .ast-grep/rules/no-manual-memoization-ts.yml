@@ -1,0 +1,24 @@
+id: no-manual-memoization-ts
+language: typescript
+files:
+  - src/app/**/*.ts
+  - src/hooks/**/*.ts
+  - src/i18n/**/*.ts
+  - src/lib/**/*.ts
+ignores:
+  - "**/*.test.ts"
+  - "**/*.stories.ts"
+severity: error
+message: React Compiler is enabled; do not add manual memoization without a measured reason.
+note: |
+  CODING_STANDARDS.md asks for no manual memoization without a measured reason.
+  If a measurement justifies it, suppress this rule on that line with
+  `// ast-grep-ignore: <rule-id>` and state the reason in a comment.
+rule:
+  any:
+    - pattern: useMemo($$$)
+    - pattern: useCallback($$$)
+    - pattern: memo($$$)
+    - pattern: React.useMemo($$$)
+    - pattern: React.useCallback($$$)
+    - pattern: React.memo($$$)

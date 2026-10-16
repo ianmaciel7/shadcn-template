@@ -65,6 +65,9 @@ export function useHighlightedCode(value: string, language: string) {
   // The last line is still being written, so it is tokenized on every render.
   const tail = code.slice(end);
 
+  // Memoized on purpose: tokenizing the unfinished last line is the costly
+  // part of a streaming render, so it must not rerun for unrelated renders.
+  // ast-grep-ignore: no-manual-memoization-ts
   return React.useMemo(() => {
     if (!highlighter) {
       return code.split("\n");

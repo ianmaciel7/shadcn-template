@@ -27,6 +27,7 @@ repository. It is not a catalog of every runtime library; `package.json` and
 | Mutation testing | Stryker + Vitest runner | 10.0.0 (see [Known limitations](#known-limitations)) | On-demand mutation analysis of selected logic. | `stryker.config.json`, `vitest.mutation.config.mts` |
 | Unused code | Knip | 6.41.0 | Finds unused files, exports, and dependencies. | `knip.jsonc` |
 | Architecture boundaries | dependency-cruiser | 18.6.0 | Enforces layering rules and forbids dependency cycles. | `.dependency-cruiser.cjs` |
+| Structural rules | ast-grep | 0.51.0 | Enforces project conventions that need syntax awareness (currently no manual memoization, per `CODING_STANDARDS.md`). Rules have snapshot tests. | `sgconfig.yml`, `.ast-grep/` |
 | Duplication | jscpd | 5.4.1 | Reports meaningful duplicated code. | `.jscpd.json` |
 | Complexity and health | Fallow | 3.33.1 | Reports complexity, CRAP score (from real coverage), and hotspots. Dead-code, duplication, and architecture analysis stay with Knip, jscpd, and dependency-cruiser. | `.fallowrc.json` |
 | React diagnostics | React Doctor | 0.9.18 | Scans application React code for correctness, performance, and security issues. | `doctor.config.json` |
@@ -65,8 +66,9 @@ pnpm. In CI or on production installs, set `HUSKY=0` to skip hook installation.
 
 On Windows, `pre-commit` can fail while building its Python virtual environment
 with `WinError 206` (path too long) when Python comes from the Microsoft Store.
-Either enable Windows long paths or set a short cache location, for example
-`VIRTUALENV_OVERRIDE_APP_DATA=C:\vc`, before committing.
+The Git hook therefore sets `VIRTUALENV_OVERRIDE_APP_DATA` to a short cache
+(`~/.virtualenv-cache`) unless you already configured one. Running `pre-commit`
+by hand outside the hook may need the same variable.
 
 ## Package management
 
@@ -96,6 +98,7 @@ leave them unapproved.
 | `pnpm check:architecture` | dependency-cruiser. |
 | `pnpm check:unused` | Knip. |
 | `pnpm check:duplicates` | jscpd. |
+| `pnpm check:structure` | ast-grep rule tests, then a scan of application code. |
 | `pnpm check:spelling` / `pnpm check:markdown` | CSpell / markdownlint. |
 | `pnpm check:security` / `pnpm check:secrets` / `pnpm audit` | Semgrep / Gitleaks / dependency audit. |
 | `pnpm analyze:health` | Unit tests with coverage, then Fallow complexity and CRAP. |
@@ -109,7 +112,7 @@ leave them unapproved.
 | Command | Responsibility | Time |
 | --- | --- | --- |
 | `pnpm verify:fast` | Biome CI, typecheck, and the unit tests only. Meant to run constantly. | seconds |
-| `pnpm verify:full` | `verify:fast`, plus architecture, unused code, duplication, spelling, Markdown, Fallow health, React Doctor, browser tests, and a production build with size budgets. | minutes |
+| `pnpm verify:full` | `verify:fast`, plus architecture, unused code, duplication, structural rules, spelling, Markdown, Fallow health, React Doctor, browser tests, and a production build with size budgets. | minutes |
 | `pnpm verify:e2e` | The whole Playwright suite: functional, accessibility, and visual. | minutes |
 | `pnpm verify:security` | Semgrep, Gitleaks, and the dependency audit. Needs the host tools. | seconds |
 
@@ -144,6 +147,7 @@ theming decision is recorded in ADR 0003.
 | `playwright.config.ts` | Playwright projects, web server, and screenshot tolerance. |
 | `.ladle/config.mjs`, `.ladle/vite.config.mjs`, `.ladle/components.tsx` | Ladle stories glob, Vite (Tailwind, `@` alias), and global providers and CSS. |
 | `.size-limit.json` | Size budgets for `.next/static/chunks`. |
+| `sgconfig.yml`, `.ast-grep/` | ast-grep rules and their snapshot tests. |
 | `knip.jsonc`, `.dependency-cruiser.cjs`, `.jscpd.json`, `.fallowrc.json`, `doctor.config.json` | Analysis tool configuration. |
 | `cspell.json`, `.markdownlint-cli2.jsonc` | Documentation quality. |
 | `.semgrep.yml` | Static security rules. |
@@ -171,8 +175,6 @@ configuration in `.ladle/` is versioned; only its build output is ignored.
   `pnpm test:visual:update` and reviewed. Do this in the CI image once CI exists.
 - **No workflows yet.** actionlint and zizmor are installed but have nothing to
   check until `.github/workflows` exists.
-- **ast-grep has no rules.** `@ast-grep/cli` is installed (ADR 0007) but the
-  project defines no structural rules yet, so it is not wired into any command.
 
 ## Agent tooling
 
