@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 4,
+  "instructions": {
+    "path": "AGENTS.md"
+  },
+  "integrations": {
+    "enabled": [
+      "codex",
+      "claude",
+      "claude_desktop",
+      "gemini",
+      "cursor",
+      "antigravity"
+    ],
+    "options": {
+      "cursorAutoApprove": true,
+      "antigravityGlobalSync": true,
+      "claudeScope": "project",
+      "copilotCliPath": ".mcp.json"
+    }
+  },
+  "syncMode": "source-only",
+  "mcp": {
+    "servers": {}
+  },
+  "workspace": {
+    "vscode": {
+      "hideGenerated": true,
+      "hiddenPaths": [
+        "**/.codex",
+        "**/.claude",
+        "**/.gemini",
+        "**/.cursor",
+        "**/.antigravity",
+        "**/.agents/mcp_config.json",
+        "**/.windsurf",
+        "**/.opencode",
+        "**/.junie",
+        "**/.mcp.json",
+        "**/opencode.json",
+        "**/.agents/generated",
+        "**/.grok",
+        "**/.amp",
+        "**/.factory",
+        "**/.kilo",
+        "**/kilo.jsonc",
+        "**/.devin",
+        "**/.zed"
+      ]
+    }
+  },
+  "lastSync": null,
+  "lastSyncSourceHash": null,
+  "activeProfile": null
+}
