@@ -25,12 +25,12 @@ test.describe("home page smoke tests", () => {
       page,
     }) => {
       await context.addCookies([
-      {
-        name: localeCookie,
-        value: locale,
-        url: "http://127.0.0.1:3000",
-      },
-    ]);
+        {
+          name: localeCookie,
+          value: locale,
+          url: "http://127.0.0.1:3000",
+        },
+      ]);
       const response = await page.goto("/");
       expect(response?.ok()).toBe(true);
       await expect(page.locator("main")).toBeVisible();
