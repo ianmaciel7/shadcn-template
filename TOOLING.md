@@ -24,7 +24,7 @@ repository. It is not a catalog of every runtime library; `package.json` and
 | End-to-end testing | Playwright | `^1.64.1` | Runs `tests/*.spec.ts` against a production build. | `playwright.config.ts`, `tests/` |
 | Accessibility testing | `@axe-core/playwright` | 4.14.0 | Scans pages for WCAG 2.x A/AA violations in Playwright (`@a11y`). | `tests/a11y.spec.ts` |
 | Visual regression | Playwright screenshots | Committed per-platform baselines | Compares full-page screenshots against baselines (`@visual`). | `tests/visual.spec.ts`, `tests/visual.spec.ts-snapshots/` |
-| Mutation testing | Stryker + Vitest runner | 10.0.0 (see [Known limitations](#known-limitations)) | On-demand mutation analysis of selected logic. | `stryker.config.json`, `vitest.mutation.config.mts` |
+| Mutation testing | Stryker with the `command` runner | 10.0.0 (see [Known limitations](#known-limitations)) | On-demand mutation analysis of selected logic; runs the unit tests once per mutant. | `stryker.config.json`, `vitest.mutation.config.mts` |
 | Unused code | Knip | 6.41.0 | Finds unused files, exports, and dependencies. | `knip.jsonc` |
 | Architecture boundaries | dependency-cruiser | 18.6.0 | Enforces layering rules and forbids dependency cycles. | `.dependency-cruiser.cjs` |
 | Structural rules | ast-grep | 0.51.0 | Enforces project conventions that need syntax awareness (currently no manual memoization, per `CODING_STANDARDS.md`). Rules have snapshot tests. | `sgconfig.yml`, `.ast-grep/` |
@@ -38,7 +38,8 @@ repository. It is not a catalog of every runtime library; `package.json` and
 | Static security | Semgrep | Host tool | Runs project security rules. | `.semgrep.yml` |
 | Secret scanning | Gitleaks | Host tool | Scans history and working tree for secrets. | `package.json` (`check:secrets`) |
 | Dependency audit | `pnpm audit` | Included with pnpm | Reports known vulnerable dependencies. | `pnpm-workspace.yaml` (`auditConfig`) |
-| Workflow linting | actionlint, zizmor | Host tools | Lint and audit GitHub Actions workflows once `.github/workflows` exists. | None yet |
+| Continuous integration | GitHub Actions | Pinned by commit SHA | Runs `verify:full`, `verify:e2e`, and the dependency audit on push and pull requests. | `.github/workflows/ci.yml` |
+| Workflow linting | actionlint, zizmor | Host tools | Lint and audit the GitHub Actions workflows. | `package.json` (`check:workflows`) |
 | Codebase graph | Graphify | Host tool | Builds an on-demand knowledge graph; output goes to the ignored `graphify-out/`. | None |
 | Git hooks | Husky + lint-staged + Commitlint | 9.1.7 / 16.4.0 / 21.2.3 | Check staged files with Biome and validate commit messages. | `.husky/`, `package.json`, `commitlint.config.mjs` |
 | Repository integrity | pre-commit | Host tool | Runs file-integrity hooks (large files, case conflicts, JSON/YAML, merge markers). | `.pre-commit-config.yaml` |
@@ -92,7 +93,8 @@ leave them unapproved.
 | `pnpm test:e2e` | Functional Playwright specs (excludes `@a11y` and `@visual`). |
 | `pnpm test:a11y` | Axe accessibility scans. |
 | `pnpm test:visual` | Compare screenshots with baselines. Never rewrites them. |
-| `pnpm test:visual:update` | Rewrite baselines after a reviewed, intentional UI change. |
+| `pnpm test:visual:update` | Rewrite this platform's baselines after a reviewed, intentional UI change. |
+| `pnpm test:visual:update:linux` | Rewrite the Linux baselines (the ones CI uses) in a Playwright Docker container. Needs Docker. |
 | `pnpm test:mutation` | Stryker on selected logic (on demand; see limitations). |
 | `pnpm ladle` / `pnpm ladle:build` | Serve or build the component workbench (`reports/ladle`). |
 | `pnpm check:architecture` | dependency-cruiser. |
@@ -101,6 +103,7 @@ leave them unapproved.
 | `pnpm check:structure` | ast-grep rule tests, then a scan of application code. |
 | `pnpm check:spelling` / `pnpm check:markdown` | CSpell / markdownlint. |
 | `pnpm check:security` / `pnpm check:secrets` / `pnpm audit` | Semgrep / Gitleaks / dependency audit. |
+| `pnpm check:workflows` | actionlint and zizmor on `.github/workflows`. |
 | `pnpm analyze:health` | Unit tests with coverage, then Fallow complexity and CRAP. |
 | `pnpm analyze:react` | React Doctor. |
 | `pnpm analyze:size` | Production build, then Size Limit budgets. |
@@ -114,7 +117,7 @@ leave them unapproved.
 | `pnpm verify:fast` | Biome CI, typecheck, and the unit tests only. Meant to run constantly. | seconds |
 | `pnpm verify:full` | `verify:fast`, plus architecture, unused code, duplication, structural rules, spelling, Markdown, Fallow health, React Doctor, browser tests, and a production build with size budgets. | minutes |
 | `pnpm verify:e2e` | The whole Playwright suite: functional, accessibility, and visual. | minutes |
-| `pnpm verify:security` | Semgrep, Gitleaks, and the dependency audit. Needs the host tools. | seconds |
+| `pnpm verify:security` | Semgrep, Gitleaks, workflow linting, and the dependency audit. Needs the host tools. | seconds |
 
 `verify:full` intentionally excludes Playwright, security scanners, mutation
 testing, and Lighthouse because they are slow or need host tools. Run
@@ -152,6 +155,8 @@ theming decision is recorded in ADR 0003.
 | `cspell.json`, `.markdownlint-cli2.jsonc` | Documentation quality. |
 | `.semgrep.yml` | Static security rules. |
 | `.husky/`, `commitlint.config.mjs`, `.pre-commit-config.yaml` | Git hooks and commit validation. |
+| `.github/workflows/ci.yml` | Continuous integration. |
+| `scripts/visual-baselines-linux.sh` | Regenerates Linux visual baselines in Docker. |
 | `.gitattributes` | Enforces LF line endings so Biome and hooks behave the same on Windows. |
 | `.agents/agents.json` | Agent and MCP configuration. |
 
@@ -161,20 +166,22 @@ configuration in `.ladle/` is versioned; only its build output is ignored.
 
 ## Known limitations
 
-- **Stryker mutation testing is not reliable on this stack.** With
-  `@stryker-mutator/vitest-runner` 10.0.0 and Vitest 5.0.5, only mutants that
-  execute at import time are detected; mutants inside functions are never
-  activated and always survive, so the reported score is meaningless. Activating
-  a mutant manually through `__STRYKER_ACTIVE_MUTANT__` makes the tests fail as
-  expected, so the targets and tests are sound. Treat `pnpm test:mutation` as
-  unusable until the runner supports Vitest 5.
+- **Stryker uses the `command` runner.** The native `@stryker-mutator/vitest-runner`
+  10.0.0 does not work with Vitest 5.0.5: mutants inside functions are never
+  activated and always survive (a ~5% score), and neither a non-hidden temp
+  directory nor `inPlace` changes that. The `command` runner activates mutants
+  through `__STRYKER_ACTIVE_MUTANT__` and works, at the cost of running the unit
+  tests once per mutant (about 10 minutes for the four targets). Switch back to
+  the `vitest` runner when it supports Vitest 5.
 - **Dependency audit exception.** `braces` (GHSA-vfj7-8cjw-p6xm) has no patched
-  release and is ignored in `auditConfig`. Reassess when one exists.
-- **Visual baselines are per platform.** The committed screenshots are named
-  `*-chromium-win32.png`. A different OS needs its own baselines, generated with
-  `pnpm test:visual:update` and reviewed. Do this in the CI image once CI exists.
-- **No workflows yet.** actionlint and zizmor are installed but have nothing to
-  check until `.github/workflows` exists.
+  release (the advisory lists none) and is ignored in `auditConfig`. It is
+  reached only through developer tools (shadcn CLI, Ladle) that expand fixed,
+  trusted glob patterns, so an attacker cannot supply the nested pattern it
+  needs. Reassess when a fixed release exists.
+- **Visual baselines are per platform.** Screenshots are committed for Windows
+  (`*-chromium-win32.png`) and Linux (`*-chromium-linux.png`, used by CI). A
+  third platform needs its own baselines. Regenerate the Linux ones with
+  `pnpm test:visual:update:linux` after a reviewed UI change.
 
 ## Agent tooling
 

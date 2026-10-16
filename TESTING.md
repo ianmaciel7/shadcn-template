@@ -80,9 +80,12 @@ pnpm test:visual:update   # rewrite baselines after reviewing the change
    PNGs in `tests/visual.spec.ts-snapshots/`, and commit them with the change.
 3. If it is not intentional, fix the code instead.
 
-Baselines are committed so every contributor compares against the same image.
-They are named per platform (`-chromium-win32.png`); another operating system
-needs its own baselines. Differences up to 1% of pixels are tolerated
+Baselines are committed so every contributor and CI compare against the same
+image. They are named per platform: `-chromium-win32.png` for local Windows runs
+and `-chromium-linux.png`, which CI uses. After an intentional UI change, update
+both: `pnpm test:visual:update` for your platform and
+`pnpm test:visual:update:linux` (Docker) for CI. Another operating system needs
+its own baselines. Differences up to 1% of pixels are tolerated
 (`maxDiffPixelRatio` in `playwright.config.ts`).
 
 ## Component workbench
@@ -107,6 +110,12 @@ Cover the variants and states a reviewer needs to see, not every prop.
 - `pnpm analyze:size` builds the app and fails when generated client JavaScript or
   CSS exceeds the gzip budgets in `.size-limit.json`. Raise a budget only with a
   reason in the pull request.
+
+## Continuous integration
+
+`.github/workflows/ci.yml` runs `pnpm verify:full`, `pnpm verify:e2e`, and
+`pnpm audit` on pushes to `main` and on pull requests. Run `pnpm check:workflows`
+after editing a workflow, and keep actions pinned by commit SHA.
 
 ## First-time setup
 

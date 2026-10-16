@@ -23,8 +23,10 @@
     "tailwindcss",
     "tw-animate-css",
     // Launched by .agents/agents.json as an MCP server.
-    "next-devtools-mcp"
+    "next-devtools-mcp",
+    // Built into @stryker-mutator/core; Knip reads the runner name as a package.
+    "@stryker-mutator/command-runner"
   ],
   // Host tools installed outside pnpm (see TOOLING.md).
-  "ignoreBinaries": ["semgrep", "gitleaks"]
+  "ignoreBinaries": ["semgrep", "gitleaks", "actionlint", "zizmor"]
 }

@@ -21,10 +21,11 @@
     "check:markdown": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#.next\"",
     "check:security": "semgrep scan --config .semgrep.yml --metrics=off",
     "check:secrets": "gitleaks detect --no-banner --redact",
+    "check:workflows": "actionlint && zizmor .github/workflows",
     "audit": "pnpm audit",
     "verify:fast": "pnpm lint:ci && pnpm typecheck && pnpm test",
     "verify:full": "pnpm verify:fast && pnpm check:architecture && pnpm check:unused && pnpm check:duplicates && pnpm check:structure && pnpm check:spelling && pnpm check:markdown && pnpm analyze:health && pnpm analyze:react && pnpm test:browser && pnpm analyze:size",
-    "verify:security": "pnpm check:security && pnpm check:secrets && pnpm audit",
+    "verify:security": "pnpm check:security && pnpm check:secrets && pnpm check:workflows && pnpm audit",
     "verify:e2e": "playwright test",
     "test": "vitest run --project unit",
     "test:watch": "vitest --project unit",
@@ -42,6 +43,7 @@
     "ladle:build": "ladle build",
     "prepare": "husky",
     "test:visual:update": "playwright test --grep @visual --update-snapshots",
+    "test:visual:update:linux": "bash scripts/visual-baselines-linux.sh",
     "analyze:health": "vitest run --project unit --coverage && fallow health --coverage coverage/coverage-final.json"
   },
   "lint-staged": {
@@ -96,7 +98,6 @@
     "@playwright/test": "^1.64.1",
     "@size-limit/file": "14.2.0",
     "@stryker-mutator/core": "10.0.0",
-    "@stryker-mutator/vitest-runner": "10.0.0",
     "@tailwindcss/turbopack": "^4",
     "@tailwindcss/vite": "^4.3.3",
     "@testing-library/dom": "^10.4.2",
