@@ -5,7 +5,6 @@
     "clientKind": "git",
     "useIgnoreFile": true
   },
-  "plugins": ["./.biome/rules/no-static-metadata.grit"],
   "files": {
     "ignoreUnknown": true,
     "includes": ["**", "!node_modules", "!.next", "!dist", "!build", "!.agents"]
