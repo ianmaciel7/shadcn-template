@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Kbd } from "@/components/ui/kbd";
 
 export default function Home() {
@@ -51,17 +51,15 @@ export default function Home() {
         </div>
 
         <div className="flex flex-col gap-4 text-base font-medium sm:flex-row w-full sm:w-auto">
-          <Button
-            nativeButton={false}
-            render={
-              <Link
-                href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={t("deployNow")}
-              />
-            }
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full px-5 text-base font-medium md:w-[158px]"
+          <Link
+            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={t("deployNow")}
+            className={buttonVariants({
+              className:
+                "flex h-12 w-full items-center justify-center gap-2 rounded-full px-5 text-base font-medium md:w-[158px]",
+            })}
           >
             <Image
               className="dark:invert h-[14px] w-4"
@@ -71,22 +69,20 @@ export default function Home() {
               height={14}
             />
             {t("deployNow")}
-          </Button>
-          <Button
-            variant="outline"
-            nativeButton={false}
-            render={
-              <Link
-                href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={t("documentation")}
-              />
-            }
-            className="flex h-12 w-full items-center justify-center rounded-full px-5 text-base font-medium md:w-[158px]"
+          </Link>
+          <Link
+            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={t("documentation")}
+            className={buttonVariants({
+              variant: "outline",
+              className:
+                "flex h-12 w-full items-center justify-center rounded-full px-5 text-base font-medium md:w-[158px]",
+            })}
           >
             {t("documentation")}
-          </Button>
+          </Link>
         </div>
       </main>
     </div>

@@ -16,8 +16,7 @@ test.describe("home page", () => {
     await page.goto("/");
 
     for (const name of ["Deploy Now", "Documentation"]) {
-      // Base UI's Button renders these anchors with role="button".
-      const link = page.getByRole("button", { name });
+      const link = page.getByRole("link", { name });
 
       await expect(link).toHaveAttribute("href", /^https:\/\//);
       await expect(link).toHaveAttribute("target", "_blank");
