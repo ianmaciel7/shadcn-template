@@ -1,8 +1,8 @@
 name: Scheduled quality
 
-# Slow checks that are too expensive for every push: mutation testing and a
-# Lighthouse audit. Fallow and React Doctor already run in ci.yml
-# (pnpm verify:static), so they are not repeated here.
+# Slow checks that are too expensive for every push: weekly Lighthouse and
+# manual-only mutation testing until its hosted-run behavior is verified.
+# Fallow and React Doctor already run in ci.yml (pnpm verify:static).
 on:
   schedule:
     # Mondays 06:00 UTC.
@@ -22,6 +22,8 @@ env:
 jobs:
   mutation:
     name: Mutation testing (Stryker)
+    # Do not schedule unverified mutation jobs for every derived repository.
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:

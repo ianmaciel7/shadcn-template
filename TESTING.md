@@ -28,7 +28,7 @@ browser, including its loading, error, and localized states where applicable.
 | End-to-end | `tests/*.spec.ts` | Playwright | `pnpm test:e2e` | User journeys against a production build. |
 | Accessibility | `tests/a11y.spec.ts`, titled `@a11y` | Playwright and axe-core | `pnpm test:a11y` | Automated WCAG 2.0, 2.1, and 2.2 A/AA scans (`wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `wcag22aa`) in light and dark mode. |
 | Visual regression | `tests/visual.spec.ts`, titled `@visual` | Playwright screenshots (CI only) | `pnpm test:visual` | Layout and theme changes in rendered pages. |
-| Mutation | `stryker.config.json` | Stryker | `pnpm test:mutation` | On-demand check of test strength. Currently unreliable; see [TOOLING.md](TOOLING.md#known-limitations). |
+| Mutation | `stryker.config.json` | Stryker | `pnpm test:mutation` | Command-runner mutation testing. Manual CI run until a hosted-run success is confirmed; see [TOOLING.md](TOOLING.md#known-limitations). |
 
 Choose the lightest layer that can fail for the right reason. Keep a behavior
 in `jsdom` when a stub is enough, and move it to Browser Mode only when the real
@@ -89,7 +89,7 @@ Playwright container, so they never depend on your machine. Locally, the
    and review the images and commit them:
 
    ```bash
-   gh run download <run-id> --name visual-baselines      --dir tests/visual.spec.ts-snapshots
+   gh run download <run-id> --name visual-baselines --dir tests/visual.spec.ts-snapshots
    ```
 
 Differences up to 1% of pixels are tolerated (`maxDiffPixelRatio` in
@@ -153,12 +153,18 @@ together with `@playwright/test` and regenerate baselines with the
 
 ### Adapting the tests in a generated project
 
-Reusable infrastructure: the Vitest and Playwright configs, the axe scan, the
-locale-cookie and external-link behaviors, and the visual-baseline workflow.
-Tied to the starter UI: `tests/home.spec.ts` (title, "To get started, edit"
-headings, "Deploy Now" and "Documentation" links) and the `home-*` visual
-baselines. Replace these with your own pages, then regenerate baselines with the
-`Update visual baselines` workflow.
+Reusable checks: the Vitest and Playwright configs, axe scan, and
+`tests/home.spec.ts` smoke tests for a successful `/` response, page landmarks,
+configured locale cookies and safe new-tab links. These tests no longer depend
+on the starter headline, document title or starter link labels. They are smoke
+tests, not proof that each locale's translated UI text is correct; add
+behavior-specific localization tests for the derived application.
+
+Template-specific fixtures: `home-*` visual baselines capture the starter
+home page. Replace them after changing the UI, and regenerate reviewed
+screenshots through the manual `Update visual baselines` workflow. If your
+application removes the home page or its primary heading, adapt the smoke test
+to your app rather than disabling E2E or automatically accepting new baselines.
 
 ### Automated accessibility limits
 
@@ -168,11 +174,12 @@ scans do not mean WCAG compliance. Test those manually.
 
 ### Scheduled and manual checks
 
-`.github/workflows/scheduled-quality.yml` runs weekly (Mondays 06:00 UTC) and on
-manual dispatch, outside the pull-request path:
+`.github/workflows/scheduled-quality.yml` runs Lighthouse weekly (Mondays
+06:00 UTC); manual dispatch also starts the Stryker mutation job:
 
-- `mutation`: Stryker (`pnpm test:mutation`); fails below the `break` score in
-  `stryker.config.json` and uploads the HTML report.
+- `mutation`: **manual dispatch only** until its behavior is verified on a
+  hosted runner; it fails below the `break` score in `stryker.config.json`
+  and uploads the HTML report.
 - `lighthouse`: builds and serves the app, then runs
   `pnpm analyze:lighthouse:ci` and uploads the report. It is report-only: it
   fails only when the audit cannot run, because no score threshold is set.
@@ -184,7 +191,8 @@ not yet on a hosted runner; check the first scheduled run.
 ### Known limitations
 
 - The `braces` advisory exception in `pnpm-workspace.yaml` is documented there;
-  revisit it when the advisory is withdrawn or the dependency chain drops it.
+  **every generated project must reassess it** against its own dependency tree.
+  Remove the suppression when the affected dependency chain is no longer present.
 - `pnpm check:security` must run inside a Git work tree; Semgrep stalls on
   Windows when the directory is not a repository.
 - Dependabot cannot read workflow `container:` images or tool pins, so
