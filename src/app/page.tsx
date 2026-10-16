@@ -25,7 +25,7 @@ export default function Home() {
       </main>
 
       <footer className="w-full max-w-4xl py-4 border-t text-center text-sm text-muted-foreground">
-        shadcn-template &copy; {new Date().getFullYear()}
+        shadcn-template &copy; 2026
       </footer>
     </div>
   );
