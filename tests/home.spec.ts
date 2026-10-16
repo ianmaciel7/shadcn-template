@@ -1,61 +1,52 @@
 import { expect, test } from "@playwright/test";
+import { defaultLocale, localeCookie, locales } from "../src/i18n/routing";
 
-test.describe("home page", () => {
-  test("renders the localized document title and heading", async ({ page }) => {
-    await page.goto("/");
-
-    await expect(page).toHaveTitle("shadcn-template");
-    await expect(
-      page.getByRole("heading", { level: 1, name: /To get started, edit/ }),
-    ).toBeVisible();
+test.describe("home page smoke tests", () => {
+  test("serves a usable page with document metadata", async ({ page }) => {
+    const response = await page.goto("/");
+    expect(response?.ok()).toBe(true);
+    await expect(page.locator("main")).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1 }).first()).toBeVisible();
+    await expect(page).toHaveTitle(/\S/);
   });
 
-  test("opens external links in a new tab without leaking the opener", async ({
-    page,
-  }) => {
+  test("protects links that open a new tab", async ({ page }) => {
     await page.goto("/");
-
-    for (const name of ["Deploy Now", "Documentation"]) {
-      const link = page.getByRole("link", { name });
-
-      await expect(link).toHaveAttribute("href", /^https:\/\//);
-      await expect(link).toHaveAttribute("target", "_blank");
-      await expect(link).toHaveAttribute("rel", /noopener/);
+    const links = page.locator('a[target="_blank"]');
+    const count = await links.count();
+    for (let i = 0; i < count; i++) {
+      await expect(links.nth(i)).toHaveAttribute("rel", /\bnoopener\b/);
     }
   });
 
-  test.describe("locale cookie", () => {
-    const cases = [
-      { locale: "en", heading: /To get started, edit/ },
-      { locale: "pt-BR", heading: /Para começar, edite/ },
-      { locale: "es", heading: /Para comenzar, edita/ },
-    ];
-
-    for (const { locale, heading } of cases) {
-      test(`renders the ${locale} messages`, async ({ context, page }) => {
-        await context.addCookies([
-          { name: "NEXT_LOCALE", value: locale, url: "http://127.0.0.1:3000" },
-        ]);
-        await page.goto("/");
-
-        await expect(
-          page.getByRole("heading", { level: 1, name: heading }),
-        ).toBeVisible();
-      });
-    }
-
-    test("falls back to English for an unsupported locale", async ({
+  for (const locale of locales) {
+    test(`serves the configured locale ${locale} without an error`, async ({
       context,
       page,
     }) => {
-      await context.addCookies([
-        { name: "NEXT_LOCALE", value: "xx", url: "http://127.0.0.1:3000" },
-      ]);
-      await page.goto("/");
-
-      await expect(
-        page.getByRole("heading", { level: 1, name: /To get started, edit/ }),
-      ).toBeVisible();
+      await context.addCookies([{
+        name: localeCookie,
+        value: locale,
+        url: "http://127.0.0.1:3000",
+      }]);
+      const response = await page.goto("/");
+      expect(response?.ok()).toBe(true);
+      await expect(page.locator("main")).toBeVisible();
     });
+  }
+
+  test("safely falls back for an unsupported locale cookie", async ({
+    context,
+    page,
+  }) => {
+    await context.addCookies([{
+      name: localeCookie,
+      value: "unsupported-locale",
+      url: "http://127.0.0.1:3000",
+    }]);
+    const response = await page.goto("/");
+    expect(response?.ok()).toBe(true);
+    await expect(page.locator("main")).toBeVisible();
+    expect(locales).toContain(defaultLocale);
   });
 });

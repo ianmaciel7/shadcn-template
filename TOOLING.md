@@ -94,7 +94,7 @@ leave them unapproved.
 | `pnpm test:a11y` | Axe accessibility scans. |
 | `pnpm test:visual` | Compare screenshots with baselines. Never rewrites them. Skipped locally; runs in CI (or with `PLAYWRIGHT_VISUAL=1`). |
 | `pnpm test:visual:update` | Rewrite baselines. Run it through the **Update visual baselines** workflow, not on your machine. |
-| `pnpm test:mutation` | Stryker on selected logic (on demand; see limitations). |
+| `pnpm test:mutation` | Stryker on selected logic (manual dispatch only in hosted CI until verified; see limitations). |
 | `pnpm ladle` / `pnpm ladle:build` | Serve or build the component workbench (`reports/ladle`). |
 | `pnpm check:architecture` | dependency-cruiser. |
 | `pnpm check:unused` | Knip. |
@@ -159,7 +159,7 @@ theming decision is recorded in ADR 0003.
 | `tests/semgrep/` | Semgrep rules and their annotated test fixture. |
 | `.github/dependabot.yml` | Weekly grouped npm, GitHub Actions, and mirror-file updates. |
 | `.github/dependabot-mirror/` | Dockerfile and `requirements.txt` that let Dependabot bump the Playwright image and the pip-installed CI tools. |
-| `.github/workflows/scheduled-quality.yml` | Weekly Stryker and Lighthouse runs, also manual. |
+| `.github/workflows/scheduled-quality.yml` | Weekly Lighthouse; Stryker by manual dispatch only until hosted CI is verified. |
 | `.husky/`, `commitlint.config.mjs`, `.pre-commit-config.yaml` | Git hooks and commit validation. |
 | `.github/workflows/ci.yml` | Continuous integration. |
 | `.github/workflows/visual-baselines.yml` | Manual workflow that regenerates the visual baselines in CI. |

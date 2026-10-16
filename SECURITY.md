@@ -33,6 +33,15 @@ coordinate disclosure and remediation with the reporter.
   Dependabot proposes weekly updates; CI runs Semgrep, Gitleaks, `pnpm audit`,
   actionlint, and zizmor. Document any audit exception with its justification,
   scope, and review condition rather than inheriting one you cannot justify.
+- **Template-specific accepted risk:** `pnpm-workspace.yaml` suppresses
+  `GHSA-vfj7-8cjw-p6xm` for `braces` based on the **template's current,
+  development-only and trusted-glob use**. The advisory has no patched release
+  in the dependency chain documented here. Before adopting this configuration
+  in a derived project, inspect `pnpm why braces`, the full dependency tree
+  and any production/runtime exposure; remove the exception as soon as the
+  vulnerable dependency is gone. Never assume this acceptance covers new uses.
+  Removing the suppression without remediating the dependency will make
+  `pnpm audit` fail; do not hide that failure with broad audit exclusions.
 - Workflows use least-privilege permissions, full-SHA-pinned actions, and no
   deployment credentials. Keep it that way.
 - Treat generated and third-party code as untrusted until reviewed.
