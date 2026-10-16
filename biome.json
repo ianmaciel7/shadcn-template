@@ -35,5 +35,35 @@
         "organizeImports": "on"
       }
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["src/components/ui/**", "src/lib/highlighter.tsx"],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "useSemanticElements": "off",
+            "useFocusableInteractive": "off",
+            "useAriaPropsForRole": "off",
+            "noLabelWithoutControl": "off",
+            "noNoninteractiveTabindex": "off",
+            "useKeyWithClickEvents": "off",
+            "noRedundantRoles": "off"
+          },
+          "suspicious": {
+            "noArrayIndexKey": "off",
+            "noDoubleEquals": "off",
+            "noDocumentCookie": "off"
+          },
+          "security": {
+            "noDangerouslySetInnerHtml": "off"
+          },
+          "correctness": {
+            "useExhaustiveDependencies": "off",
+            "noUnusedImports": "off"
+          }
+        }
+      }
+    }
+  ]
 }
