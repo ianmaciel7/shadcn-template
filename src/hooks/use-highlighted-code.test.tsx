@@ -13,9 +13,11 @@ type FakeState = { lines: number };
 // A stand-in for the Shiki highlighter: it wraps every line in angle brackets
 // and counts the lines it has seen, so tests can observe how the hook resumes
 // from the previous grammar state while code streams in.
-function createFakeHighlighter() {
+function createFakeHighlighter(wrap: [string, string] = ["<", ">"]) {
   const highlight = vi.fn((code: string, state?: FakeState) => {
-    const lines: ReactNode[] = code.split("\n").map((line) => `<${line}>`);
+    const lines: ReactNode[] = code
+      .split("\n")
+      .map((line) => `${wrap[0]}${line}${wrap[1]}`);
 
     return {
       lines,
@@ -126,5 +128,50 @@ describe("useHighlightedCode", () => {
     finishPython(createFakeHighlighter());
 
     await waitFor(() => expect(result.current).toEqual(["<a>", "<b>"]));
+  });
+
+  it("uses the new highlighter when the language changes for the same code", async () => {
+    loadHighlighter.mockImplementation((language: string) =>
+      Promise.resolve(
+        createFakeHighlighter(language === "ts" ? ["<", ">"] : ["[", "]"]),
+      ),
+    );
+
+    const { result, rerender } = renderHook(
+      ({ language }) => useHighlightedCode("a\nb", language),
+      { initialProps: { language: "ts" } },
+    );
+
+    await waitFor(() => expect(result.current).toEqual(["<a>", "<b>"]));
+
+    rerender({ language: "py" });
+
+    await waitFor(() => expect(result.current).toEqual(["[a]", "[b]"]));
+  });
+
+  it("ignores a stale highlighter that finishes loading after the language changed", async () => {
+    let finishTypescript: (value: unknown) => void = () => {};
+
+    loadHighlighter.mockImplementation((language: string) =>
+      language === "ts"
+        ? new Promise((resolve) => {
+            finishTypescript = resolve;
+          })
+        : Promise.resolve(createFakeHighlighter(["[", "]"])),
+    );
+
+    const { result, rerender } = renderHook(
+      ({ language }) => useHighlightedCode("a\nb", language),
+      { initialProps: { language: "ts" } },
+    );
+
+    rerender({ language: "py" });
+
+    await waitFor(() => expect(result.current).toEqual(["[a]", "[b]"]));
+
+    finishTypescript(createFakeHighlighter(["<", ">"]));
+    await Promise.resolve();
+
+    expect(result.current).toEqual(["[a]", "[b]"]);
   });
 });

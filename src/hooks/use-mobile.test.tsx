@@ -1,4 +1,5 @@
 import { act, renderHook } from "@testing-library/react";
+import { renderToString } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useIsMobile } from "./use-mobile";
 
@@ -66,5 +67,31 @@ describe("useIsMobile", () => {
     });
 
     expect(result.current).toBe(false);
+  });
+
+  it("queries the media list just below the 768px breakpoint", () => {
+    renderHook(() => useIsMobile());
+
+    expect(window.matchMedia).toHaveBeenCalledWith("(max-width: 767px)");
+  });
+
+  it("stops listening for changes when it unmounts", () => {
+    const { unmount } = renderHook(() => useIsMobile());
+
+    expect(listeners.size).toBe(1);
+
+    unmount();
+
+    expect(listeners.size).toBe(0);
+  });
+
+  it("renders the desktop layout on the server, which has no viewport", () => {
+    function Probe() {
+      return <span>{String(useIsMobile())}</span>;
+    }
+
+    setViewportWidth(500);
+
+    expect(renderToString(<Probe />)).toContain("false");
   });
 });

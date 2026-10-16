@@ -3,6 +3,11 @@ import { describe, expect, it } from "vitest";
 import { isLocale, localeCookie, routing } from "./routing";
 
 describe("routing", () => {
+  it("supports English, Brazilian Portuguese, and Spanish, defaulting to English", () => {
+    expect(routing.locales).toEqual(["en", "pt-BR", "es"]);
+    expect(routing.defaultLocale).toBe("en");
+  });
+
   it("defaults to a locale that is supported", () => {
     expect(routing.locales).toContain(routing.defaultLocale);
   });
