@@ -1,4 +1,4 @@
-# ADR 0007: Configure local development toolchain
+# ADR 0007: Configure quality tooling
 
 - **Status**: Accepted
 - **Date**: 2026-10-16
