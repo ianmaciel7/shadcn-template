@@ -14,7 +14,7 @@ repository. It is not a catalog of every runtime library; `package.json` and
 | Language | TypeScript | `^5` (5.9.3 locked) | Provides type checking and the `@/*` import alias. | `package.json`, `tsconfig.json`, `pnpm-lock.yaml` |
 | Compiler | React Compiler | 1.0.0 | Optimizes React components through Next.js configuration. | `package.json`, `next.config.ts` |
 | Styling | Tailwind CSS | `^4` | Generates utility CSS and is loaded by Turbopack (and by Vite for Ladle). | `package.json`, `next.config.ts`, `.ladle/vite.config.mjs`, `src/app/globals.css` |
-| Code quality | Biome | 2.4.2 | Formats code, runs lint checks, and organizes imports. | `package.json`, `biome.json` |
+| Code quality | Biome | 2.5.15 | Formats code, runs lint checks, and organizes imports. | `package.json`, `biome.json` |
 | Custom code quality rules | GritQL | Executed by Biome; no standalone CLI | Supplies the three project-specific Next.js rules for layout props, page props, and route context. Regression-tested in `.biome/rules/nextjs/rules.test.ts`. | `.biome/rules/nextjs/*.grit`, `biome.json` |
 | UI scaffolding | shadcn/ui CLI | 4.21.5 | Adds and maintains locally owned UI components using the configured aliases and style. | `package.json`, `components.json` |
 | Component workbench | Ladle | 5.1.1 | Develops and reviews components in isolation through colocated `*.stories.tsx` files. | `.ladle/`, `package.json` |
@@ -246,12 +246,16 @@ is reintroduced:
 ## Known limitations
 
 - **Vendored components are excluded from coverage, Fallow health, React Doctor,
-  and relaxed in Biome.** The exclusions cover the preinstalled shadcn/ui files
+  and relaxed in Biome.** Formatting and import organization are disabled for the
+  distributed shadcn/ui and AI Elements files; the existing targeted lint
+  exceptions still apply. The exclusions cover the preinstalled shadcn/ui files
   (`src/components/ui/*.tsx`) and `src/components/ai-elements/`. Project code
   that lives beside them, such as `src/components/ui/extensions/`, is fully
-  checked. Fallow reports `38/1304 functions matched` for coverage because the
+  checked. The upstream `src/app/typeset.css` is not auto-formatted, and
+  standalone `public/*.svg` assets are excluded from Biome; accessible names
+  must still be supplied at their points of use. Fallow reports `38/1304 functions matched` for coverage because the
   denominator includes those vendored functions; every covered file is matched.
-- **CI hotspot analysis needs history.** The `verify` job checks out with
+- **CI hotspot analysis needs history.** The `static` job checks out with
   `fetch-depth: 0` so Fallow can compute hotspots; other jobs use shallow clones
   except `security`, which Gitleaks needs in full.
 
