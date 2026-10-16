@@ -40,8 +40,11 @@ documentation entrypoints, except for the domain records described below:
    their current baseline status, and expectations for future test tooling.
 8. `GLOSSARY.md` is the single-context domain glossary when product-specific
    terminology is agreed.
-9. `TOOLING.md` is the operational index for the configured package manager,
-   commands, application toolchain, and agent tooling.
+9. `TOOLING.md` is the operational inventory of every installed or configured
+   development tool, including its version or status, purpose, and source of
+   truth. It covers the package manager, build toolchain, code-quality tools
+   (including Biome and GritQL rules), UI scaffolding, commands, and agent
+   tooling; it does not duplicate the application dependency catalog.
 10. `CODING_STANDARDS.md` consolidates day-to-day code conventions whose
    executable form is split across tool configuration and accepted ADRs.
 
@@ -75,8 +78,9 @@ multiple domain contexts.
   - The existing `src/` layout is explicitly aligned with the Next.js 16
     guidance used for this decision.
   - Future test or security tooling changes have clear documentation owners.
-  - Contributors have a single source for the installed tooling and a prepared
-    location for agreed domain vocabulary.
+  - Contributors have a single source for installed and configured tooling,
+    including its ownership and configuration, and a prepared location for
+    agreed domain vocabulary.
   - Code conventions are discoverable without duplicating tool configuration.
 - **Negative / Trade-offs**:
   - These documents must be maintained whenever practices or tooling change.
