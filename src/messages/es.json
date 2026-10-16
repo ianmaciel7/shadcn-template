@@ -1,37 +1,14 @@
 {
   "App": {
-    "badge": "Next.js 16 • Base UI • Tailwind CSS v4",
-    "heroTitle": "Construye más rápido con",
-    "heroTitleHighlight": "shadcn/ui",
-    "heroDescription": "Una plantilla moderna lista para producción con primitivas Base UI, Biome, React Compiler y next-intl.",
-    "getStartedCardTitle": "Para comenzar, edita",
-    "getStartedCardDescription": "Guarda el archivo para ver los cambios reflejados al instante.",
-    "deployNow": "Implementar ahora",
-    "documentation": "Documentación",
-    "github": "GitHub",
-    "components": "Componentes",
+    "getStartedPrefix": "Para comenzar, edita el archivo",
+    "getStartedSuffix": ".",
+    "instructionsPrefix": "¿Buscas un punto de partida o más instrucciones? Visita",
     "templates": "Plantillas",
-    "featuresTitle": "Incluido en esta plantilla",
-    "features": {
-      "baseUi": {
-        "title": "Primitivas Base UI",
-        "description": "Componentes accesibles y personalizables con Tailwind CSS v4."
-      },
-      "compiler": {
-        "title": "React Compiler",
-        "description": "Memorización automática y renderizado óptimo listo para usar."
-      },
-      "biome": {
-        "title": "Biome Toolchain",
-        "description": "Formateo y linting ultrarrápidos para todo tu código."
-      },
-      "i18n": {
-        "title": "next-intl",
-        "description": "Internacionalización segura con tipos para Server y Client Components."
-      }
-    },
-    "showcaseTitle": "Muestra de Componentes",
-    "showcaseDescription": "Componentes preinstalados y estilizados listos para componer."
+    "instructionsMiddle": "o el centro de",
+    "learning": "Aprendizaje",
+    "instructionsSuffix": ".",
+    "deployNow": "Deploy Now",
+    "documentation": "Documentation"
   },
   "Theme": {
     "toggle": "Alternar tema",
