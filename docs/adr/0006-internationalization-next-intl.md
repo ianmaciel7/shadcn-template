@@ -1,0 +1,61 @@
+# ADR 0006: Internationalization (i18n) Architecture with next-intl
+
+- **Status**: Accepted
+- **Date**: 2026-10-16
+- **Deciders**: ianmaciel7
+
+## Context
+Applications built from this template require multi-language support (English, Portuguese `pt-BR`, and Spanish `es`). We need a robust internationalization architecture that works seamlessly across Next.js Server Components, Client Components, and routing without complex boilerplate or degraded SSR performance, following the proven pattern in `ianmaciel7/exams-app`.
+
+## Decision
+We adopt `next-intl` with a decoupled routing, provider, and message structure:
+
+1. **Routing Definition (`src/i18n/routing.ts`)**:
+   Defines supported locales (`["en", "pt-BR", "es"]`), the fallback default locale (`"en"`), cookie name (`"NEXT_LOCALE"`), and locale type guards (`isLocale`).
+   ```ts
+   import { hasLocale } from "next-intl";
+   import { defineRouting } from "next-intl/routing";
+
+   export const routing = defineRouting({
+     locales: ["en", "pt-BR", "es"],
+     defaultLocale: "en",
+   });
+
+   export const { locales, defaultLocale } = routing;
+   export type Locale = (typeof routing.locales)[number];
+   export const localeCookie = "NEXT_LOCALE";
+   ```
+
+2. **Server Request Configuration (`src/i18n/request.ts`)**:
+   Resolves the active locale from cookies or explicit params and dynamically imports the corresponding JSON message dictionary from `src/messages/${locale}.json`.
+
+3. **Localized Navigation (`src/i18n/navigation.ts`)**:
+   Provides localized primitives (`Link`, `redirect`, `usePathname`, `useRouter`, `getPathname`) via `createNavigation(routing)`.
+
+4. **Client Provider Wrapper (`src/app/_components/intl-provider.tsx`)**:
+   An async Server Component that retrieves the locale via `getLocale()` and provides messages to client components via `<NextIntlClientProvider>` without layout shift (`className="contents"`).
+
+5. **Message Catalogs (`src/messages/*.json`)**:
+   Structured JSON files per locale (`en.json`, `pt-BR.json`, `es.json`) maintaining type-safe translation keys.
+
+6. **Next.js Config Integration (`next.config.ts`)**:
+   Wrap the Next.js configuration using the official `createNextIntlPlugin`:
+   ```ts
+   import createNextIntlPlugin from "next-intl/plugin";
+
+   const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
+   export default withNextIntl(nextConfig);
+   ```
+
+7. **TypeScript Global Message Augmentation (`src/types/global.d.ts`)**:
+   Declare `Messages` interface extending `en.json` to enable strict autocomplete and compile-time verification on `useTranslations()` keys.
+
+## Consequences
+- **Positive**:
+  - Full support for Server Components and Client Components out-of-the-box.
+  - Automatic locale detection with cookie-based persistence (`NEXT_LOCALE`).
+  - Compile-time type-safety for translation keys via global type augmentation.
+  - Zero layout shift with `display: contents` wrapper.
+- **Negative / Trade-offs**:
+  - Requires maintaining translations across 3 language JSON files for UI strings.
+  - Requires configuring `next.config.ts` with `createNextIntlPlugin`.
