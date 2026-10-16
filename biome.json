@@ -5,6 +5,7 @@
     "clientKind": "git",
     "useIgnoreFile": true
   },
+  "plugins": ["./.biome/rules/no-static-metadata.grit"],
   "files": {
     "ignoreUnknown": true,
     "includes": ["**", "!node_modules", "!.next", "!dist", "!build", "!.agents"]
@@ -22,7 +23,15 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
+      "recommended": true,
+      "style": {
+        "noJsxLiterals": {
+          "level": "error",
+          "options": {
+            "ignoreProps": true
+          }
+        }
+      }
     },
     "domains": {
       "next": "recommended",
@@ -61,6 +70,9 @@
           "correctness": {
             "useExhaustiveDependencies": "off",
             "noUnusedImports": "off"
+          },
+          "style": {
+            "noJsxLiterals": "off"
           }
         }
       }

@@ -23,7 +23,7 @@ export default function Home() {
           <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-foreground">
             {t("getStartedPrefix")}{" "}
             <Kbd className="rounded bg-muted px-1.5 py-0.5 font-mono text-[0.9em] text-foreground border border-border h-auto">
-              page.tsx
+              {t("pageFile")}
             </Kbd>{" "}
             {t("getStartedSuffix")}
           </h1>

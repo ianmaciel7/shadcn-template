@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { IntlProvider } from "@/components/ui/extensions/intl-provider";
 import { ThemeProvider } from "@/components/ui/extensions/theme-provider";
@@ -16,11 +17,14 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "shadcn-template",
-  description:
-    "Next.js + shadcn/ui template with Biome, React Compiler, and i18n",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Metadata");
+
+  return {
+    title: t("title"),
+    description: t("description"),
+  };
+}
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

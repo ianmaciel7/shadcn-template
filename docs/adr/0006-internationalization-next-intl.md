@@ -71,6 +71,12 @@ We adopt `next-intl` with a decoupled routing, provider, and message structure:
 7. **TypeScript Global Message Augmentation (`src/types/global.d.ts`)**:
    Declare `Messages` interface extending `en.json` to enable strict autocomplete and compile-time verification on `useTranslations()` keys.
 
+8. **Biome Linting Enforcement (`noJsxLiterals` & Static Metadata Plugin)**:
+   To ensure strings are not left hardcoded across the application:
+   - **`style.noJsxLiterals`**: Configured as `"error"` with `"ignoreProps": true`. This flags raw JSX string literals (such as `<Kbd>page.tsx</Kbd>`) while ignoring attribute props (`className="..."`, `href="..."`, `variant="..."`) and translation calls (`{t("key")}`).
+   - **UI Overrides**: Pre-built UI primitives in `src/components/ui/**` and `src/lib/highlighter.tsx` have `"noJsxLiterals": "off"` in `biome.json` overrides to prevent flagging internal accessibility labels (`Close`, `Toggle Sidebar`).
+   - **Custom GritQL Metadata Rule (`.biome/rules/no-static-metadata.grit`)**: Configured via Biome's `"plugins"` to detect and prevent static `export const metadata: Metadata = { ... }` containing hardcoded strings, enforcing the use of dynamic `generateMetadata()` with `getTranslations("Metadata")`.
+
 ## Consequences
 - **Positive**:
   - Full support for Server Components and Client Components out-of-the-box.
@@ -78,6 +84,8 @@ We adopt `next-intl` with a decoupled routing, provider, and message structure:
   - Compile-time type-safety for translation keys via global type augmentation.
   - Pure React context provider with zero DOM pollution or unexpected layout side effects.
   - Consistent shadcn component declaration and export pattern across UI extensions.
+  - Automated Biome static analysis preventing un-translated JSX text and hardcoded static metadata without breaking Tailwind `className` DX.
 - **Negative / Trade-offs**:
   - Requires maintaining translations across 3 language JSON files for UI strings.
   - Requires configuring `next.config.ts` with `createNextIntlPlugin`.
+  - Developers must wrap or extract legitimate non-translated text into translation catalogs.
