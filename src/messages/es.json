@@ -1,35 +1,37 @@
 {
   "App": {
-    "title": "shadcn-template",
-    "description": "Plantilla Next.js + shadcn/ui con Biome, React Compiler e i18n",
-    "badge": "Next.js 16 + shadcn/ui",
-    "getStarted": "Para comenzar, edita el archivo",
-    "file": "src/app/page.tsx",
-    "subtext": "¿Buscas un punto de partida o más instrucciones? Visita",
-    "templates": "Plantillas",
-    "learning": "Aprendizaje",
-    "center": "o el centro de aprendizaje.",
+    "badge": "Next.js 16 • Base UI • Tailwind CSS v4",
+    "heroTitle": "Construye más rápido con",
+    "heroTitleHighlight": "shadcn/ui",
+    "heroDescription": "Una plantilla moderna lista para producción con primitivas Base UI, Biome, React Compiler y next-intl.",
+    "getStartedCardTitle": "Para comenzar, edita",
+    "getStartedCardDescription": "Guarda el archivo para ver los cambios reflejados al instante.",
     "deployNow": "Implementar ahora",
     "documentation": "Documentación",
+    "github": "GitHub",
+    "components": "Componentes",
+    "templates": "Plantillas",
     "featuresTitle": "Incluido en esta plantilla",
     "features": {
-      "biome": {
-        "title": "Biome",
-        "description": "Formateo y linting ultrarrápidos listos para usar."
+      "baseUi": {
+        "title": "Primitivas Base UI",
+        "description": "Componentes accesibles y personalizables con Tailwind CSS v4."
       },
       "compiler": {
         "title": "React Compiler",
-        "description": "Memorización y optimización automáticas habilitadas."
+        "description": "Memorización automática y renderizado óptimo listo para usar."
       },
-      "shadcn": {
-        "title": "shadcn/ui",
-        "description": "Componentes accesibles y personalizables con Tailwind CSS v4."
+      "biome": {
+        "title": "Biome Toolchain",
+        "description": "Formateo y linting ultrarrápidos para todo tu código."
       },
       "i18n": {
         "title": "next-intl",
-        "description": "Internacionalización ligera con soporte en el servidor."
+        "description": "Internacionalización segura con tipos para Server y Client Components."
       }
-    }
+    },
+    "showcaseTitle": "Muestra de Componentes",
+    "showcaseDescription": "Componentes preinstalados y estilizados listos para componer."
   },
   "Theme": {
     "toggle": "Alternar tema",

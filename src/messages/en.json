@@ -1,35 +1,37 @@
 {
   "App": {
-    "title": "shadcn-template",
-    "description": "Next.js + shadcn/ui template with Biome, React Compiler, and i18n",
-    "badge": "Next.js 16 + shadcn/ui",
-    "getStarted": "To get started, edit the",
-    "file": "src/app/page.tsx",
-    "subtext": "Looking for a starting point or more instructions? Head over to",
-    "templates": "Templates",
-    "learning": "Learning",
-    "center": "center.",
+    "badge": "Next.js 16 • Base UI • Tailwind CSS v4",
+    "heroTitle": "Build faster with",
+    "heroTitleHighlight": "shadcn/ui",
+    "heroDescription": "A modern, production-ready template with Base UI primitives, Biome, React Compiler, and next-intl.",
+    "getStartedCardTitle": "To get started, edit",
+    "getStartedCardDescription": "Save the file to see your changes reflected instantly in the browser.",
     "deployNow": "Deploy Now",
     "documentation": "Documentation",
+    "github": "GitHub",
+    "components": "Components",
+    "templates": "Templates",
     "featuresTitle": "Included in this template",
     "features": {
-      "biome": {
-        "title": "Biome",
-        "description": "Fast formatting and linting configured out of the box."
+      "baseUi": {
+        "title": "Base UI Primitives",
+        "description": "Accessible, unstyled primitives styled with Tailwind CSS v4."
       },
       "compiler": {
         "title": "React Compiler",
-        "description": "Automatic memoization and optimization enabled."
+        "description": "Automatic memoization and optimal rendering out of the box."
       },
-      "shadcn": {
-        "title": "shadcn/ui",
-        "description": "Accessible, customizable components with Tailwind CSS v4."
+      "biome": {
+        "title": "Biome Toolchain",
+        "description": "Sub-millisecond formatting and linting for your entire codebase."
       },
       "i18n": {
         "title": "next-intl",
-        "description": "Lightweight internationalization with server-side support."
+        "description": "Type-safe internationalization for Server and Client Components."
       }
-    }
+    },
+    "showcaseTitle": "Component Showcase",
+    "showcaseDescription": "Pre-installed and styled components ready to copy and compose."
   },
   "Theme": {
     "toggle": "Toggle theme",
