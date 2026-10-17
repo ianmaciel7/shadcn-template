@@ -33,6 +33,12 @@ When standards conflict, apply them in this order:
 
 ## Components and styling
 
+- Consult [DESIGN.md](DESIGN.md) for tokens and component conventions. Update
+  that reference when changing fonts, theme tokens, or `components.json`.
+- Biome disables formatting and import organization for vendored UI and AI
+  Elements files, with targeted lint exceptions. `ui/extensions` remains
+  application code; do not extend vendor exceptions to it.
+
 - Reuse `src/components/ui` primitives before creating new ones.
 - Follow the existing shadcn component convention: declare a named function
   and export it explicitly (for example, `function Button()` then
@@ -43,6 +49,12 @@ When standards conflict, apply them in this order:
   value must be computed at runtime.
 
 ## Internationalization
+
+- Write source, comments, and project documentation in English by default,
+  following `.agents/rules/language.md`. Localized catalogs use their own
+  language.
+- Follow the implemented cookie-based request resolution. Localized navigation
+  helpers alone do not establish locale-prefixed routes.
 
 - Put user-facing application text in the `next-intl` message catalogs under
   `src/messages/`.
@@ -57,8 +69,9 @@ When standards conflict, apply them in this order:
   [TESTING.md](TESTING.md).
 - Do not weaken or disable a lint rule to accommodate new application code
   without recording the rationale in an ADR when the decision is durable.
-- Keep changes focused and add or update tests when automated test tooling is
-  introduced.
+- Keep changes focused and add or update behavior tests when the change affects
+  application behavior. For documentation changes, check Markdown, spelling,
+  links, and commands against the current configuration.
 
 ## Tests
 

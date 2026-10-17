@@ -62,11 +62,43 @@ files, and `public/` remain at the repository root, as required by the Next.js
 See ADR 0006 for the adopted architecture and [TESTING.md](TESTING.md) for
 commands and implementation conventions.
 
-- Internationalization is implemented through `src/i18n` and
-  `src/messages`; see ADR 0004 for the adopted `next-intl` design.
+## Internationalization
+
+`src/i18n/routing.ts` declares `en`, `pt-BR`, and `es`, with `en` as the
+default and `NEXT_LOCALE` as the cookie name. `src/i18n/request.ts` prefers an
+explicit request locale over the cookie and validates the result before
+loading a catalog. An unsupported value falls back to `en`.
+
+The application currently serves `src/app/page.tsx` at `/`; there is no
+`[locale]` route segment or `src/proxy.ts`. The helpers in
+`src/i18n/navigation.ts` are available, but their presence does not create
+localized routes. The root layout still declares `lang="en"` even when
+translated content is selected by a cookie. Derived applications must align
+that attribute with their locale strategy. See ADR 0004 for the original
+decision.
+
+## Runtime and component boundaries
+
+`next.config.ts` enables Cache Components, partial prefetching, and React
+Compiler. It loads Tailwind through the Turbopack CSS loader and wraps the
+configuration with the `next-intl` plugin.
+
+The root layout keeps the async `IntlProvider` inside `Suspense`, followed by
+`ThemeProvider` and `TooltipProvider`. The component libraries under
+`src/components/ui` and `src/components/ai-elements` are locally owned source;
+custom providers under `ui/extensions` remain subject to application checks.
+
+`.dependency-cruiser.cjs` rejects cycles, imports from shared components into
+`src/app`, and imports from `src/lib` into routes, components, hooks, or i18n.
+It does not ban all third-party React dependencies in `src/lib`.
+
+No database, authentication provider, or deployment integration is configured.
+Keep [DER.md](DER.md) and [GLOSSARY.md](GLOSSARY.md) pending until the respective
+persistence and product decisions exist.
 
 ## Decision records
 
 Architecture decisions that have lasting consequences are recorded in
-`docs/adr/`. New ADRs are numbered sequentially and must describe the context,
+`docs/adr/`; use its [index](docs/adr/README.md) to distinguish historical
+details from current configuration. New ADRs are numbered sequentially and must describe the context,
 decision, and consequences before the related implementation is merged.

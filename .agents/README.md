@@ -1,41 +1,52 @@
-# .agents
+# Agent configuration
 
-Project-local standard for AGENTS.md + MCP + SKILLS.
+Project-local instructions, MCP configuration, and reusable skills.
 
-## Status
-- **MCP Servers**: None configured.
-- **Skills**: None configured.
+## Configured integrations
 
-## Quick workflow
-- `agents status` to inspect enabled integrations and MCP state.
-- `agents mcp add <url-or-name>` to add one server for all selected tools.
-- `agents mcp test --runtime` to validate connectivity.
-- `agents sync` to materialize generated configuration.
-- `agents sync --check` for CI-safe drift detection.
+`.agents/agents.json` enables Codex, Claude, Claude Desktop, Gemini, Cursor,
+and Antigravity, with `syncMode` set to `source-only`.
 
-## Source files (commit these)
-- `agents.json`: selected integrations + MCP servers + workspace behavior
-- `skills/*/SKILL.md`: project skills
-- `rules/*.md`: persistent project guidance for coding agents
+| MCP server | Command | Purpose |
+| --- | --- | --- |
+| Serena | `serena start-mcp-server --project-from-cwd --context=codex` | Project-local semantic symbol analysis |
+| Next.js DevTools | `pnpm exec next-devtools-mcp` | Runtime diagnostics and route inspection |
 
-## Root instruction file
-- `../AGENTS.md`: canonical instruction document
+These are configured servers, not a statement that the executables are
+installed or that runtime connectivity has been verified. Serena and the
+Agents CLI are host tools; `next-devtools-mcp` is a project dependency.
 
-## Local/private files (do not commit)
-- `local.json`: machine-specific MCP overrides and secrets
+## Installed skills
 
-## Generated files
-- `generated/*`: renderer outputs used by `agents sync`
-- `mcp_config.json`: Antigravity CLI workspace MCP config
-- `generated/vscode.settings.state.json`: managed VS Code hide state
+The repository contains `ask-matt`, `context7-cli`,
+`setup-matt-pocock-skills`, and `shadcn`. See the
+[skill inventory](skills/README.md) for entrypoints and provenance.
 
-## Common materialized outputs
-- `.codex/config.toml`
-- `.gemini/settings.json`
-- `.vscode/mcp.json`
-- `.vscode/settings.json`
-- `.cursor/mcp.json`
-- `.agents/mcp_config.json`
-- `opencode.json`
-- `.windsurf/skills/`
-- `~/.codeium/windsurf/mcp_config.json` (global)
+Persistent rules cover [English as the default language](rules/language.md)
+and [ADR naming and immutability](rules/adr-naming.md).
+
+## Source and local files
+
+- `agents.json`: enabled integrations, MCP servers, and workspace behavior.
+- `skills/*/SKILL.md`: reusable skill instructions and supporting references.
+- `rules/*.md`: persistent guidance for coding agents.
+- [AGENTS.md](../AGENTS.md): canonical repository instructions.
+- `local.json`: private machine-specific overrides and secrets; do not commit.
+
+## Maintenance workflow
+
+Use the externally provided Agents CLI when changing configuration or reusable
+skill instructions:
+
+```bash
+agents status
+agents sync
+agents sync --check
+```
+
+When introducing a server, also run `agents mcp test --runtime`. Do not add
+unrequested servers or approve package-provided agent skills (ADR 0007).
+
+Generated tool configuration and local state must remain untracked. The
+selected integrations and sync mode determine the materialized outputs; use
+`agents status` instead of assuming every supported output exists.

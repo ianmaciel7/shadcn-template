@@ -40,6 +40,8 @@ Deliver correct, maintainable changes with minimal risk.
 4. Report results and residual risks.
 
 ## Project documentation
+- `docs/README.md`: documentation ownership and maintenance guide.
+- `DESIGN.md`: implemented tokens, typography, and component design reference.
 - `ARCHITECTURE.md`: repository layout and application boundaries.
 - `CODING_STANDARDS.md`: conventions for TypeScript, React, Next.js, UI, and i18n.
 - `TOOLING.md`: package manager, commands, and configuration ownership.
@@ -52,6 +54,10 @@ Deliver correct, maintainable changes with minimal risk.
   database and persistence model are adopted.
 - `.agents/rules/adr-naming.md`: naming and immutability policy for future
   architecture decision records.
+
+Accepted ADRs are historical records; use `docs/adr/README.md` and current
+configuration to identify later operational changes. The four installed skills
+and two configured MCP servers are indexed in `.agents/README.md`.
 
 Read the documentation relevant to the change before editing it. Keep these
 documents and the relevant ADR current when a durable project practice changes.
