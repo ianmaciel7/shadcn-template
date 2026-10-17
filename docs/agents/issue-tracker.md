@@ -11,7 +11,11 @@ Issues and specs for this repo live as GitHub issues. Use the `gh` CLI for all o
 - **Apply / remove labels**: `gh issue edit <number> --add-label "..."` / `--remove-label "..."`
 - **Close**: `gh issue close <number> --comment "..."`
 
-Infer the repo from `git remote -v`; `gh` does this automatically when run inside a clone.
+Infer the repo from `git remote -v`; `gh` does this automatically when run inside
+a clone. Without a clone, pass `--repo ianmaciel7/shadcn-template` explicitly.
+For multiline issue content, use `--body-file <path>` to preserve the exact
+text and avoid shell interpolation. Change the explicit repository when
+adapting these instructions to a derived project.
 
 ## Pull requests as a triage surface
 

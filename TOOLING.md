@@ -76,9 +76,11 @@ by hand outside the hook may need the same variable.
 Use [pnpm](https://pnpm.io/) `12.11.2`, as pinned by the `packageManager`
 field in `package.json`. The `pnpm-lock.yaml` file is the lockfile of record.
 
-Do not run `pnpm approve` or install tools that add agent skills; ADR 0007
-forbids both. If a package reports "agent skills awaiting approval" (Fallow does),
-leave them unapproved.
+Do not approve third-party build scripts unless a reviewed dependency needs
+them for documented core functionality. ADR 0007 also prohibits approving tools
+that install agent skills or add unrequested MCP servers. If a package reports
+"agent skills awaiting approval" (Fallow does), leave them unapproved. Existing
+project skills are tracked in `.agents/skills/` and `skills-lock.json`.
 
 ## Commands
 
@@ -218,7 +220,12 @@ is reintroduced:
   literals are deferred until the template has toasts.
 - **Security** (`next-*` server rules): see "Security checks not adopted".
 
-### Native Biome rules evaluated for this version (2.4.2)
+### Native Biome rule evaluation history
+
+The following evaluation was recorded against Biome 2.4.2. The repository now
+pins Biome 2.5.15; `biome.json` defines the enabled rules. Historical absence
+from 2.4.2 is not evidence that a rule is absent from the installed version.
+Recheck current documentation before adding a replacement rule.
 
 - **Enabled:** `noJsxLiterals` (`ignoreProps`), `noReactForwardRef` (React 19
   passes `ref` as a prop; relaxed for vendored components), and the `next` and
@@ -253,8 +260,9 @@ is reintroduced:
   that lives beside them, such as `src/components/ui/extensions/`, is fully
   checked. The upstream `src/app/typeset.css` is not auto-formatted, and
   standalone `public/*.svg` assets are excluded from Biome; accessible names
-  must still be supplied at their points of use. Fallow reports `38/1304 functions matched` for coverage because the
-  denominator includes those vendored functions; every covered file is matched.
+  must still be supplied at their points of use. Fallow's coverage-match count can include vendored functions in its
+  denominator. Inspect the current report before interpreting that count; it is
+  not a fixed project metric.
 - **CI hotspot analysis needs history.** The `static` job checks out with
   `fetch-depth: 0` so Fallow can compute hotspots; other jobs use shallow clones
   except `security`, which Gitleaks needs in full.
@@ -267,18 +275,20 @@ is reintroduced:
   tests once per mutant (about 10 minutes for the four targets). Switch back to
   the `vitest` runner when it supports Vitest 5.
 - **Dependency audit exception.** `braces` (GHSA-vfj7-8cjw-p6xm) has no patched
-  release and none is expected: the maintainer closed
+  release according to the recorded template assessment: the maintainer closed
   [micromatch/braces#84](https://github.com/micromatch/braces/issues/84) as
-  not-to-fix and disputes the advisory. Every current release of `fast-glob`,
-  `globby`, `markdownlint-cli2`, and `shadcn` still depends on it, so no upgrade
-  removes it. It is ignored in `auditConfig`. It is reached only through
+  not-to-fix and disputes the advisory. The recorded dependency chain includes
+  `fast-glob`, `globby`, `markdownlint-cli2`, and `shadcn`. Recheck
+  `pnpm why braces` and current advisories after dependency changes rather than
+  assuming that chain or remediation status remains unchanged. The advisory is
+  ignored in `auditConfig`. It is reached only through
   developer tools (shadcn CLI, Ladle, markdownlint) that expand fixed, trusted
   glob patterns. Remove the exception if the advisory is withdrawn or the chain
   drops `braces`; a local `pnpm patch` is not worth maintaining for this
   exposure.
 - **Visual tests run only in CI.** Baselines are Linux screenshots, generated and
   compared inside the pinned Playwright container (the `container` image in
-  `ci.yml` and `visual-baselines.yml`), so rendering is identical every time.
+  `ci.yml` and `visual-baselines.yml`), to reduce rendering differences between baseline generation and comparison.
   Locally the visual specs are skipped. Keep the image tag and digest in step with
   the `@playwright/test` version in `package.json` when you upgrade Playwright.
 
@@ -287,6 +297,11 @@ is reintroduced:
 Reusable agent skills and MCP configuration live in `.agents/`. Run
 `agents sync` after changing `.agents/agents.json` or reusable skills, and use
 `agents sync --check` before opening a pull request that changes them.
+
+The configured MCP servers are Serena and Next.js DevTools. The installed
+skills are `ask-matt`, `context7-cli`, `setup-matt-pocock-skills`, and `shadcn`;
+see the [agent inventory](.agents/README.md). Configuration does not guarantee
+that an external executable is installed or a server is running.
 
 Use Context7 when current library documentation is needed. The project-local
 `context7-cli` skill documents its two-step library lookup and documentation

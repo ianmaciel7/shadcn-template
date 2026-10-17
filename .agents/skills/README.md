@@ -1,32 +1,29 @@
-# Skills Folder
+# Project skills
 
-This directory stores project skills used across supported LLM tools.
+This directory contains four installed skills. `skills-lock.json` at the
+repository root records their upstream sources, paths, and computed hashes.
 
-## Configured skills
-No skills are currently configured in this repository.
+| Skill | Entrypoint | Upstream | Use |
+| --- | --- | --- | --- |
+| ask-matt | [SKILL.md](ask-matt/SKILL.md) | `mattpocock/skills` | Route engineering work to relevant workflows |
+| context7-cli | [SKILL.md](context7-cli/SKILL.md) | `upstash/context7` | Resolve a library and query current documentation |
+| setup-matt-pocock-skills | [SKILL.md](setup-matt-pocock-skills/SKILL.md) | `mattpocock/skills` | Configure engineering skill and tracker documentation |
+| shadcn | [SKILL.md](shadcn/SKILL.md) | `shadcn/ui` | Work with shadcn components, registries, and design systems |
 
-To add a new skill, create a folder under `.agents/skills/<skill-id>/SKILL.md` following the template below:
+Supporting Markdown under each skill is an upstream reference, not a claim
+that every example, provider, or workflow is configured in this application.
+The tracker and domain configuration for this repository live in
+[docs/agents](../../docs/agents/).
 
-## Skill structure
-Each skill must live in its own folder and contain `SKILL.md`:
+## Maintenance
 
-```text
-.agents/skills/<skill-id>/SKILL.md
-```
+Keep upstream skill content and `skills-lock.json` aligned when updating an
+installed skill. Review upstream changes rather than rewriting their examples
+to describe the template. Keep repository-specific guidance in `AGENTS.md`,
+`.agents/rules/`, and `docs/agents/`.
 
-## Minimal SKILL.md template
-```md
----
-name: my-skill
-description: When this skill should be used.
----
-
-Step-by-step instructions for the agent.
-```
-
-Keep skills narrow and reusable. Prefer one clear outcome per skill.
-
-## Recommended conventions
-- Directory name should match frontmatter `name`.
-- Use kebab-case for `name` (lowercase letters, numbers, `-`).
-- Keep `description` specific so tools can trigger the skill correctly.
+For a new, explicitly requested project skill, use a kebab-case directory with
+`SKILL.md` containing `name` and a specific `description` in YAML front matter.
+Keep its instructions narrow and reusable. Run `agents sync` and
+`agents sync --check` after changing reusable instructions, as described in
+[the agent guide](../README.md).

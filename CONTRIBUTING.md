@@ -52,6 +52,12 @@ Releases and git tags follow [Semantic Versioning (SemVer)](https://semver.org/)
 
 ## Before opening a pull request
 
+For a documentation-only change, run `pnpm check:markdown` and
+`pnpm check:spelling`, verify relative links and script names, and follow the
+full validation guidance in [TESTING.md](TESTING.md). Accepted ADRs describe
+decisions at their original date; preserve them and use a new ADR when a
+decision changes. Keep current operational details in the root guides.
+
 Run the checks in [TESTING.md](TESTING.md), keep changes focused, title the
 pull request as a Conventional Commit (CI validates it and squash merges use
 it as the commit message), and update

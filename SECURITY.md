@@ -44,7 +44,13 @@ coordinate disclosure and remediation with the reporter.
   `pnpm audit` fail; do not hide that failure with broad audit exclusions.
 - Workflows use least-privilege permissions, full-SHA-pinned actions, and no
   deployment credentials. Keep it that way.
-- Treat generated and third-party code as untrusted until reviewed.
+- Treat generated and third-party code as untrusted until reviewed. Vendored
+  UI and AI Elements have scoped lint and analysis exceptions; those exceptions
+  do not establish security or accessibility correctness. Review changes to
+  HTML rendering, executable content, external links, and browser integrations
+  at their usage boundaries.
+- AI interface components do not configure an AI service, server-side
+  authorization, or credentials. A derived application owns those decisions.
 
 This template does not prescribe an authentication provider or data store.
 Projects derived from it must document their own access-control, data-retention,

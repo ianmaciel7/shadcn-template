@@ -122,9 +122,9 @@ Source of truth: `src/app/globals.css`. Colors are authored there in `oklch()`; 
 | Theme switching | `next-themes`, `attribute="class"`, `defaultTheme="system"`, `enableSystem`, `disableTransitionOnChange` | `src/app/layout.tsx` |
 | `html` classes | Geist + Geist Mono variables, `h-full antialiased` | `src/app/layout.tsx` |
 | `body` classes | `min-h-full flex flex-col` | `src/app/layout.tsx` |
-| Provider stack | `IntlProvider` > `ThemeProvider` > `TooltipProvider` | `src/app/layout.tsx` |
+| Provider stack | `Suspense` > async `IntlProvider` > `ThemeProvider` > `TooltipProvider` | `src/app/layout.tsx` |
 | Component aliases | `@/components`, `@/components/ui`, `@/lib`, `@/hooks`, `@/lib/utils` | `components.json` |
-| Component workshop | Ladle, mirrors the layout provider stack; wrapper uses `bg-background p-4 font-sans text-foreground` | `.ladle/components.tsx` |
+| Component workshop | Ladle, uses `NextIntlClientProvider` with English messages, theme and tooltip providers; wrapper uses `bg-background p-4 font-sans text-foreground` | `.ladle/components.tsx` |
 
 ## Colors
 
@@ -205,6 +205,10 @@ Base radius `--radius: 0.625rem` (10px). Derived tokens:
 
 - Enabled `button` and `[role="button"]` elements get `cursor: pointer`.
 - `body` uses `bg-background text-foreground`.
+- Ladle's theme control drives `next-themes`; stories use English messages.
+- The application root currently fixes `html` to `lang="en"`. Locale cookies
+  select translated content without changing that attribute; review language
+  semantics alongside visual and accessibility changes.
 
 ## Do's and Don'ts
 

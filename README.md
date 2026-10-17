@@ -5,11 +5,12 @@ TypeScript, Tailwind CSS, shadcn/ui, Biome, and `next-intl`.
 
 ## Getting Started
 
-Install dependencies and start the development server with the repository's
-pinned package manager:
+Use Node.js `^22.19.0 || ^24.5.0` and pnpm `12.11.2`, as declared in
+`package.json`. Install dependencies with the committed lockfile and start the
+development server:
 
 ```bash
-pnpm install
+pnpm install --frozen-lockfile
 pnpm dev
 ```
 
@@ -39,8 +40,20 @@ auto-updates as you edit the file.
 
 See [Testing](TESTING.md) and [Security](SECURITY.md) for details.
 
+## Current application behavior
+
+The starter exposes `/`. `next-intl` selects `en`, `pt-BR`, or `es` from an
+explicit request locale or the `NEXT_LOCALE` cookie, falling back to `en`.
+There is no locale route segment or request proxy configured. The root
+`<html lang="en">` is currently static; cookie-based translations do not update
+that attribute. See [Architecture](ARCHITECTURE.md#internationalization).
+
 ## Documentation
 
+Start with the [documentation guide](docs/README.md) for ownership, maintenance,
+and the distinction between current guidance and historical decisions.
+
+- [Design system](DESIGN.md)
 - [Architecture](ARCHITECTURE.md)
 - [Coding standards](CODING_STANDARDS.md)
 - [Tooling](TOOLING.md)
@@ -49,7 +62,8 @@ See [Testing](TESTING.md) and [Security](SECURITY.md) for details.
 - [Security](SECURITY.md)
 - [Glossary](GLOSSARY.md)
 - [Entity-relationship diagram](DER.md)
-- [Architecture decision records](docs/adr/)
+- [Architecture decision records](docs/adr/README.md)
+- [Agent integrations and skills](.agents/README.md)
 
 ## Validation
 

@@ -7,10 +7,16 @@ Run the checks relevant to a change before opening a pull request. See
 
 | Command | Use it for |
 | --- | --- |
-| `pnpm verify:fast` | Every change: Biome CI, typecheck, and unit tests. Runs in seconds. |
+| `pnpm verify:fast` | Code changes: Biome CI, typecheck, and unit tests. Browser suites run separately. |
 | `pnpm verify:full` | Before a pull request: `verify:static` (adds coverage thresholds, architecture, unused code, duplication, spelling, Markdown, complexity, React diagnostics) plus `verify:build` (browser tests, production build with size budgets, Ladle build). |
 | `pnpm verify:e2e` | Changes that affect pages or visual output: functional, accessibility, and visual Playwright specs. |
 | `pnpm verify:security` | Dependency or configuration changes: Semgrep rule tests and scan, Gitleaks, workflow lint, and `pnpm audit`. Needs the host tools in [TOOLING.md](TOOLING.md#host-prerequisites). |
+
+For documentation-only changes, run `pnpm check:markdown` and
+`pnpm check:spelling`, then verify relative links, referenced paths, and
+commands against the repository. These checks do not replace CI; the pull
+request still runs the configured jobs. Markdown lint intentionally excludes
+agent files and ADRs 0001–0005, so review those manually when applicable.
 
 `pnpm verify:fast` must stay fast. It runs only the `unit` Vitest project; browser,
 end-to-end, visual, and mutation tests are deliberately outside it.
@@ -104,8 +110,10 @@ pnpm ladle         # serve the workbench
 pnpm ladle:build   # production build in reports/ladle
 ```
 
-`.ladle/components.tsx` wraps every story in the same providers as
-`src/app/layout.tsx` (theme, intl, tooltip) and loads `src/app/globals.css`.
+`.ladle/components.tsx` uses `NextIntlClientProvider` with English messages,
+plus the application's theme and tooltip providers. It imports `.ladle/ladle.css`,
+which loads `src/app/globals.css`; the async application `IntlProvider` is not
+used in the browser workbench.
 Cover the variants and states a reviewer needs to see, not every prop.
 
 ## Coverage, complexity, and size
@@ -114,7 +122,7 @@ Cover the variants and states a reviewer needs to see, not every prop.
   leaves out the vendored `src/components/ui/*.tsx` and
   `src/components/ai-elements`; `src/components/ui/extensions` is measured.
 - `vitest.config.mts` sets a coverage floor of 70% (statements, branches,
-  functions, lines), just below the template's current 74%. Raise it as
+  functions, lines). Actual coverage comes from the latest run. Raise it as
   application code grows; never lower it to pass a run. `json-summary` feeds
   the CI step summary.
 - `pnpm analyze:health` runs coverage and feeds it to Fallow so CRAP scores
@@ -147,8 +155,9 @@ actions and the Playwright container pinned by commit SHA or digest.
 
 Dependabot opens weekly grouped updates for npm and GitHub Actions
 (`.github/dependabot.yml`); review each one, there is no auto-merge. It does not
-cover the Playwright container tag and digest in the workflows, so bump them
-together with `@playwright/test` and regenerate baselines with the
+update the workflow container directly: the Docker mirror receives proposed
+image updates, which must be copied into both workflows. Keep the image tag and
+digest aligned with `@playwright/test` and regenerate baselines with the
 `Update visual baselines` workflow.
 
 ### Adapting the tests in a generated project
@@ -158,7 +167,9 @@ Reusable checks: the Vitest and Playwright configs, axe scan, and
 configured locale cookies and safe new-tab links. These tests no longer depend
 on the starter headline, document title or starter link labels. They are smoke
 tests, not proof that each locale's translated UI text is correct; add
-behavior-specific localization tests for the derived application.
+behavior-specific localization tests for the derived application, including
+translated text and the document language. The current root layout fixes
+`html lang` to `en`; the cookie smoke tests do not validate that attribute.
 
 Template-specific fixtures: `home-*` visual baselines capture the starter
 home page. Replace them after changing the UI, and regenerate reviewed
