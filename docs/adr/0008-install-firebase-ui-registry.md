@@ -342,6 +342,17 @@ These four errors remain. The build configuration excludes the directory, so the
 do not fail `pnpm typecheck`, but they surface in the editor and as soon as the
 application imports those files.
 
+<!-- cspell:ignore TOTP totp -->
+
+**Known functional defect: TOTP enrollment.**
+`totp-multi-factor-enrollment-form.tsx` passes the verification code as the
+third argument of `enrollWithMultiFactorAssertion` instead of the chosen display
+name. The enrolled factor can therefore be labeled with the one-time code.
+This reference component is not suitable for use as-is. An application requiring
+TOTP enrollment must provide and test a corrected application-owned implementation
+outside the reference layer, or adopt a verified upstream fix through the update
+procedure. The integrity manifest does not certify functional correctness.
+
 The registry installer can modify files outside `src/components/firebase/`. The
 Firebase items carry CSS, and the shadcn CLI merged it into `src/app/globals.css`
 by appending a `@layer components` block and a `@variant dark` block of 66 lines
