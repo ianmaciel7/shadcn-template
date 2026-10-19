@@ -3,6 +3,7 @@
   "ignore": {
     "files": [
       "src/components/ai-elements/**",
+      "src/components/firebase/**",
       "src/components/ui/*.tsx",
       "reports/**",
       ".next/**",

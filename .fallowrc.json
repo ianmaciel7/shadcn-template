@@ -10,6 +10,7 @@
   "health": {
     "ignore": [
       "src/components/ai-elements/**",
+      "src/components/firebase/**",
       "src/components/ui/*.tsx",
       "**/*.stories.tsx"
     ]

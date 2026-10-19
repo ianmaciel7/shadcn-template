@@ -10,6 +10,7 @@
     "**/*.test.ts",
     "**/*.test.tsx",
     "**/components/ai-elements/**",
+    "**/components/firebase/**",
     "**/components/ui/**"
   ],
   "gitignore": true

@@ -23,6 +23,7 @@ export default defineConfig({
       exclude: [
         "src/**/*.{test,browser.test,stories}.{ts,tsx}",
         "src/components/ai-elements/**",
+        "src/components/firebase/**",
         "src/components/ui/*.tsx",
         "src/types/**",
       ],
@@ -32,7 +33,11 @@ export default defineConfig({
         test: {
           name: "unit",
           environment: "jsdom",
-          include: ["src/**/*.test.{ts,tsx}", ".biome/**/*.test.ts"],
+          include: [
+            "src/**/*.test.{ts,tsx}",
+            ".biome/**/*.test.ts",
+            "tests/unit/**/*.test.ts",
+          ],
           exclude: ["src/**/*.browser.test.{ts,tsx}"],
         },
       },

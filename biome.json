@@ -23,6 +23,7 @@
       "!.claude",
       "!.serena",
       "!tests/semgrep",
+      "!src/components/firebase",
       "!public/*.svg"
     ]
   },

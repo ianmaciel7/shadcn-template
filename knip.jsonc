@@ -15,7 +15,10 @@
   // they are kept intentionally even though no route uses them yet.
   "ignoreFiles": ["src/i18n/navigation.ts"],
   "ignoreIssues": {
-    "src/i18n/routing.ts": ["exports"]
+    "src/i18n/routing.ts": ["exports"],
+    // Vendored Firebase UI reference layer (ADR 0008): never edited here, so an
+    // import that upstream wrote against a different layout stays unresolved.
+    "src/components/firebase/**": ["unresolved"]
   },
   "ignoreDependencies": [
     // Referenced only from CSS, which Knip does not follow.

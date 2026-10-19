@@ -64,6 +64,8 @@ files, and `public/` remain at the repository root, as required by the Next.js
   non-JSX modules and `*.test.tsx` for React or JSX integrations.
 - Colocate Ladle stories (`*.stories.tsx`) next to UI primitives under
   `src/components/ui/` for isolated component development and visual inspection.
+- Keep repository-integrity Vitest tests, such as the Firebase reference guard, in
+  `tests/unit/` with `*.test.ts`; they check files outside a single source module.
 - Keep Playwright E2E specifications in root `tests/` with `*.spec.ts`.
   Feature-specific fixtures and helpers stay with their consumer unless shared
   by multiple E2E specifications.
@@ -111,6 +113,12 @@ The root layout keeps the async `IntlProvider` inside `Suspense`, followed by
 `ThemeProvider` and `TooltipProvider`. The component libraries under
 `src/components/ui` and `src/components/ai-elements` are locally owned source;
 custom providers under `ui/extensions` remain subject to application checks.
+`src/components/firebase` is a read-only vendored reference layer for the Firebase UI
+registry: never edit it by hand, never put application code in it, and change it only
+through the update procedure in [ADR 0008](docs/adr/0008-install-firebase-ui-registry.md).
+The root `tsconfig.json` includes this layer for editor diagnostics;
+`tsconfig.build.json` excludes it from the application typecheck unless an
+application file imports it. The Next.js configuration uses the build config.
 Ladle (`.ladle/`) isolates and documents UI components without requiring the
 Next.js runtime.
 

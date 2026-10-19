@@ -8,6 +8,9 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   reactCompiler: true,
+  typescript: {
+    tsconfigPath: "tsconfig.build.json",
+  },
   turbopack: {
     rules: {
       "*.css": {

@@ -88,7 +88,7 @@ project skills are tracked in `.agents/skills/` and `skills-lock.json`.
 | --- | --- |
 | `pnpm dev` / `pnpm build` / `pnpm start` | Develop, build, and serve the Next.js application. |
 | `pnpm lint` / `pnpm lint:ci` / `pnpm format` | Biome check, CI check, and formatting. |
-| `pnpm typecheck` | Generate route types and run `tsc --noEmit`. |
+| `pnpm typecheck` | Generate route types and run `tsc --noEmit -p tsconfig.build.json`. |
 | `pnpm test` | Fast `unit` Vitest project in `jsdom`. |
 | `pnpm test:watch` / `pnpm test:coverage` | Watch mode / coverage (writes `coverage/`). |
 | `pnpm test:browser` | `browser` Vitest project in Chromium. |
@@ -146,7 +146,8 @@ theming decision is recorded in ADR 0003.
 | `package.json` | Dependencies, scripts, and `lint-staged`. |
 | `pnpm-workspace.yaml` | Native-build allowlist, security `overrides`, and `auditConfig`. |
 | `next.config.ts` | Next.js, Turbopack, React Compiler, and `next-intl` configuration. |
-| `tsconfig.json` | TypeScript compiler settings and the `@/*` alias. |
+| `tsconfig.json` | TypeScript compiler settings, editor project, and the `@/*` alias. |
+| `tsconfig.build.json` | Application typecheck and Next.js build settings, inherited from `tsconfig.json`. |
 | `biome.json` | Biome formatting, linting, and custom-rule configuration. |
 | `.biome/rules/nextjs/*.grit` | GritQL source for project-specific Biome rules. |
 | `components.json` | shadcn/ui configuration and import aliases. |
@@ -253,6 +254,13 @@ Recheck current documentation before adding a replacement rule.
 
 ## Known limitations
 
+- **The Firebase UI reference layer `src/components/firebase` is excluded from automated
+  tooling.** Biome (so `lint-staged` never rewrites it), TypeScript, CSpell, jscpd,
+  coverage, Fallow health, and React Doctor skip it, and Knip ignores its unresolved
+  imports. Dependency-cruiser and ast-grep still scan it; ast-grep reports one
+  `no-hardcoded-ui-attribute` warning there that is left unfixed on purpose. The
+  SHA-256 guard in `tests/unit/` protects it instead; see
+  [ADR 0008](docs/adr/0008-install-firebase-ui-registry.md).
 - **Vendored components are excluded from coverage, Fallow health, React Doctor,
   and relaxed in Biome.** Formatting and import organization are disabled for the
   distributed shadcn/ui and AI Elements files; the existing targeted lint
