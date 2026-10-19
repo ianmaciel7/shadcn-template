@@ -9,6 +9,8 @@ allowBuilds:
   esbuild: true
   msw: false
 overrides:
+  # Firestore pins 1.9.16; 1.13.6 fixes GHSA-m9gg-hp2v-232j and GHSA-f596-whhp-79r4.
+  "@grpc/grpc-js": "^1.13.6"
   "@modelcontextprotocol/sdk": ">=1.31.0"
   linkify-it: ">=5.0.2"
   qs: ">=6.16.0"
