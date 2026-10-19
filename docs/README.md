@@ -27,9 +27,9 @@ language, as defined in `.agents/rules/language.md`.
   guides above.
 - [Agent configuration](../.agents/README.md): two configured MCP servers,
   persistent rules, and enabled integrations.
-- [Skill inventory](../.agents/skills/README.md): four installed skills and
-  their upstream provenance. Supporting skill documents remain reusable
-  references rather than application configuration.
+- [Skill inventory](../.agents/skills/README.md): five installed skills and
+  their provenance. Supporting skill documents remain reusable references
+  rather than application configuration.
 - [Domain workflow](agents/domain.md) and
   [issue tracker](agents/issue-tracker.md): repository-specific skill context.
 

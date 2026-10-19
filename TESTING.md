@@ -57,13 +57,13 @@ instead of a stubbed `matchMedia`).
 - Do not write a test only to make a tool report success. When a tool has no
   suitable subject yet, leave it unused and say so.
 
-Two Vitest suites verify configuration rather than application behavior:
+Three Vitest suites verify configuration rather than application behavior:
 `src/messages/messages.test.ts` checks that every locale catalog has the same
 keys and ICU arguments as the default locale and no empty messages, and
-`.biome/rules/nextjs/rules.test.ts` lints fixtures to prove each Grit rule
-reports invalid code and accepts valid code. Semgrep rules are tested with
-`semgrep --test` (`pnpm check:security:rules`) and ast-grep rules with
-`ast-grep test`.
+`.biome/rules/nextjs/rules.test.ts` and `.biome/rules/dom/rules.test.ts` lint
+fixtures to prove each Grit rule reports invalid code and accepts valid code.
+Semgrep rules are tested with `semgrep --test` (`pnpm check:security:rules`) and
+ast-grep rules with `ast-grep test`.
 
 Use Vitest with React Testing Library for synchronous units, components, and
 integrations. Favor `getByRole` and other accessible queries. Test observable

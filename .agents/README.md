@@ -18,7 +18,7 @@ Agents CLI are host tools; `next-devtools-mcp` is a project dependency.
 
 ## Installed skills
 
-The repository contains `ask-matt`, `context7-cli`,
+The repository contains `ask-matt`, `context7-cli`, `save`,
 `setup-matt-pocock-skills`, and `shadcn`. See the
 [skill inventory](skills/README.md) for entrypoints and provenance.
 

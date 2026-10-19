@@ -6,6 +6,7 @@
     "useIgnoreFile": true
   },
   "plugins": [
+    "./.biome/rules/dom/no-document-write.grit",
     "./.biome/rules/nextjs/prefer-layout-props.grit",
     "./.biome/rules/nextjs/prefer-page-props.grit",
     "./.biome/rules/nextjs/prefer-route-context.grit"

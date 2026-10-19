@@ -29,15 +29,24 @@ documentation entrypoints, except for the domain records described below:
 2. `README.md` introduces the template, its package-manager workflow, and the
    documentation index for all contributors.
 3. `docs/agents/issue-tracker.md` and `docs/agents/domain.md` configure the
-   installed engineering skills. `docs/agents/triage-labels.md` is required
-   only when the `triage` skill is installed.
+   installed engineering skills. The project installs five skills in
+   `.agents/skills/` (`ask-matt`, `context7-cli`, `save`, `setup-matt-pocock-skills`,
+   and `shadcn`), tracked with locked versions and hashes in `skills-lock.json`.
+   `docs/agents/triage-labels.md` is required only when the `triage` skill is
+   installed.
 4. `ARCHITECTURE.md` defines the repository layout and App Router boundaries.
 5. `SECURITY.md` defines the vulnerability-reporting policy, its currently
    published channels, and baseline secure contribution practices.
 6. `CONTRIBUTING.md` defines Conventional Branch and Conventional Commit rules
    along with pull-request expectations.
-7. `TESTING.md` defines the validation commands (`pnpm lint` and `pnpm build`),
-   their current baseline status, and expectations for future test tooling.
+7. `TESTING.md` defines the test strategy and validation commands. While
+   originally anchored on baseline checks (`pnpm lint` and `pnpm build`), the
+   testing standard has evolved into a comprehensive automated suite established
+   across [ADR 0006](0006-configure-testing.md) and
+   [ADR 0007](0007-configure-ci.md): colocated Vitest unit
+   and JSX tests (`src/**/*.test.ts(x)`), Vitest Browser Mode, Playwright E2E and
+   axe-core accessibility testing (`tests/*.spec.ts`), visual regression
+   baselines, property-based tests (`fast-check`), and mutation testing (`stryker`).
 8. `GLOSSARY.md` is the single-context domain glossary when product-specific
    terminology is agreed.
 9. `DER.md` is the single entrypoint for the entity-relationship diagram. Until
@@ -72,6 +81,11 @@ documentation entrypoints, except for the domain records described below:
      implemented content are omitted, not filled with placeholders.
    - Each documented value cites its source (`globals.css`, `layout.tsx`,
      `components.json`, `typeset.css`) so it can be verified.
+13. Ladle (`.ladle/`) is the isolated UI component development and documentation
+   workbench. It provides an isolated environment for developing, inspecting,
+   and cataloging design system primitives and UI extensions through colocated
+   `*.stories.tsx` files, completely independent of the Next.js App Router
+   runtime.
 
 Lasting architectural choices continue to be recorded as sequential ADRs in
 `docs/adr/`. Future ADRs follow the filename and title convention in
@@ -117,6 +131,8 @@ persistence model.
   - These documents must be maintained whenever practices or tooling change.
   - `DESIGN.md` duplicates token values from `globals.css` and has no automated
     sync check yet, so it can drift if a theme change omits it.
-  - The template does not yet provide an automated test runner; contributors
-    must rely on the documented static analysis, production build, and relevant
-    manual verification until one is adopted.
+  - The baseline testing standard initially lacked an automated test runner,
+    relying on static analysis and production builds. This baseline has since
+    evolved to the full automated Vitest, Playwright, and Ladle test and workbench
+    suites formally adopted in [ADR 0006](0006-configure-testing.md) and
+    [ADR 0007](0007-configure-ci.md).

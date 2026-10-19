@@ -56,7 +56,7 @@ Deliver correct, maintainable changes with minimal risk.
   architecture decision records.
 
 Accepted ADRs are historical records; use `docs/adr/README.md` and current
-configuration to identify later operational changes. The four installed skills
+configuration to identify later operational changes. The five installed skills
 and two configured MCP servers are indexed in `.agents/README.md`.
 
 Read the documentation relevant to the change before editing it. Keep these

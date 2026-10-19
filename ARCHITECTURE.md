@@ -11,6 +11,11 @@ configuration and repository documentation.
 
 ```text
 .
+├── .agents/                 # Agent rules, workflows, and installed skills
+├── .biome/                  # Custom Biome GritQL rules and tests
+├── .fallow/                 # Fallow complexity and hotspot tracking
+├── .github/                 # GitHub Actions CI workflows and configurations
+├── .ladle/                  # Ladle component workbench configuration and styling
 ├── docs/
 │   ├── adr/                 # Accepted architecture decisions
 │   └── agents/              # Instructions for automated contributors
@@ -23,11 +28,15 @@ configuration and repository documentation.
 │   ├── lib/                 # Framework-independent utilities
 │   ├── messages/            # Locale message catalogs
 │   └── types/               # Shared TypeScript declarations
+├── tests/                   # Playwright E2E tests, visual baselines, and Semgrep rules
+├── AGENTS.md
 ├── ARCHITECTURE.md
-├── CONTRIBUTING.md
 ├── CODING_STANDARDS.md
-├── DER.md                 # Entity-relationship diagram (pending persistence)
+├── CONTRIBUTING.md
+├── DER.md                   # Entity-relationship diagram (pending persistence)
+├── DESIGN.md                # Design system tokens, typography, and UI specs
 ├── GLOSSARY.md
+├── README.md
 ├── SECURITY.md
 ├── TESTING.md
 └── TOOLING.md
@@ -53,28 +62,43 @@ files, and `public/` remain at the repository root, as required by the Next.js
 
 - Colocate Vitest tests with the `src/` code they verify: use `*.test.ts` for
   non-JSX modules and `*.test.tsx` for React or JSX integrations.
+- Colocate Ladle stories (`*.stories.tsx`) next to UI primitives under
+  `src/components/ui/` for isolated component development and visual inspection.
 - Keep Playwright E2E specifications in root `tests/` with `*.spec.ts`.
   Feature-specific fixtures and helpers stay with their consumer unless shared
   by multiple E2E specifications.
 - Keep route-private test subjects under existing `_components` and `_lib`
   boundaries; test placement must not alter a route's URL or structure.
 
-See ADR 0006 for the adopted architecture and [TESTING.md](TESTING.md) for
+See [ADR 0006](docs/adr/0006-configure-testing.md) for the adopted architecture and [TESTING.md](TESTING.md) for
 commands and implementation conventions.
 
 ## Internationalization
 
-`src/i18n/routing.ts` declares `en`, `pt-BR`, and `es`, with `en` as the
-default and `NEXT_LOCALE` as the cookie name. `src/i18n/request.ts` prefers an
-explicit request locale over the cookie and validates the result before
-loading a catalog. An unsupported value falls back to `en`.
+The internationalization architecture is 100% cookie-driven (`NEXT_LOCALE`)
+without `middleware.ts` and without a `[locale]` folder segment in the App
+Router. The application serves `src/app/page.tsx` directly at `/`; there are no
+localized URL route prefixes or proxy scripts.
 
-The application currently serves `src/app/page.tsx` at `/`; there is no
-`[locale]` route segment or `src/proxy.ts`. The helpers in
-`src/i18n/navigation.ts` are available, but their presence does not create
-localized routes. The root layout still declares `lang="en"` even when
-translated content is selected by a cookie. Derived applications must align
-that attribute with their locale strategy. See ADR 0004 for the original
+`src/i18n/routing.ts` defines `en`, `pt-BR`, and `es`, defaulting to `en`, and
+exports `localeCookie = "NEXT_LOCALE"` along with the `isLocale` type guard.
+`src/i18n/routing.test.ts` verifies this guard with property-based testing
+(`fast-check`). `src/i18n/request.ts` reads the cookie (or explicit request
+locale) and imports `src/messages/${locale}.json`, cleanly falling back to `en`
+if an invalid locale is received.
+
+Message catalogs (`src/messages/*.json`) adhere to a structural testing
+contract in `src/messages/messages.test.ts`, which validates key parity across
+`en.json`, `pt-BR.json`, and `es.json`, forbids empty messages, and ensures ICU
+placeholders match the reference catalog. Global message type safety is enforced
+by augmenting the `IntlMessages` interface in `src/types/global.d.ts`. Spelling
+validation integrates `@cspell/dict-pt-br`.
+
+The root layout (`src/app/layout.tsx`) currently declares a static `<html
+lang="en">` attribute even when translated content is rendered through
+`IntlProvider` via the cookie. Derived applications requiring dynamic
+server-rendered `lang` attributes must read the cookie in `RootLayout`. See
+[ADR 0004](docs/adr/0004-configure-internationalization.md) for the complete
 decision.
 
 ## Runtime and component boundaries
@@ -87,6 +111,8 @@ The root layout keeps the async `IntlProvider` inside `Suspense`, followed by
 `ThemeProvider` and `TooltipProvider`. The component libraries under
 `src/components/ui` and `src/components/ai-elements` are locally owned source;
 custom providers under `ui/extensions` remain subject to application checks.
+Ladle (`.ladle/`) isolates and documents UI components without requiring the
+Next.js runtime.
 
 `.dependency-cruiser.cjs` rejects cycles, imports from shared components into
 `src/app`, and imports from `src/lib` into routes, components, hooks, or i18n.
