@@ -62,3 +62,13 @@ Run the checks in [TESTING.md](TESTING.md), keep changes focused, title the
 pull request as a Conventional Commit (CI validates it and squash merges use
 it as the commit message), and update
 architecture or security documentation when the change affects those concerns.
+
+## Merging into main
+
+Submit changes to `main` through a pull request and use squash merge. Wait for
+the **CI result** check to pass against an up-to-date branch, address review
+conversations, and obtain an independent review when available. Verify that
+the final squash commit title follows Conventional Commits. The intended GitHub
+protection settings and their availability are described in
+[ADR 0007](docs/adr/0007-configure-ci.md#main-branch-merge-policy); repository
+settings must be configured separately to enforce this policy.

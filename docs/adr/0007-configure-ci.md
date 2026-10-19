@@ -291,6 +291,45 @@ for branch protection.
     - Ephemeral artifacts: generated reports (`reports/`), coverage (`coverage/`),
       Ladle builds, and temporary analysis artifacts remain ignored in `.gitignore`.
 
+## Main branch merge policy
+
+The following policy extends this decision; it is a desired GitHub repository
+configuration, not evidence that the remote settings are already enforced.
+Repository administrators must configure and periodically verify it:
+
+- Require changes to `main` to arrive through a pull request. Block direct
+  pushes, force pushes, and branch deletion; do not grant routine bypasses,
+  including to administrators or automation.
+- Allow only squash merges into `main`. Configure the ruleset's allowed merge
+  method accordingly, or disable merge commits and rebase merging in repository
+  settings while retaining squash merging. Linear history alone is insufficient
+  because it also permits rebase merging.
+- Require the GitHub Actions check **CI result** (`ci-result`) to pass, and
+  require the branch to be up to date with `main` before merging. Select GitHub
+  Actions as the expected check source when available. The aggregate depends on
+  static, build, end-to-end, security, and pull request title jobs; investigate
+  failures and do not bypass a missing or failing check.
+- Require review by at least one other contributor when an independent reviewer
+  is available, dismiss stale approvals on new commits, and resolve review
+  conversations before merging. A solo repository needs another eligible
+  reviewer before enabling mandatory approvals; do not represent self-review
+  as independent review.
+- Use the Conventional Commit pull request title as the default squash commit
+  title, and verify the final title before merging. GitHub permits editing that
+  message, so the pull request title check alone cannot enforce the final text.
+- Protect changes to workflows and branch rules with appropriate repository
+  permissions and review. Keep exceptions exceptional, documented, and limited
+  to authorized maintainers.
+
+Ruleset availability depends on repository visibility and GitHub plan. If the
+required protection is unavailable, the policy remains a manual convention,
+not an enforced gate. Confirm the actual rules and merge settings in GitHub
+before relying on them. If a merge queue is introduced, add and validate the
+`merge_group` workflow trigger before requiring CI in the queue.
+
+See [GitHub's ruleset documentation](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets)
+and [protected branch documentation](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches).
+
 ## Consequences
 
 - **Positive**:
