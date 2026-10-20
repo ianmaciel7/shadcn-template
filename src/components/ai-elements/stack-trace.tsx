@@ -423,14 +423,14 @@ type StackTraceFramesProps = ComponentProps<"div"> & {
   showInternalFrames?: boolean;
 };
 
-interface FilePathButtonProps {
+type FilePathButtonProps = ComponentProps<"button"> & {
   frame: StackFrame;
   onFilePathClick?: (
     filePath: string,
     lineNumber?: number,
     columnNumber?: number,
   ) => void;
-}
+};
 
 const FilePathButton = memo(
   ({ frame, onFilePathClick }: FilePathButtonProps) => {

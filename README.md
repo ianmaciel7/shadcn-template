@@ -21,21 +21,26 @@ auto-updates as you edit the file.
 
 ## After creating a repository from this template
 
-1. Rename the package in `package.json`, update the application metadata and
+1. Run `pnpm setup:github` (requires authenticated `gh` CLI) to configure GitHub
+   repository merge policies (Squash only, Auto-merge enabled) and enable branch
+   protection on the default branch (`CI result` required check, strict linear
+   history, conversation resolution). GitHub template repositories do not inherit
+   branch protection or repository settings from their template automatically.
+2. Rename the package in `package.json`, update the application metadata and
    replace the starter home page. Update the README and domain documentation.
-2. Keep the generic Playwright smoke, localization-request, and new-tab safety
+3. Keep the generic Playwright smoke, localization-request, and new-tab safety
    checks; adjust the `/` route assertions if your app does not expose a home
    page or primary heading. Add behavior-specific E2E tests for your own pages.
-3. The visual baselines still capture the **starter UI**, not a reusable design
+4. The visual baselines still capture the **starter UI**, not a reusable design
    contract. Once you replace the page, run the manual **Update visual baselines**
    workflow, review its PNG artifacts, and commit the new baseline images.
-4. Reassess the documented `braces` audit exception in `pnpm-workspace.yaml`
+5. Reassess the documented `braces` audit exception in `pnpm-workspace.yaml`
    against the **new** dependency tree. Do not treat the original template's
    risk assessment as applicable to a different app.
-5. Run `pnpm verify:fast`, `pnpm verify:full`, and `pnpm verify:e2e` before
+6. Run `pnpm verify:fast`, `pnpm verify:full`, and `pnpm verify:e2e` before
    merging changes. Review the 70% coverage floor for code owned by your app;
    do not lower it merely to make CI green.
-6. Keep CI provider-independent. Add staging, deployment and credentials only
+7. Keep CI provider-independent. Add staging, deployment and credentials only
    when the derived application has selected its hosting platform.
 
 See [Testing](TESTING.md) and [Security](SECURITY.md) for details.
