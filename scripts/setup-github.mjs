@@ -105,7 +105,9 @@ try {
         stdio: ["pipe", "ignore", "inherit"],
       },
     );
-    console.log(`✔ Updated existing ruleset '${parsed.name}' (ID: ${matched.id}).`);
+    console.log(
+      `✔ Updated existing ruleset '${parsed.name}' (ID: ${matched.id}).`,
+    );
   } else {
     const created = JSON.parse(
       execFileSync(
@@ -118,7 +120,9 @@ try {
         },
       ),
     );
-    console.log(`✔ Created modern GitHub Ruleset '${parsed.name}' (ID: ${created.id}).`);
+    console.log(
+      `✔ Created modern GitHub Ruleset '${parsed.name}' (ID: ${created.id}).`,
+    );
   }
 } catch (err) {
   hasError = true;
