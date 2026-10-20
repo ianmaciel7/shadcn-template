@@ -1,5 +1,9 @@
 import { execFileSync } from "node:child_process";
 
+if (process.env.GITHUB_TOKEN && !process.env.GH_TOKEN) {
+  process.env.GH_TOKEN = process.env.GITHUB_TOKEN;
+}
+
 // 1. Verify gh CLI authentication
 try {
   execFileSync("gh", ["auth", "status"], { stdio: "ignore" });
