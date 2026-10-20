@@ -1,4 +1,6 @@
 import { execFileSync } from "node:child_process";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 
 if (process.env.GITHUB_TOKEN && !process.env.GH_TOKEN) {
   process.env.GH_TOKEN = process.env.GITHUB_TOKEN;
@@ -15,28 +17,14 @@ try {
   process.exit(1);
 }
 
-// 2. Identify the target repository and default branch
+// 2. Identify the target repository
 let repo;
-let defaultBranch = "main";
 try {
-  const repoInfo = JSON.parse(
-    execFileSync(
-      "gh",
-      [
-        "repo",
-        "view",
-        "--json",
-        "nameWithOwner,defaultBranchRef",
-        "-q",
-        "{nameWithOwner: .nameWithOwner, defaultBranch: .defaultBranchRef.name}",
-      ],
-      { encoding: "utf8" },
-    ),
-  );
-  repo = repoInfo.nameWithOwner;
-  if (repoInfo.defaultBranch) {
-    defaultBranch = repoInfo.defaultBranch;
-  }
+  repo = execFileSync(
+    "gh",
+    ["repo", "view", "--json", "nameWithOwner", "-q", ".nameWithOwner"],
+    { encoding: "utf8" },
+  ).trim();
 } catch (err) {
   console.error(
     "Could not determine GitHub repository info:",
@@ -45,13 +33,11 @@ try {
   process.exit(1);
 }
 
-console.log(
-  `Configuring GitHub settings for ${repo} (default branch: ${defaultBranch})...`,
-);
+console.log(`Configuring GitHub repository and rulesets for ${repo}...`);
 
 let hasError = false;
 
-// 3. Configure repository merge options (using typed booleans with -F)
+// 3. Configure repository merge options (Squash only, Auto-merge enabled)
 try {
   execFileSync(
     "gh",
@@ -82,49 +68,62 @@ try {
   );
 }
 
-// 4. Configure branch protection on the default branch
-const branchProtectionPayload = JSON.stringify({
-  required_status_checks: {
-    strict: true,
-    contexts: ["CI result"],
-  },
-  enforce_admins: true,
-  required_pull_request_reviews: {
-    dismiss_stale_reviews: true,
-    require_code_owner_reviews: false,
-    require_last_push_approval: false,
-    required_approving_review_count: 0,
-  },
-  restrictions: null,
-  required_linear_history: true,
-  allow_force_pushes: false,
-  allow_deletions: false,
-  required_conversation_resolution: true,
-});
+// 4. Configure modern GitHub Repository Ruleset (~DEFAULT_BRANCH protection)
+const rulesetFilePath = resolve(
+  import.meta.dirname,
+  "../.github/rulesets/default-branch.json",
+);
 
 try {
-  execFileSync(
-    "gh",
-    [
-      "api",
-      "--method",
-      "PUT",
-      `repos/${repo}/branches/${defaultBranch}/protection`,
-      "--input",
-      "-",
-    ],
-    {
-      input: branchProtectionPayload,
-      stdio: ["pipe", "ignore", "inherit"],
-    },
+  const rulesetPayload = readFileSync(rulesetFilePath, "utf8");
+  const parsed = JSON.parse(rulesetPayload);
+
+  // Check if ruleset already exists
+  const existingRulesets = JSON.parse(
+    execFileSync("gh", ["api", `repos/${repo}/rulesets`], {
+      encoding: "utf8",
+    }),
   );
-  console.log(
-    `✔ Configured branch protection on '${defaultBranch}' (strict 'CI result' check, linear history, conversation resolution).`,
-  );
+
+  const matched = Array.isArray(existingRulesets)
+    ? existingRulesets.find((r) => r.name === parsed.name)
+    : null;
+
+  if (matched) {
+    execFileSync(
+      "gh",
+      [
+        "api",
+        "--method",
+        "PUT",
+        `repos/${repo}/rulesets/${matched.id}`,
+        "--input",
+        "-",
+      ],
+      {
+        input: rulesetPayload,
+        stdio: ["pipe", "ignore", "inherit"],
+      },
+    );
+    console.log(`✔ Updated existing ruleset '${parsed.name}' (ID: ${matched.id}).`);
+  } else {
+    const created = JSON.parse(
+      execFileSync(
+        "gh",
+        ["api", "--method", "POST", `repos/${repo}/rulesets`, "--input", "-"],
+        {
+          input: rulesetPayload,
+          encoding: "utf8",
+          stdio: ["pipe", "pipe", "inherit"],
+        },
+      ),
+    );
+    console.log(`✔ Created modern GitHub Ruleset '${parsed.name}' (ID: ${created.id}).`);
+  }
 } catch (err) {
   hasError = true;
   console.error(
-    `Failed to configure branch protection on '${defaultBranch}':`,
+    "Failed to configure GitHub repository ruleset:",
     err instanceof Error ? err.message : err,
   );
 }
