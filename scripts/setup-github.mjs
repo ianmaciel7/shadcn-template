@@ -49,7 +49,9 @@ console.log(
   `Configuring GitHub settings for ${repo} (default branch: ${defaultBranch})...`,
 );
 
-// 3. Configure repository merge options
+let hasError = false;
+
+// 3. Configure repository merge options (using typed booleans with -F)
 try {
   execFileSync(
     "gh",
@@ -58,9 +60,9 @@ try {
       "--method",
       "PATCH",
       `repos/${repo}`,
-      "-f",
+      "-F",
       "allow_merge_commit=false",
-      "-f",
+      "-F",
       "allow_rebase_merge=false",
       "-F",
       "allow_auto_merge=true",
@@ -73,6 +75,7 @@ try {
     "✔ Configured pull request merge options (Squash only, Auto-merge enabled).",
   );
 } catch (err) {
+  hasError = true;
   console.error(
     "Failed to update repository settings:",
     err instanceof Error ? err.message : err,
@@ -119,8 +122,13 @@ try {
     `✔ Configured branch protection on '${defaultBranch}' (strict 'CI result' check, linear history, conversation resolution).`,
   );
 } catch (err) {
+  hasError = true;
   console.error(
     `Failed to configure branch protection on '${defaultBranch}':`,
     err instanceof Error ? err.message : err,
   );
+}
+
+if (hasError) {
+  process.exit(1);
 }

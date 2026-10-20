@@ -38,5 +38,5 @@ rule:
             regex: 'ButtonProps$'
         - not:
             has:
-              field: body
+              kind: extends_type_clause
               regex: 'ComponentProps<'

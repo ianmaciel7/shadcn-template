@@ -433,26 +433,41 @@ type FilePathButtonProps = ComponentProps<"button"> & {
 };
 
 const FilePathButton = memo(
-  ({ frame, onFilePathClick }: FilePathButtonProps) => {
-    const handleClick = useCallback(() => {
-      if (frame.filePath) {
-        onFilePathClick?.(
-          frame.filePath,
-          frame.lineNumber ?? undefined,
-          frame.columnNumber ?? undefined,
-        );
-      }
-    }, [frame, onFilePathClick]);
+  ({
+    className,
+    disabled,
+    frame,
+    onClick,
+    onFilePathClick,
+    ...props
+  }: FilePathButtonProps) => {
+    const handleClick = useCallback(
+      (e: React.MouseEvent<HTMLButtonElement>) => {
+        if (onClick) {
+          onClick(e);
+        }
+        if (frame.filePath) {
+          onFilePathClick?.(
+            frame.filePath,
+            frame.lineNumber ?? undefined,
+            frame.columnNumber ?? undefined,
+          );
+        }
+      },
+      [frame, onClick, onFilePathClick],
+    );
 
     return (
       <button
         className={cn(
           "underline decoration-dotted hover:text-primary",
           onFilePathClick && "cursor-pointer",
+          className,
         )}
-        disabled={!onFilePathClick}
+        disabled={disabled ?? !onFilePathClick}
         onClick={handleClick}
         type="button"
+        {...props}
       >
         {frame.filePath}
         {frame.lineNumber !== null && `:${frame.lineNumber}`}
