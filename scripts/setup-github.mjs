@@ -78,15 +78,21 @@ try {
   const rulesetPayload = readFileSync(rulesetFilePath, "utf8");
   const parsed = JSON.parse(rulesetPayload);
 
-  // Check if ruleset already exists
+  // Check if repository ruleset already exists (excluding inherited organization rulesets)
   const existingRulesets = JSON.parse(
-    execFileSync("gh", ["api", `repos/${repo}/rulesets`], {
-      encoding: "utf8",
-    }),
+    execFileSync(
+      "gh",
+      ["api", `repos/${repo}/rulesets?includes_parents=false`],
+      {
+        encoding: "utf8",
+      },
+    ),
   );
 
   const matched = Array.isArray(existingRulesets)
-    ? existingRulesets.find((r) => r.name === parsed.name)
+    ? existingRulesets.find(
+        (r) => r.name === parsed.name && r.source_type === "Repository",
+      )
     : null;
 
   if (matched) {
