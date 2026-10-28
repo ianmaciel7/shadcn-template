@@ -309,3 +309,16 @@ that an external executable is installed or a server is running.
 Use Context7 when current library documentation is needed. The project-local
 `context7-cli` skill documents its two-step library lookup and documentation
 query flow.
+
+<!-- cspell:ignore gcqx -->
+
+### Dependency audit maintenance
+
+`pnpm-workspace.yaml` keeps vulnerable transitive packages on patched releases
+within their current major versions. The `deepmerge` advisory
+[GHSA-gcqx-w48m-w2h4](https://github.com/advisories/GHSA-gcqx-w48m-w2h4)
+has no upstream fix. Its exception is limited to the shadcn CLI merging trusted
+registry configuration during development; application code does not import it.
+Recheck `pnpm why deepmerge` after updates and remove the exception when a
+patched release exists or the CLI drops this dependency. Derived applications
+must reassess their own dependency graph before retaining this exception.
